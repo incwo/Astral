@@ -1,6 +1,6 @@
 //
-//  StripeDiscoveryViewModel.swift
-//  ProtoStripeTerminal
+//  DiscoveryViewModel.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 21/01/2022.
 //
@@ -8,16 +8,16 @@
 import Foundation
 import StripeTerminal
 
-class StripeDiscoveryViewModel {
+class DiscoveryViewModel {
     
-    init(readersDiscovery: StripeReadersDiscovery, onUpdateDiscovering: @escaping (Bool)->(), onUpdateSections: @escaping (IndexSet)->(), onError: @escaping (Error)->()) {
+    init(readersDiscovery: ReadersDiscovery, onUpdateDiscovering: @escaping (Bool)->(), onUpdateSections: @escaping (IndexSet)->(), onError: @escaping (Error)->()) {
         self.readersDiscovery = readersDiscovery
         self.onUpdateDiscovering = onUpdateDiscovering
         self.onUpdateSections = onUpdateSections
         self.onError = onError
     }
     
-    let readersDiscovery: StripeReadersDiscovery
+    let readersDiscovery: ReadersDiscovery
     let onUpdateDiscovering: (Bool)->()
     let onUpdateSections: (IndexSet)->()
     let onError: (Error)->()

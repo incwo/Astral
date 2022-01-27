@@ -1,6 +1,6 @@
 //
-//  StripeSettingsViewModel.swift
-//  ProtoStripeTerminal
+//  SettingsViewModel.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 22/12/2021.
 //
@@ -8,7 +8,7 @@
 import Foundation
 import StripeTerminal
 
-class StripeSettingsViewModel {
+class SettingsViewModel {
     init(onSetupNewReader: @escaping ()->(), onShowUpdate: @escaping ()->(), onDisconnect: @escaping ()->()) {
         self.onSetupNewReader = onSetupNewReader
         self.onShowUpdate = onShowUpdate

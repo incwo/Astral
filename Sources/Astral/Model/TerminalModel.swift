@@ -1,6 +1,6 @@
 //
-//  StripeTerminalModel.swift
-//  ProtoStripeTerminal
+//  TerminalModel.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 17/01/2022.
 //
@@ -9,31 +9,31 @@ import Foundation
 import StripeTerminal
 
 // All these methods are called on the main thread
-protocol StripeTerminalModelDelegate: AnyObject {
-    func stripeTerminalModel(_ sender: StripeTerminalModel, didUpdateState state: StripeTerminalModel.State)
+protocol TerminalModelDelegate: AnyObject {
+    func stripeTerminalModel(_ sender: TerminalModel, didUpdateState state: TerminalModel.State)
     
     /// Make the User pick a reader
     ///
     /// This method is called when trying to charge while no Reader is ready (not connected or updating, etc.).
-    func stripeTerminalModelNeedsSettingUp(_ sender: StripeTerminalModel)
+    func stripeTerminalModelNeedsSettingUp(_ sender: TerminalModel)
     
     /// The installation of an update is progressing
-    func stripeTerminalModel(_ sender: StripeTerminalModel, softwareUpdateDidProgress progress: Float)
+    func stripeTerminalModel(_ sender: TerminalModel, softwareUpdateDidProgress progress: Float)
     
     /// Inform about an error
-    func stripeTerminalModel(_sender: StripeTerminalModel, didFailWithError error: Error)
+    func stripeTerminalModel(_sender: TerminalModel, didFailWithError error: Error)
 }
 
-class StripeTerminalModel: NSObject {
+class TerminalModel: NSObject {
     init(apiClient: AstralApiClient) {
-        self.paymentProcessor = StripePaymentProcessor(apiClient: apiClient)
+        self.paymentProcessor = PaymentProcessor(apiClient: apiClient)
         super.init()
         
         Terminal.shared.delegate = self
         reconnect()
     }
     
-    weak var delegate: StripeTerminalModelDelegate?
+    weak var delegate: TerminalModelDelegate?
     
     enum State {
         case noReaderConnected
@@ -53,10 +53,10 @@ class StripeTerminalModel: NSObject {
         }
     }
     
-    func charge(amount: NSDecimalNumber, currency: String, completion: @escaping (StripeChargeResult)->()) {
+    func charge(amount: NSDecimalNumber, currency: String, completion: @escaping (ChargeResult)->()) {
         switch state {
         case .readerConnected (_):
-            paymentProcessor.charge(amount: StripeAmount(amount: amount, currency: currency), completion: completion)
+            paymentProcessor.charge(amount: Amount(amount: amount, currency: currency), completion: completion)
         case .charging(_):
             let error = NSError(domain: #function, code: 0, userInfo: [NSLocalizedDescriptionKey: "Can not charge now. The Terminal is already charging."])
             delegate?.stripeTerminalModel(_sender: self, didFailWithError: error)
@@ -70,8 +70,8 @@ class StripeTerminalModel: NSObject {
         Terminal.shared.installAvailableUpdate()
     }
     
-    private let paymentProcessor: StripePaymentProcessor
-    let discovery = StripeReadersDiscovery()
+    private let paymentProcessor: PaymentProcessor
+    let discovery = ReadersDiscovery()
     
     // MARK: Connection
     
@@ -82,7 +82,7 @@ class StripeTerminalModel: NSObject {
         }
     }
     
-    private var connection: StripeReaderConnection?
+    private var connection: ReaderConnection?
     
     func connect() {
         guard Terminal.shared.connectionStatus == .notConnected else {
@@ -97,7 +97,7 @@ class StripeTerminalModel: NSObject {
         state = .connecting(reader)
         
         self.configureSimulator()
-        connection = StripeReaderConnection()
+        connection = ReaderConnection()
         connection?.delegate = self
         
         let locationId: String?
@@ -171,7 +171,7 @@ class StripeTerminalModel: NSObject {
     private let serialNumberUserDefaultsKey = "StripeTerminal.reader.serialNumber"
 }
 
-extension StripeTerminalModel: TerminalDelegate {
+extension TerminalModel: TerminalDelegate {
     func terminal(_ terminal: Terminal, didReportUnexpectedReaderDisconnect reader: Reader) {
         // You might want to display UI to notify the user and start re-discovering readers
     }
@@ -183,12 +183,12 @@ extension StripeTerminalModel: TerminalDelegate {
     }
 }
 
-extension StripeTerminalModel: StripeReaderConnectionDelegate {
-    func readerConnection(_ sender: StripeReaderConnection, showReaderMessage message: String) {
+extension TerminalModel: ReaderConnectionDelegate {
+    func readerConnection(_ sender: ReaderConnection, showReaderMessage message: String) {
         state = .charging(message: message)
     }
     
-    func readerConnectionDidStartInstallingUpdate(_ sender: StripeReaderConnection) {
+    func readerConnectionDidStartInstallingUpdate(_ sender: ReaderConnection) {
         guard let reader = reader else {
             fatalError("\(#function) There should be a reader connected at this point.")
         }
@@ -196,11 +196,11 @@ extension StripeTerminalModel: StripeReaderConnectionDelegate {
         state = .installingUpdate(reader)
     }
     
-    func readerConnection(_ sender: StripeReaderConnection, softwareUpdateDidProgress progress: Float) {
+    func readerConnection(_ sender: ReaderConnection, softwareUpdateDidProgress progress: Float) {
         delegate?.stripeTerminalModel(self, softwareUpdateDidProgress: progress)
     }
     
-    func readerConnectionDidFinishInstallingUpdate(_ sender: StripeReaderConnection) {
+    func readerConnectionDidFinishInstallingUpdate(_ sender: ReaderConnection) {
         if let reader = reader,
             Terminal.shared.connectedReader == reader {
             state = .readerConnected(reader)

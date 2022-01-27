@@ -1,5 +1,5 @@
 //
-//  AstralResources.swift
+//  Resources.swift
 //  Astral
 //
 //  Created by Renaud Pradenc on 25/01/2022.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct AstralResources {
+struct Resources {
     
 }
 

@@ -1,14 +1,14 @@
 //
-//  StripeUpdateTableViewController.swift
-//  ProtoStripeTerminal
+//  UpdateTableViewController.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 05/01/2022.
 //
 
 import UIKit
 
-class StripeUpdateTableViewController: UITableViewController {
-    var viewModel: StripeUpdateViewModel?
+class UpdateTableViewController: UITableViewController {
+    var viewModel: UpdateViewModel?
 
     func reload() {
         tableView.reloadData()
@@ -18,13 +18,13 @@ class StripeUpdateTableViewController: UITableViewController {
         updatingCell?.progress = progress
     }
     // Keep a reference to update the progress
-    private var updatingCell: StripeUpdatingCell?
+    private var updatingCell: UpdatingCell?
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
 
-    private func row(at indexPath: IndexPath) -> StripeUpdateViewModel.Row {
+    private func row(at indexPath: IndexPath) -> UpdateViewModel.Row {
         viewModel!.sections[indexPath.section].rows[indexPath.row]
     }
 
@@ -32,7 +32,7 @@ class StripeUpdateTableViewController: UITableViewController {
 
 // MARK: UITableViewDataSource
 
-extension StripeUpdateTableViewController {
+extension UpdateTableViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel?.sections.count ?? 0
     }
@@ -48,12 +48,12 @@ extension StripeUpdateTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch row(at: indexPath) {
         case .currentVersion(let version):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "currentVersion", for: indexPath) as! StripeVersionCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "currentVersion", for: indexPath) as! VersionCell
             cell.version = version
             return cell
             
         case .updateVersion(let version):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "updateVersion", for: indexPath) as! StripeVersionCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "updateVersion", for: indexPath) as! VersionCell
             cell.version = version
             return cell
             
@@ -64,7 +64,7 @@ extension StripeUpdateTableViewController {
             return tableView.dequeueReusableCell(withIdentifier: "update", for: indexPath)
             
         case .updating (let progress):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "updating", for: indexPath) as! StripeUpdatingCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "updating", for: indexPath) as! UpdatingCell
             self.updatingCell = cell
             cell.progress = progress
             return cell
@@ -78,7 +78,7 @@ extension StripeUpdateTableViewController {
 
 // MARK: UITableViewDelegate
 
-extension StripeUpdateTableViewController {
+extension UpdateTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch row(at: indexPath) {
         case .update:

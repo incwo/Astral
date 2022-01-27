@@ -1,6 +1,6 @@
 //
 //  MainTableViewController.swift
-//  ProtoStripeTerminal
+//  AstralExample
 //
 //  Created by Renaud Pradenc on 21/12/2021.
 //

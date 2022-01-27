@@ -1,6 +1,6 @@
 //
-//  StripeDiscoveryTableViewController.swift
-//  ProtoStripeTerminal
+//  DiscoveryTableViewController.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 23/12/2021.
 //
@@ -8,9 +8,9 @@
 import UIKit
 import StripeTerminal
 
-class StripeDiscoveryTableViewController: UITableViewController {
+class DiscoveryTableViewController: UITableViewController {
     
-    var viewModel: StripeDiscoveryViewModel?
+    var viewModel: DiscoveryViewModel?
     
     /// Closure called when the user touches the "Pick a location" row
     var onPickLocation: (()->())?
@@ -42,7 +42,7 @@ class StripeDiscoveryTableViewController: UITableViewController {
         tableView.reloadSections(indexes, with: .automatic)
     }
     
-    private func row(at indexPath: IndexPath) -> StripeDiscoveryViewModel.Row {
+    private func row(at indexPath: IndexPath) -> DiscoveryViewModel.Row {
         guard let viewModel = viewModel else {
             fatalError("A ViewModel must be set")
         }
@@ -53,7 +53,7 @@ class StripeDiscoveryTableViewController: UITableViewController {
 
 // MARK: UITableViewDataSource
 
-extension StripeDiscoveryTableViewController {
+extension DiscoveryTableViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         viewModel?.sections.count ?? 0
     }
@@ -68,7 +68,7 @@ extension StripeDiscoveryTableViewController {
             return tableView.dequeueReusableCell(withIdentifier: "pickLocation", for: indexPath)
             
         case .location(let location):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "location", for: indexPath) as! StripeShortLocationCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "location", for: indexPath) as! ShortLocationCell
             cell.location = location
             return cell
             
@@ -76,7 +76,7 @@ extension StripeDiscoveryTableViewController {
             return tableView.dequeueReusableCell(withIdentifier: "noLocationPicked", for: indexPath)
             
         case .reader(let reader):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "readerIdentity", for: indexPath) as! StripeReaderIdentityCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "readerIdentity", for: indexPath) as! ReaderIdentityCell
             cell.model = Terminal.stringFromDeviceType(reader.deviceType)
             cell.serialNumber = reader.serialNumber
             return cell
@@ -90,7 +90,7 @@ extension StripeDiscoveryTableViewController {
 
 // MARK: UITableViewDelegate
 
-extension StripeDiscoveryTableViewController {
+extension DiscoveryTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch row(at: indexPath) {
         case .pickLocation:

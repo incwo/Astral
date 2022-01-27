@@ -1,6 +1,6 @@
 //
-//  StripeChargeCoordinator.swift
-//  ProtoStripeTerminal
+//  ChargeCoordinator.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 25/01/2022.
 //
@@ -8,14 +8,14 @@
 import Foundation
 import UIKit
 
-protocol StripeChargeCoordinatorDelegate: AnyObject {
+protocol ChargeCoordinatorDelegate: AnyObject {
     /// Tells that the panel is about to close
     func chargeCoordinatorWillDismiss()
 }
 
-class StripeChargeCoordinator: NSObject {
+class ChargeCoordinator: NSObject {
     
-    weak var delegate: StripeChargeCoordinatorDelegate?
+    weak var delegate: ChargeCoordinatorDelegate?
     
     enum Operation {
         case charging (amount: NSDecimalNumber, currencyCode: String)
@@ -69,13 +69,13 @@ class StripeChargeCoordinator: NSObject {
         navigationController.viewControllers = [chargeViewController]
     }
     
-    private lazy var chargeViewController: StripeChargeViewController = {
-        storyboard.instantiateViewController(withIdentifier: "charge") as! StripeChargeViewController
+    private lazy var chargeViewController: ChargeViewController = {
+        storyboard.instantiateViewController(withIdentifier: "charge") as! ChargeViewController
     }()
     
 }
 
-private extension StripeChargeCoordinator.Operation {
+private extension ChargeCoordinator.Operation {
     var title: String {
         switch self {
         case .charging:
@@ -98,7 +98,7 @@ private extension StripeChargeCoordinator.Operation {
     }
 }
 
-private extension StripeChargeCoordinator.Status {
+private extension ChargeCoordinator.Status {
     var statusString: String {
         switch self {
         case .none:
@@ -115,7 +115,7 @@ private extension StripeChargeCoordinator.Status {
     }
 }
 
-extension StripeChargeCoordinator: UIAdaptivePresentationControllerDelegate {
+extension ChargeCoordinator: UIAdaptivePresentationControllerDelegate {
     // Called for "Swipe to dismiss" on iOS 13+
     // This is for the navigationController.
     func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {

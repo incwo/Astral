@@ -1,6 +1,6 @@
 //
-//  StripeReaderConnection.swift
-//  ProtoStripe
+//  ReaderConnection.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 17/12/2021.
 //
@@ -8,17 +8,17 @@
 import Foundation
 import StripeTerminal
 
-protocol StripeReaderConnectionDelegate: AnyObject {
-    func readerConnection(_ sender: StripeReaderConnection, showReaderMessage message: String)
-    func readerConnectionDidStartInstallingUpdate(_ sender: StripeReaderConnection)
-    func readerConnection(_ sender: StripeReaderConnection, softwareUpdateDidProgress progress: Float)
-    func readerConnectionDidFinishInstallingUpdate(_ sender: StripeReaderConnection)
+protocol ReaderConnectionDelegate: AnyObject {
+    func readerConnection(_ sender: ReaderConnection, showReaderMessage message: String)
+    func readerConnectionDidStartInstallingUpdate(_ sender: ReaderConnection)
+    func readerConnection(_ sender: ReaderConnection, softwareUpdateDidProgress progress: Float)
+    func readerConnectionDidFinishInstallingUpdate(_ sender: ReaderConnection)
 }
 
 /// Handle connections with Stripe terminals
-class StripeReaderConnection: NSObject {
+class ReaderConnection: NSObject {
     
-    weak var delegate: StripeReaderConnectionDelegate?
+    weak var delegate: ReaderConnectionDelegate?
     
     /// Connect a Bluetooth Reader
     func connect(_ reader: Reader, locationId: String, onSuccess: @escaping ()->(), onFailure: @escaping (Error)->()) {
@@ -49,7 +49,7 @@ class StripeReaderConnection: NSObject {
     }
 }
 
-extension StripeReaderConnection: BluetoothReaderDelegate {
+extension ReaderConnection: BluetoothReaderDelegate {
     func reader(_ reader: Reader, didReportAvailableUpdate update: ReaderSoftwareUpdate) {
         // This method is not used.
     }

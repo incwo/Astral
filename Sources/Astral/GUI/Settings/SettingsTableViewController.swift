@@ -1,6 +1,6 @@
 //
-//  StripeSettingsTableViewController.swift
-//  ProtoStripeTerminal
+//  SettingsTableViewController.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 21/12/2021.
 //
@@ -8,10 +8,10 @@
 import UIKit
 import StripeTerminal
 
-class StripeSettingsTableViewController: UITableViewController {
+class SettingsTableViewController: UITableViewController {
     var onClose: (()->())?
     
-    var viewModel: StripeSettingsViewModel? {
+    var viewModel: SettingsViewModel? {
         didSet {
             if isViewLoaded {
                 tableView.reloadData()
@@ -40,21 +40,21 @@ class StripeSettingsTableViewController: UITableViewController {
         onClose?()
     }
     
-    private func section(at index: Int) -> StripeSettingsViewModel.Section {
+    private func section(at index: Int) -> SettingsViewModel.Section {
         guard let viewModel = viewModel else {
             fatalError("No ViewModel set")
         }
         return viewModel.sections[index]
     }
     
-    private func row(at indexPath: IndexPath) -> StripeSettingsViewModel.Row {
+    private func row(at indexPath: IndexPath) -> SettingsViewModel.Row {
         return section(at: indexPath.section).rows[indexPath.row]
     }
 }
 
 // MARK: UITableViewDataSource
 
-extension StripeSettingsTableViewController {
+extension SettingsTableViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel?.sections.count ?? 0
     }
@@ -71,7 +71,7 @@ extension StripeSettingsTableViewController {
         return cell(in: tableView, at: indexPath, for: row(at: indexPath))
     }
     
-    private func cell(in tableView: UITableView, at indexPath: IndexPath, for row: StripeSettingsViewModel.Row) -> UITableViewCell {
+    private func cell(in tableView: UITableView, at indexPath: IndexPath, for row: SettingsViewModel.Row) -> UITableViewCell {
         switch row {
         case .setupReader:
             return tableView.dequeueReusableCell(withIdentifier: "setupReader", for: indexPath)
@@ -83,7 +83,7 @@ extension StripeSettingsTableViewController {
             return tableView.dequeueReusableCell(withIdentifier: "connecting", for: indexPath)
             
         case .readerDescription (let reader):
-            let cell = tableView.dequeueReusableCell(withIdentifier: "reader", for: indexPath) as! StripeReaderCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "reader", for: indexPath) as! ReaderCell
             cell.model = Terminal.stringFromDeviceType(reader.deviceType)
             cell.serialNumber = reader.serialNumber
             cell.batteryLevel = reader.batteryLevel?.floatValue
@@ -105,7 +105,7 @@ extension StripeSettingsTableViewController {
 
 // MARK: UITableViewDelegate
 
-extension StripeSettingsTableViewController {
+extension SettingsTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch row(at: indexPath) {
         case .setupReader:

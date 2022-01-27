@@ -1,6 +1,6 @@
 //
-//  StripeUpdateViewModel.swift
-//  ProtoStripeTerminal
+//  UpdateViewModel.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 05/01/2022.
 //
@@ -8,7 +8,7 @@
 import Foundation
 import StripeTerminal
 
-class StripeUpdateViewModel {
+class UpdateViewModel {
     
     init(onInstallUpdate: @escaping ()->()) {
         self.onInstallUpdate = onInstallUpdate

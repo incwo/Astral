@@ -1,13 +1,13 @@
 //
-//  StripeVersionCell.swift
-//  ProtoStripeTerminal
+//  VersionCell.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 05/01/2022.
 //
 
 import UIKit
 
-class StripeVersionCell: UITableViewCell {
+class VersionCell: UITableViewCell {
 
     var version: String? {
         didSet {

@@ -1,6 +1,6 @@
 //
-//  StripeLocationCell.swift
-//  ProtoStripeTerminal
+//  LocationCell.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 05/01/2022.
 //
@@ -9,7 +9,7 @@ import UIKit
 import StripeTerminal
 
 /// A cell to show the name and the address of a Stripe Location
-class StripeLocationCell: UITableViewCell {
+class LocationCell: UITableViewCell {
     
     var location: Location? {
         didSet {

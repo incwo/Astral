@@ -1,6 +1,6 @@
 //
-//  StripeReadersDiscovery.swift
-//  ProtoStripe
+//  ReadersDiscovery.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 17/12/2021.
 //
@@ -9,7 +9,7 @@ import Foundation
 import StripeTerminal
 
 /// Discover Stripe Readers
-class StripeReadersDiscovery: NSObject {
+class ReadersDiscovery: NSObject {
     typealias OnUpdate = ([Reader])->()
     typealias OnError = (Error)->()
     private var onUpdate: OnUpdate?
@@ -82,7 +82,7 @@ class StripeReadersDiscovery: NSObject {
     }
 }
 
-extension StripeReadersDiscovery: DiscoveryDelegate {
+extension ReadersDiscovery: DiscoveryDelegate {
     func terminal(_ terminal: Terminal, didUpdateDiscoveredReaders readers: [Reader]) {
         onUpdate?(readers)
     }

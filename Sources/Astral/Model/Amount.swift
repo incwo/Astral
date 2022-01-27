@@ -1,6 +1,6 @@
 //
-//  StripeAmount.swift
-//  ProtoStripeTerminal
+//  Amount.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 12/01/2022.
 //
@@ -8,7 +8,7 @@
 import Foundation
 
 /// An amount in a given currency
-public struct StripeAmount {
+public struct Amount {
     /// Amount in the smallest unit of the currency (i.e: in cents if the currency has them).
     let smallestUnitAmount: UInt
     

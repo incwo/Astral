@@ -1,13 +1,13 @@
 //
-//  StripeReaderIdentityCell.swift
-//  ProtoStripeTerminal
+//  ReaderIdentityCell.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 23/12/2021.
 //
 
 import UIKit
 
-class StripeReaderIdentityCell: UITableViewCell {
+class ReaderIdentityCell: UITableViewCell {
 
     var model: String? {
         didSet {

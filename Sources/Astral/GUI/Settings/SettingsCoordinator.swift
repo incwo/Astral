@@ -1,6 +1,6 @@
 //
-//  StripeSettingsCoordinator.swift
-//  ProtoStripeTerminal
+//  SettingsCoordinator.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 24/01/2022.
 //
@@ -9,37 +9,37 @@ import Foundation
 import UIKit
 import StripeTerminal
 
-protocol StripeSettingsCoordinatorDelegate: AnyObject {
+protocol SettingsCoordinatorDelegate: AnyObject {
     /// Tells that the Settings panel is about to close
-    func settingsCoordinatorWillDismiss(_ sender: StripeSettingsCoordinator)
+    func settingsCoordinatorWillDismiss(_ sender: SettingsCoordinator)
     
     /// Tells that the User chose a Location among the list
-    func settingsCoordinator(_ sender: StripeSettingsCoordinator, didPick location: Location)
+    func settingsCoordinator(_ sender: SettingsCoordinator, didPick location: Location)
     
     /// Tells that the User chose a Reader among the list of ones available at the current location
-    func settingsCoordinator(_ sender: StripeSettingsCoordinator, didPick reader: Reader)
+    func settingsCoordinator(_ sender: SettingsCoordinator, didPick reader: Reader)
     
     /// Asks the delegate for the Reader to update.
     ///
     /// The reader object is needed to show the current version and the one to install.
-    func settingsCoordinatorRequestsReaderToUpdate(_ sender: StripeSettingsCoordinator) -> Reader?
+    func settingsCoordinatorRequestsReaderToUpdate(_ sender: SettingsCoordinator) -> Reader?
     
     /// Asks the delegate to disconnect the current Reader
-    func settingsCoordinatorDisconnectReader(_ sender: StripeSettingsCoordinator)
+    func settingsCoordinatorDisconnectReader(_ sender: SettingsCoordinator)
     
     /// Asks the delegate to install the Reader's software update
-    func settingsCoordinatorInstallSoftwareUpdate(_ sender: StripeSettingsCoordinator)
+    func settingsCoordinatorInstallSoftwareUpdate(_ sender: SettingsCoordinator)
 }
 
 /// A coordinator for the Settings panel
-class StripeSettingsCoordinator: NSObject {
-    init(readersDiscovery: StripeReadersDiscovery) {
+class SettingsCoordinator: NSObject {
+    init(readersDiscovery: ReadersDiscovery) {
         self.readersDiscovery = readersDiscovery
     }
     
-    let readersDiscovery: StripeReadersDiscovery
+    let readersDiscovery: ReadersDiscovery
     
-    weak var delegate: StripeSettingsCoordinatorDelegate?
+    weak var delegate: SettingsCoordinatorDelegate?
     
     func presentSettings(from presentingViewController: UIViewController, reader: Reader?) {
         guard let _ = delegate else {
@@ -47,7 +47,7 @@ class StripeSettingsCoordinator: NSObject {
             return
         }
         
-        let settingsViewModel = StripeSettingsViewModel(
+        let settingsViewModel = SettingsViewModel(
             onSetupNewReader: {
                 self.screen = .discovery
             }, onShowUpdate: { [weak self] in
@@ -186,14 +186,14 @@ class StripeSettingsCoordinator: NSObject {
         return navigationController
     }()
     
-    private lazy var settingsViewController: StripeSettingsTableViewController = {
-        storyboard.instantiateViewController(withIdentifier: "settings") as! StripeSettingsTableViewController
+    private lazy var settingsViewController: SettingsTableViewController = {
+        storyboard.instantiateViewController(withIdentifier: "settings") as! SettingsTableViewController
     }()
     
-    private lazy var discoveryViewController: StripeDiscoveryTableViewController = {
-        let discoveryViewController = storyboard.instantiateViewController(withIdentifier: "discovery") as! StripeDiscoveryTableViewController
+    private lazy var discoveryViewController: DiscoveryTableViewController = {
+        let discoveryViewController = storyboard.instantiateViewController(withIdentifier: "discovery") as! DiscoveryTableViewController
         
-        discoveryViewController.viewModel = StripeDiscoveryViewModel(
+        discoveryViewController.viewModel = DiscoveryViewModel(
             readersDiscovery: readersDiscovery,
             onUpdateDiscovering: { isDiscovering in
                 
@@ -217,8 +217,8 @@ class StripeSettingsCoordinator: NSObject {
         return discoveryViewController
     }()
     
-    private lazy var locationsViewController: StripeLocationsTableViewController = {
-        let locationsViewController = storyboard.instantiateViewController(withIdentifier: "locations") as! StripeLocationsTableViewController
+    private lazy var locationsViewController: LocationsTableViewController = {
+        let locationsViewController = storyboard.instantiateViewController(withIdentifier: "locations") as! LocationsTableViewController
         
         locationsViewController.onLocationPicked = { [weak self] location in
             guard let self = self else { return }
@@ -230,10 +230,10 @@ class StripeSettingsCoordinator: NSObject {
         return locationsViewController
     }()
     
-    private lazy var updateViewController: StripeUpdateTableViewController = {
-        let updateViewController = storyboard.instantiateViewController(withIdentifier: "update") as! StripeUpdateTableViewController
+    private lazy var updateViewController: UpdateTableViewController = {
+        let updateViewController = storyboard.instantiateViewController(withIdentifier: "update") as! UpdateTableViewController
         
-        let viewModel = StripeUpdateViewModel(onInstallUpdate: { [weak self] in
+        let viewModel = UpdateViewModel(onInstallUpdate: { [weak self] in
             guard let self = self else { return }
             self.delegate?.settingsCoordinatorInstallSoftwareUpdate(self)
         })
@@ -259,7 +259,7 @@ class StripeSettingsCoordinator: NSObject {
     private var labelColor = UIColor(named: "stripe_label", in: .module, compatibleWith: nil)!
 }
 
-extension StripeSettingsCoordinator: UIAdaptivePresentationControllerDelegate {
+extension SettingsCoordinator: UIAdaptivePresentationControllerDelegate {
     // Called for "Swipe to dismiss" on iOS 13+
     // This is for the navigationController
     func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {

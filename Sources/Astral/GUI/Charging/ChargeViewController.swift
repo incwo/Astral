@@ -1,13 +1,13 @@
 //
-//  StripeChargeViewController.swift
-//  ProtoStripeTerminal
+//  ChargeViewController.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 25/01/2022.
 //
 
 import UIKit
 
-class StripeChargeViewController: UIViewController {
+class ChargeViewController: UIViewController {
 
     var operationTitle: String? {
         didSet {

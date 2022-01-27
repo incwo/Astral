@@ -11,25 +11,25 @@ import StripeTerminal
 
 public class Astral {
     public init(apiClient: AstralApiClient) {
-        self.model = StripeTerminalModel(apiClient: apiClient)
+        self.model = TerminalModel(apiClient: apiClient)
         //super.init()
         self.model.delegate = self
     }
     
-    private let model: StripeTerminalModel
+    private let model: TerminalModel
     
     public func presentSettings(from presentingViewController: UIViewController) {
-        let settingsCoordinator = StripeSettingsCoordinator(readersDiscovery: model.discovery)
+        let settingsCoordinator = SettingsCoordinator(readersDiscovery: model.discovery)
         settingsCoordinator.delegate = self
         settingsCoordinator.presentSettings(from: presentingViewController, reader: model.reader)
         coordinator = .settings(settingsCoordinator)
     }
     
     private var presentingViewController: UIViewController?
-    public func charge(amount: NSDecimalNumber, currency: String, presentFrom presentingViewController: UIViewController, onSuccess: @escaping (StripePaymentInfo)->(), onError: @escaping (Error)->()) {
+    public func charge(amount: NSDecimalNumber, currency: String, presentFrom presentingViewController: UIViewController, onSuccess: @escaping (PaymentInfo)->(), onError: @escaping (Error)->()) {
         self.presentingViewController = presentingViewController
         
-        let chargeCoordinator = StripeChargeCoordinator()
+        let chargeCoordinator = ChargeCoordinator()
         chargeCoordinator.delegate = self
         chargeCoordinator.present(for: .charging(amount: amount, currencyCode: currency), from: presentingViewController)
         coordinator = .charge(chargeCoordinator)
@@ -52,14 +52,14 @@ public class Astral {
     
     private enum PresentedCoordinator {
         case none
-        case charge (StripeChargeCoordinator)
-        case settings (StripeSettingsCoordinator)
+        case charge (ChargeCoordinator)
+        case settings (SettingsCoordinator)
     }
     private var coordinator: PresentedCoordinator = .none
 }
 
-extension Astral: StripeTerminalModelDelegate {
-    func stripeTerminalModel(_ sender: StripeTerminalModel, didUpdateState state: StripeTerminalModel.State) {
+extension Astral: TerminalModelDelegate {
+    func stripeTerminalModel(_ sender: TerminalModel, didUpdateState state: TerminalModel.State) {
         switch coordinator {
         case .none:
             NSLog("\(#function) Unexpected: receiving Model state update with no Coordinator presented.")
@@ -70,7 +70,7 @@ extension Astral: StripeTerminalModelDelegate {
         }
     }
     
-    private func updateChargeCoordinator(_ chargeCoordinator: StripeChargeCoordinator, for state: StripeTerminalModel.State) {
+    private func updateChargeCoordinator(_ chargeCoordinator: ChargeCoordinator, for state: TerminalModel.State) {
         switch state {
         case .noReaderConnected:
             break
@@ -95,7 +95,7 @@ extension Astral: StripeTerminalModelDelegate {
         }
     }
     
-    private func updateSettingsCoordinator(_ settingsCoordinator: StripeSettingsCoordinator, for state: StripeTerminalModel.State) {
+    private func updateSettingsCoordinator(_ settingsCoordinator: SettingsCoordinator, for state: TerminalModel.State) {
         switch state {
         case .noReaderConnected:
             settingsCoordinator.update(for: .didDisconnect)
@@ -120,11 +120,11 @@ extension Astral: StripeTerminalModelDelegate {
         }
     }
     
-    func stripeTerminalModel(_sender: StripeTerminalModel, didFailWithError error: Error) {
+    func stripeTerminalModel(_sender: TerminalModel, didFailWithError error: Error) {
         NSLog("\(#function) error: \(error)")
     }
     
-    func stripeTerminalModelNeedsSettingUp(_ sender: StripeTerminalModel) {
+    func stripeTerminalModelNeedsSettingUp(_ sender: TerminalModel) {
         guard let presentingViewController = presentingViewController else {
             NSLog("\(#function) No presentingViewController")
             return
@@ -132,7 +132,7 @@ extension Astral: StripeTerminalModelDelegate {
         presentSettings(from: presentingViewController)
     }
     
-    func stripeTerminalModel(_ sender: StripeTerminalModel, softwareUpdateDidProgress progress: Float) {
+    func stripeTerminalModel(_ sender: TerminalModel, softwareUpdateDidProgress progress: Float) {
         switch coordinator {
         case .settings(let coordinator):
             coordinator.update(for: .didProgressInstallingUpdate(progress))
@@ -142,35 +142,35 @@ extension Astral: StripeTerminalModelDelegate {
     }
 }
 
-extension Astral: StripeChargeCoordinatorDelegate {
+extension Astral: ChargeCoordinatorDelegate {
     func chargeCoordinatorWillDismiss() {
         coordinator = .none
     }
 }
 
-extension Astral: StripeSettingsCoordinatorDelegate {
-    func settingsCoordinatorWillDismiss(_ sender: StripeSettingsCoordinator) {
+extension Astral: SettingsCoordinatorDelegate {
+    func settingsCoordinatorWillDismiss(_ sender: SettingsCoordinator) {
         coordinator = .none
     }
     
-    func settingsCoordinator(_ sender: StripeSettingsCoordinator, didPick location: Location) {
+    func settingsCoordinator(_ sender: SettingsCoordinator, didPick location: Location) {
         model.location = location
     }
     
-    func settingsCoordinator(_ sender: StripeSettingsCoordinator, didPick reader: Reader) {
+    func settingsCoordinator(_ sender: SettingsCoordinator, didPick reader: Reader) {
         model.reader = reader
         model.connect()
     }
     
-    func settingsCoordinatorRequestsReaderToUpdate(_ sender: StripeSettingsCoordinator) -> Reader? {
+    func settingsCoordinatorRequestsReaderToUpdate(_ sender: SettingsCoordinator) -> Reader? {
         model.reader
     }
     
-    func settingsCoordinatorDisconnectReader(_ sender: StripeSettingsCoordinator) {
+    func settingsCoordinatorDisconnectReader(_ sender: SettingsCoordinator) {
         model.disconnect()
     }
     
-    func settingsCoordinatorInstallSoftwareUpdate(_ sender: StripeSettingsCoordinator) {
+    func settingsCoordinatorInstallSoftwareUpdate(_ sender: SettingsCoordinator) {
         model.installUpdate()
     }
 }

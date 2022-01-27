@@ -1,13 +1,13 @@
 //
-//  StripeUpdatingCell.swift
-//  ProtoStripeTerminal
+//  UpdatingCell.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 05/01/2022.
 //
 
 import UIKit
 
-class StripeUpdatingCell: UITableViewCell {
+class UpdatingCell: UITableViewCell {
     /// The progress of updating, in the 0..1 range.
     var progress: Float? {
         didSet {

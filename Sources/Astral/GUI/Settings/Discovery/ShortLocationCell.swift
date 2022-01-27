@@ -1,6 +1,6 @@
 //
-//  StripeShortLocationCell.swift
-//  ProtoStripeTerminal
+//  ShortLocationCell.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 06/01/2022.
 //
@@ -10,7 +10,7 @@ import UIKit
 import StripeTerminal
 
 /// A cell to show a short identification of a Location
-class StripeShortLocationCell: UITableViewCell {
+class ShortLocationCell: UITableViewCell {
     
     var location: Location? {
         didSet {

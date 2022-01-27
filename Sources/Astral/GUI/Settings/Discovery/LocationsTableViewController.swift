@@ -1,6 +1,6 @@
 //
-//  StripeLocationsTableViewController.swift
-//  ProtoStripeTerminal
+//  LocationsTableViewController.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 05/01/2022.
 //
@@ -8,7 +8,7 @@
 import UIKit
 import StripeTerminal
 
-class StripeLocationsTableViewController: UITableViewController {
+class LocationsTableViewController: UITableViewController {
     
     var onLocationPicked: ((Location)->())?
     private var locations: [Location] = []
@@ -57,7 +57,7 @@ class StripeLocationsTableViewController: UITableViewController {
 
 // MARK: UITableViewDataSource
 
-extension StripeLocationsTableViewController {
+extension LocationsTableViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -67,7 +67,7 @@ extension StripeLocationsTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "location", for: indexPath) as! StripeLocationCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "location", for: indexPath) as! LocationCell
         cell.location = locations[indexPath.row]
         return cell
     }
@@ -75,7 +75,7 @@ extension StripeLocationsTableViewController {
 
 // MARK: UITableViewDelegate
 
-extension StripeLocationsTableViewController {
+extension LocationsTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         onLocationPicked?(locations[indexPath.row])
     }

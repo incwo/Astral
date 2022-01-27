@@ -1,6 +1,6 @@
 //
-//  StripePaymentProcessor.swift
-//  ProtoStripe
+//  PaymentProcessor.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 15/12/2021.
 //
@@ -21,13 +21,13 @@ public protocol AstralApiClient {
     func capturePaymentIntent(id: String, onSuccess: @escaping ()->(), onError: @escaping (Error)->())
 }
 
-enum StripeChargeResult {
-    case success (StripePaymentInfo)
+enum ChargeResult {
+    case success (PaymentInfo)
     case cancelled
     case error (Error)
 }
 
-class StripePaymentProcessor: NSObject {
+class PaymentProcessor: NSObject {
     let apiClient: AstralApiClient
     init(apiClient: AstralApiClient) {
         self.apiClient = apiClient
@@ -37,7 +37,7 @@ class StripePaymentProcessor: NSObject {
         Terminal.setTokenProvider(self)
     }
     
-    func charge(amount: StripeAmount, completion: @escaping (StripeChargeResult)->()) {
+    func charge(amount: Amount, completion: @escaping (ChargeResult)->()) {
         let params = PaymentIntentParameters(amount: amount.smallestUnitAmount, currency: amount.currency)
         Terminal.shared.createPaymentIntent(params) { paymentIntent, error in
             if let error = error {
@@ -57,7 +57,7 @@ class StripePaymentProcessor: NSObject {
     }
     
     private var collectCancellable: Cancelable?
-    private func collectPaymentMethod(_ paymentIntent: PaymentIntent, completion: @escaping (StripeChargeResult)->()) {
+    private func collectPaymentMethod(_ paymentIntent: PaymentIntent, completion: @escaping (ChargeResult)->()) {
         self.collectCancellable = Terminal.shared.collectPaymentMethod(paymentIntent) { paymentIntentToCollect, error in
             self.collectCancellable = nil
             
@@ -69,7 +69,7 @@ class StripePaymentProcessor: NSObject {
         }
     }
     
-    private func processPayment(_ paymentIntent: PaymentIntent, completion: @escaping (StripeChargeResult)->()) {
+    private func processPayment(_ paymentIntent: PaymentIntent, completion: @escaping (ChargeResult)->()) {
         Terminal.shared.processPayment(paymentIntent) { paymentIntentToConfirm, error in
             if let error = error {
                 if let updatedPaymentIntent = error.paymentIntent {
@@ -100,7 +100,7 @@ class StripePaymentProcessor: NSObject {
                         .filter({ $0.status == .succeeded })
                         .map({ $0.asPaymentInfoCharge() })
                     
-                    let paymentInfo = StripePaymentInfo(id: paymentIntent.stripeId, date: Date(), charges: charges)
+                    let paymentInfo = PaymentInfo(id: paymentIntent.stripeId, date: Date(), charges: charges)
                     completion(.success(paymentInfo))
                 }, onError: { error in
                     completion(.error(error))
@@ -110,7 +110,7 @@ class StripePaymentProcessor: NSObject {
     }
 }
 
-extension StripePaymentProcessor: ConnectionTokenProvider {
+extension PaymentProcessor: ConnectionTokenProvider {
     func fetchConnectionToken(_ completion: @escaping ConnectionTokenCompletionBlock) {
         apiClient.fetchConnectionToken(onSuccess: { secret in
             completion(secret, nil)
@@ -121,11 +121,11 @@ extension StripePaymentProcessor: ConnectionTokenProvider {
 }
 
 private extension Charge {
-    func asPaymentInfoCharge() -> StripePaymentInfo.Charge {
-        return .init(id: self.stripeId, amount: StripeAmount(smallestUnitAmount: self.amount, currency: self.currency), cardDetails: self.cardDetails)
+    func asPaymentInfoCharge() -> PaymentInfo.Charge {
+        return .init(id: self.stripeId, amount: Amount(smallestUnitAmount: self.amount, currency: self.currency), cardDetails: self.cardDetails)
     }
     
-    private var cardDetails: StripeCardDetails? {
+    private var cardDetails: CardDetails? {
         guard self.status == .succeeded,
               let paymentMethodDetails = self.paymentMethodDetails
         else {
@@ -146,7 +146,7 @@ private extension Charge {
             return nil
         }
         
-        return StripeCardDetails(
+        return CardDetails(
             brand: Terminal.stringFromCardBrand(present.brand),
             last4: present.last4)
     }

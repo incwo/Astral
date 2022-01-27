@@ -1,6 +1,6 @@
 //
-//  StripeReaderCell.swift
-//  ProtoStripeTerminal
+//  ReaderCell.swift
+//  Astral
 //
 //  Created by Renaud Pradenc on 22/12/2021.
 //
@@ -8,7 +8,7 @@
 import UIKit
 
 /// A Table View Cell to show the identity of a Stripe Reader
-class StripeReaderCell: UITableViewCell {
+class ReaderCell: UITableViewCell {
     var model: String? {
         didSet {
             modelLabel.text = model
