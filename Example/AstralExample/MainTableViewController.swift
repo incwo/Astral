@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Stral
+import Astral
 
 class MainTableViewController: UITableViewController {
 
@@ -16,7 +16,7 @@ class MainTableViewController: UITableViewController {
     }
     
     private lazy var stralApiClient = ExampleApiClient()
-    private lazy var stripeManager = StralManager(apiClient: stralApiClient)
+    private lazy var stripeManager = AstralManager(apiClient: stralApiClient)
 
     @IBAction private func setup(_ sender: Any) {
         stripeManager.presentSettings(from: self)

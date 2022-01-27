@@ -22,8 +22,6 @@
 "Terminal.readerDisplayMessage.insertOrSwipeCard" = "Insert or swipe the card";
 "Terminal.readerDisplayMessage.swipeCard" = "Swipe the card";
 "Terminal.readerDisplayMessage.removeCard" = "Remove the card";
-"Terminal.readerDisplayMessage.multipleContactlessCardsDetected" = "The reader detected multiple contactless cards. Make sure only one
- contactless card or NFC device is near the reader.";
-"Terminal.readerDisplayMessage.tryAnotherReadMethod" = "The card could not be read. Try another read method on the same card, or
- use a different card.";
+"Terminal.readerDisplayMessage.multipleContactlessCardsDetected" = "The reader detected multiple contactless cards. Make sure only one contactless card or NFC device is near the reader.";
+"Terminal.readerDisplayMessage.tryAnotherReadMethod" = "The card could not be read. Try another read method on the same card, or use a different card.";
 "Terminal.readerDisplayMessage.tryAnotherCard" = "The card is invalid. Try another card.";

@@ -9,21 +9,22 @@
 /* Begin PBXBuildFile section */
 		DF58313527A1A0F800F8A1FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF58313427A1A0F800F8A1FC /* AppDelegate.swift */; };
 		DF58313727A1A0F800F8A1FC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF58313627A1A0F800F8A1FC /* SceneDelegate.swift */; };
-		DF58313927A1A0F800F8A1FC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF58313827A1A0F800F8A1FC /* ViewController.swift */; };
 		DF58313C27A1A0F800F8A1FC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF58313A27A1A0F800F8A1FC /* Main.storyboard */; };
 		DF58313E27A1A0FA00F8A1FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF58313D27A1A0FA00F8A1FC /* Assets.xcassets */; };
 		DF58314127A1A0FA00F8A1FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF58313F27A1A0FA00F8A1FC /* LaunchScreen.storyboard */; };
+		DF58314E27A289BC00F8A1FC /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF58314D27A289BC00F8A1FC /* MainTableViewController.swift */; };
+		DF58316727A2A21400F8A1FC /* Astral in Frameworks */ = {isa = PBXBuildFile; productRef = DF58316627A2A21400F8A1FC /* Astral */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		DF58313127A1A0F800F8A1FC /* AstralExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AstralExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF58313427A1A0F800F8A1FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DF58313627A1A0F800F8A1FC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		DF58313827A1A0F800F8A1FC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		DF58313B27A1A0F800F8A1FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DF58313D27A1A0FA00F8A1FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DF58314027A1A0FA00F8A1FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DF58314227A1A0FA00F8A1FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DF58314D27A289BC00F8A1FC /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF58316727A2A21400F8A1FC /* Astral in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,8 +42,10 @@
 		DF58312827A1A0F700F8A1FC = {
 			isa = PBXGroup;
 			children = (
+				DF58315927A2970800F8A1FC /* Packages */,
 				DF58313327A1A0F800F8A1FC /* AstralExample */,
 				DF58313227A1A0F800F8A1FC /* Products */,
+				DF58315127A28C8300F8A1FC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,13 +62,27 @@
 			children = (
 				DF58313427A1A0F800F8A1FC /* AppDelegate.swift */,
 				DF58313627A1A0F800F8A1FC /* SceneDelegate.swift */,
-				DF58313827A1A0F800F8A1FC /* ViewController.swift */,
+				DF58314D27A289BC00F8A1FC /* MainTableViewController.swift */,
 				DF58313A27A1A0F800F8A1FC /* Main.storyboard */,
 				DF58313D27A1A0FA00F8A1FC /* Assets.xcassets */,
 				DF58313F27A1A0FA00F8A1FC /* LaunchScreen.storyboard */,
 				DF58314227A1A0FA00F8A1FC /* Info.plist */,
 			);
 			path = AstralExample;
+			sourceTree = "<group>";
+		};
+		DF58315127A28C8300F8A1FC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DF58315927A2970800F8A1FC /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Packages;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +101,9 @@
 			dependencies = (
 			);
 			name = AstralExample;
+			packageProductDependencies = (
+				DF58316627A2A21400F8A1FC /* Astral */,
+			);
 			productName = AstralExample;
 			productReference = DF58313127A1A0F800F8A1FC /* AstralExample.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +132,9 @@
 				Base,
 			);
 			mainGroup = DF58312827A1A0F700F8A1FC;
+			packageReferences = (
+				DF58316527A2A21400F8A1FC /* XCRemoteSwiftPackageReference "Astral" */,
+			);
 			productRefGroup = DF58313227A1A0F800F8A1FC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -138,7 +162,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DF58313927A1A0F800F8A1FC /* ViewController.swift in Sources */,
+				DF58314E27A289BC00F8A1FC /* MainTableViewController.swift in Sources */,
 				DF58313527A1A0F800F8A1FC /* AppDelegate.swift in Sources */,
 				DF58313727A1A0F800F8A1FC /* SceneDelegate.swift in Sources */,
 			);
@@ -362,6 +386,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DF58316527A2A21400F8A1FC /* XCRemoteSwiftPackageReference "Astral" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/incwo/Astral";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DF58316627A2A21400F8A1FC /* Astral */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DF58316527A2A21400F8A1FC /* XCRemoteSwiftPackageReference "Astral" */;
+			productName = Astral;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DF58312927A1A0F700F8A1FC /* Project object */;
 }

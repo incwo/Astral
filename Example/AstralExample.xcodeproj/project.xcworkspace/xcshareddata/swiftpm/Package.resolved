@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Astral",
+        "repositoryURL": "https://github.com/incwo/Astral",
+        "state": {
+          "branch": "main",
+          "revision": "d94c8a8d6125fd8c149321ba62554c047e14fa57",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
