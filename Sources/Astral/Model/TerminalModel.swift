@@ -168,7 +168,7 @@ class TerminalModel: NSObject {
         }
     }
     
-    private let serialNumberUserDefaultsKey = "StripeTerminal.reader.serialNumber"
+    private let serialNumberUserDefaultsKey = "Astral.reader.serialNumber"
 }
 
 extension TerminalModel: TerminalDelegate {
@@ -178,8 +178,7 @@ extension TerminalModel: TerminalDelegate {
     
     // Call this method just before connecting the reader; simulatorConfiguration might be nil earlier.
     private func configureSimulator() {
-        #warning("Remettre en .random")
-        Terminal.shared.simulatorConfiguration.availableReaderUpdate = .available
+        Terminal.shared.simulatorConfiguration.availableReaderUpdate = .random
     }
 }
 
