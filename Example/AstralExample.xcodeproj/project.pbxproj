@@ -25,6 +25,7 @@
 		DF58314027A1A0FA00F8A1FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DF58314227A1A0FA00F8A1FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DF58314D27A289BC00F8A1FC /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
+		DF58318C27A2A97400F8A1FC /* Astral */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Astral; path = ..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +82,7 @@
 		DF58315927A2970800F8A1FC /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				DF58318C27A2A97400F8A1FC /* Astral */,
 			);
 			name = Packages;
 			sourceTree = "<group>";

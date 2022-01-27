@@ -1,5 +1,5 @@
 //
-//  StralManager.swift
+//  Astral.swift
 //  Stral
 //
 //  Created by Renaud Pradenc on 21/12/2021.
@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import StripeTerminal
 
-public class StralManager {
+public class Astral {
     public init(apiClient: StripeApiClient) {
         self.model = StripeTerminalModel(apiClient: apiClient)
         super.init()
@@ -58,7 +58,7 @@ public class StralManager {
     private var coordinator: PresentedCoordinator = .none
 }
 
-extension StralManager: StripeTerminalModelDelegate {
+extension Astral: StripeTerminalModelDelegate {
     func stripeTerminalModel(_ sender: StripeTerminalModel, didUpdateState state: StripeTerminalModel.State) {
         switch coordinator {
         case .none:
@@ -142,13 +142,13 @@ extension StralManager: StripeTerminalModelDelegate {
     }
 }
 
-extension StralManager: StripeChargeCoordinatorDelegate {
+extension Astral: StripeChargeCoordinatorDelegate {
     func chargeCoordinatorWillDismiss() {
         coordinator = .none
     }
 }
 
-extension StralManager: StripeSettingsCoordinatorDelegate {
+extension Astral: StripeSettingsCoordinatorDelegate {
     func settingsCoordinatorWillDismiss(_ sender: StripeSettingsCoordinator) {
         coordinator = .none
     }

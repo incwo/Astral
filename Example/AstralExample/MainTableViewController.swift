@@ -16,7 +16,7 @@ class MainTableViewController: UITableViewController {
     }
     
     private lazy var stralApiClient = ExampleApiClient()
-    private lazy var stripeManager = AstralManager(apiClient: stralApiClient)
+    private lazy var stripeManager = Astral(apiClient: stralApiClient)
 
     @IBAction private func setup(_ sender: Any) {
         stripeManager.presentSettings(from: self)

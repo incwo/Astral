@@ -3,7 +3,7 @@
     "pins": [
       {
         "package": "StripeTerminal",
-        "repositoryURL": "https://github.com/stripe/stripe-terminal-ios",
+        "repositoryURL": "https://github.com/stripe/stripe-terminal-ios.git",
         "state": {
           "branch": null,
           "revision": "09883b0ce8b5d337d7eb92e44f1b150903aa0f86",

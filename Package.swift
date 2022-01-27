@@ -13,7 +13,7 @@ let package = Package(
             targets: ["Astral"]),
     ],
     dependencies: [
-        .package(name: "StripeTerminal", url: "https://github.com/stripe/stripe-terminal-ios", from: "2.0.0"),
+        .package(name: "StripeTerminal", url: "https://github.com/stripe/stripe-terminal-ios.git", from: "2.0.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
