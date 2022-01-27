@@ -181,8 +181,8 @@ class SettingsCoordinator: NSObject {
     
     private lazy var navigationController: UINavigationController = {
         let navigationController = UINavigationController()
-        navigationController.navigationBar.tintColor = UIColor(named: "stripe_accent", in: .module, compatibleWith: nil)
-        navigationController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: labelColor]
+        navigationController.navigationBar.tintColor = .astralAccent
+        navigationController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.astralLabel as Any]
         return navigationController
     }()
     
@@ -252,11 +252,6 @@ class SettingsCoordinator: NSObject {
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         viewController.present(alert, animated: true, completion: nil)
     }
-    
-    // MARK: Appearance
-    
-    private var accentColor = UIColor(named: "stripe_accent", in: .module, compatibleWith: nil)
-    private var labelColor = UIColor(named: "stripe_label", in: .module, compatibleWith: nil)!
 }
 
 extension SettingsCoordinator: UIAdaptivePresentationControllerDelegate {
