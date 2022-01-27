@@ -10,9 +10,9 @@ import UIKit
 import StripeTerminal
 
 public class Astral {
-    public init(apiClient: StripeApiClient) {
+    public init(apiClient: AstralApiClient) {
         self.model = StripeTerminalModel(apiClient: apiClient)
-        super.init()
+        //super.init()
         self.model.delegate = self
     }
     

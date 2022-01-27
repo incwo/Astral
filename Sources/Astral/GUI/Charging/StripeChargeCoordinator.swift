@@ -55,7 +55,7 @@ class StripeChargeCoordinator: NSObject {
     // MARK: View Controllers
     
     private lazy var storyboard: UIStoryboard = {
-        UIStoryboard(name: "StripeTerminal", bundle: nil)
+        UIStoryboard(name: "Astral", bundle: .module)
     }()
     
     private lazy var navigationController: UINavigationController = {

@@ -10,7 +10,7 @@ import StripeTerminal
 import UIKit
 
 /// The ability to send requests toward the server so it can process Stripe Payments.
-protocol StripeApiClient {
+public protocol AstralApiClient {
     /// Perform a POST request toward the server so it returns a Stripe Connection Token.
     ///
     /// On success, returns the secret token.
@@ -28,8 +28,8 @@ enum StripeChargeResult {
 }
 
 class StripePaymentProcessor: NSObject {
-    let apiClient: StripeApiClient
-    init(apiClient: StripeApiClient) {
+    let apiClient: AstralApiClient
+    init(apiClient: AstralApiClient) {
         self.apiClient = apiClient
         
         super.init()

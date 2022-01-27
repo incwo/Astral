@@ -13,7 +13,7 @@
         <!--Stripe Settings Table View Controller-->
         <scene sceneID="YdT-fq-5ym">
             <objects>
-                <tableViewController storyboardIdentifier="settings" id="426-pZ-fFz" customClass="StripeSettingsTableViewController" customModule="ProtoStripeTerminal" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="settings" id="426-pZ-fFz" customClass="StripeSettingsTableViewController" customModule="Astral" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="44" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="r6i-b4-Wf6">
                         <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -109,7 +109,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="reader" id="44r-k9-BTd" customClass="StripeReaderCell" customModule="ProtoStripeTerminal" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="reader" id="44r-k9-BTd" customClass="StripeReaderCell" customModule="Astral">
                                 <rect key="frame" x="0.0" y="275.5" width="540" height="63.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="44r-k9-BTd" id="u5g-dt-K3u">
@@ -226,7 +226,7 @@
         <!--Stripe Charge View Controller-->
         <scene sceneID="RAk-qn-iiN">
             <objects>
-                <viewController storyboardIdentifier="charge" id="TgG-y5-ewr" customClass="StripeChargeViewController" customModule="ProtoStripeTerminal" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="charge" id="TgG-y5-ewr" customClass="StripeChargeViewController" customModule="Astral" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gHi-m0-fiW">
                         <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -294,13 +294,13 @@
         <!--Update-->
         <scene sceneID="F32-ca-smp">
             <objects>
-                <tableViewController storyboardIdentifier="update" title="Update" id="QxL-pj-Lfk" customClass="StripeUpdateTableViewController" customModule="ProtoStripeTerminal" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="update" title="Update" id="QxL-pj-Lfk" customClass="StripeUpdateTableViewController" customModule="Astral" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="18" id="eoc-VR-ZQZ">
                         <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="currentVersion" id="yd0-zG-JvQ" customClass="StripeVersionCell" customModule="ProtoStripeTerminal" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="currentVersion" id="yd0-zG-JvQ" customClass="StripeVersionCell" customModule="Astral">
                                 <rect key="frame" x="0.0" y="49.5" width="540" height="42"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="yd0-zG-JvQ" id="svk-8h-gOD">
@@ -337,7 +337,7 @@
                                     <outlet property="versionLabel" destination="ugs-nv-uMC" id="WNk-Gr-LIL"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="updateVersion" id="xla-O0-27M" customClass="StripeVersionCell" customModule="ProtoStripeTerminal" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="updateVersion" id="xla-O0-27M" customClass="StripeVersionCell" customModule="Astral">
                                 <rect key="frame" x="0.0" y="91.5" width="540" height="42"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xla-O0-27M" id="you-zv-aC0">
@@ -425,7 +425,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="updating" rowHeight="82" id="YbS-Ap-3Vh" customClass="StripeUpdatingCell" customModule="ProtoStripeTerminal" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="updating" rowHeight="82" id="YbS-Ap-3Vh" customClass="StripeUpdatingCell" customModule="Astral">
                                 <rect key="frame" x="0.0" y="220" width="540" height="82"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YbS-Ap-3Vh" id="fyi-fW-MX5">
@@ -488,7 +488,7 @@
         <!--Readers discovery-->
         <scene sceneID="Q0d-4g-QnY">
             <objects>
-                <tableViewController storyboardIdentifier="discovery" title="Readers discovery" id="g2Y-ee-6gs" customClass="StripeDiscoveryTableViewController" customModule="ProtoStripeTerminal" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="discovery" title="Readers discovery" id="g2Y-ee-6gs" customClass="StripeDiscoveryTableViewController" customModule="Astral" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="6f9-XV-VfC">
                         <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -516,7 +516,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="location" id="ZTv-gX-DuT" customClass="StripeShortLocationCell" customModule="ProtoStripeTerminal" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="location" id="ZTv-gX-DuT" customClass="StripeShortLocationCell" customModule="Astral">
                                 <rect key="frame" x="0.0" y="113" width="540" height="90.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ZTv-gX-DuT" id="aSs-vE-cWX">
@@ -604,7 +604,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="readerIdentity" id="XTR-qx-8A5" customClass="StripeReaderIdentityCell" customModule="ProtoStripeTerminal" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="readerIdentity" id="XTR-qx-8A5" customClass="StripeReaderIdentityCell" customModule="Astral">
                                 <rect key="frame" x="0.0" y="328" width="540" height="63.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="XTR-qx-8A5" id="w0D-6P-XQ0">
@@ -654,13 +654,13 @@
         <!--Locations-->
         <scene sceneID="P6o-vk-uld">
             <objects>
-                <tableViewController storyboardIdentifier="locations" title="Locations" id="ltk-xa-uE1" customClass="StripeLocationsTableViewController" customModule="ProtoStripeTerminal" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="locations" title="Locations" id="ltk-xa-uE1" customClass="StripeLocationsTableViewController" customModule="Astral" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="lq6-43-Tmq">
                         <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="location" id="HeM-hj-oTl" customClass="StripeLocationCell" customModule="ProtoStripeTerminal" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="location" id="HeM-hj-oTl" customClass="StripeLocationCell" customModule="Astral">
                                 <rect key="frame" x="0.0" y="49.5" width="540" height="158"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="HeM-hj-oTl" id="Bqh-7J-bSG">

@@ -29,7 +29,11 @@ class StripeSettingsTableViewController: UITableViewController {
         super.viewDidLoad()
         
         title = "Stripe Terminal Settings"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(close(_:)))
+        if #available(iOS 13, *) {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(close(_:)))
+        } else {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: locz("close"), style: .plain, target: self, action: #selector(close(_:)))
+        }
     }
     
     @objc private func close(_ sender: UIBarButtonItem) {

@@ -177,11 +177,11 @@ class StripeSettingsCoordinator: NSObject {
     
     // MARK: View Controllers
     
-    private lazy var storyboard = UIStoryboard(name: "StripeTerminal", bundle: nil)
+    private lazy var storyboard = UIStoryboard(name: "Astral", bundle: .module)
     
     private lazy var navigationController: UINavigationController = {
         let navigationController = UINavigationController()
-        navigationController.navigationBar.tintColor = UIColor(named: "stripe_accent")
+        navigationController.navigationBar.tintColor = UIColor(named: "stripe_accent", in: .module, compatibleWith: nil)
         navigationController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: labelColor]
         return navigationController
     }()
@@ -255,8 +255,8 @@ class StripeSettingsCoordinator: NSObject {
     
     // MARK: Appearance
     
-    private var accentColor = UIColor(named: "stripe_accent")!
-    private var labelColor = UIColor(named: "stripe_label")!
+    private var accentColor = UIColor(named: "stripe_accent", in: .module, compatibleWith: nil)
+    private var labelColor = UIColor(named: "stripe_label", in: .module, compatibleWith: nil)!
 }
 
 extension StripeSettingsCoordinator: UIAdaptivePresentationControllerDelegate {

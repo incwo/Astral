@@ -8,15 +8,15 @@
 import Foundation
 
 /// An amount in a given currency
-struct StripeAmount {
+public struct StripeAmount {
     /// Amount in the smallest unit of the currency (i.e: in cents if the currency has them).
     let smallestUnitAmount: UInt
     
     /// ISO code of the currency (lower case)
-    let currency: String
+    public let currency: String
     
     /// Initialize with an amount and a currency.
-    init(amount: NSDecimalNumber, currency: String) {
+    public init(amount: NSDecimalNumber, currency: String) {
         self.currency = currency.lowercased() // Stripe wants lowercase codes
         
         // Stripe demands that the amount is given as an integer in the "smallest unit". e.g. in cents for Euros or Dollars. But some currencies have no cents.
@@ -28,7 +28,7 @@ struct StripeAmount {
         }
     }
     
-    var amount: NSDecimalNumber {
+    public var amount: NSDecimalNumber {
         if noDecimalCurrencyCodes.contains(self.currency) {
             return NSDecimalNumber(value: self.smallestUnitAmount)
         } else {

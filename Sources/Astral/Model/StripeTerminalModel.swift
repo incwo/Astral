@@ -25,7 +25,7 @@ protocol StripeTerminalModelDelegate: AnyObject {
 }
 
 class StripeTerminalModel: NSObject {
-    init(apiClient: StripeApiClient) {
+    init(apiClient: AstralApiClient) {
         self.paymentProcessor = StripePaymentProcessor(apiClient: apiClient)
         super.init()
         

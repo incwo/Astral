@@ -7,22 +7,22 @@
 
 import Foundation
 
-struct StripeCardDetails {
-    let brand: String
-    let last4: String
+public struct StripeCardDetails {
+    public let brand: String
+    public let last4: String
 }
 
-struct StripePaymentInfo {
+public struct StripePaymentInfo {
     /// Stripe identifier of the Payment Intent
-    let id: String
+    public let id: String
     
-    let date: Date
+    public let date: Date
     
-    struct Charge {
+    public struct Charge {
         /// Stripe identifier of the Charge
-        let id: String
-        let amount: StripeAmount
-        let cardDetails: StripeCardDetails?
+        public let id: String
+        public let amount: StripeAmount
+        public let cardDetails: StripeCardDetails?
     }
-    let charges: [Charge]
+    public let charges: [Charge]
 }

@@ -20,7 +20,13 @@ class StripeLocationsTableViewController: UITableViewController {
     }
     
     private lazy var activityIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .medium)
+        let style: UIActivityIndicatorView.Style
+        if #available(iOS 13, *) {
+            style = .medium
+        } else {
+            style = .gray
+        }
+        let indicator = UIActivityIndicatorView(style: style)
         indicator.hidesWhenStopped = true
         return indicator
     }()
