@@ -18,7 +18,7 @@ class ChargeCoordinator: NSObject {
     weak var delegate: ChargeCoordinatorDelegate?
     
     enum Operation {
-        case charging (amount: NSDecimalNumber, currencyCode: String)
+        case charging (amount: Amount)
         // case refund  // Not supported yet
     }
     
@@ -85,16 +85,9 @@ private extension ChargeCoordinator.Operation {
     
     var amountString: String {
         switch self {
-        case let .charging(amount, currencyCode):
-            return Self.localizedAmountString(amount: amount, currencyCode: currencyCode)
+        case let .charging(amount):
+            return amount.localizedString
         }
-    }
-    
-    private static func localizedAmountString(amount: NSDecimalNumber, currencyCode: String) -> String {
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .currency
-        numberFormatter.currencyCode = currencyCode
-        return numberFormatter.string(from: amount) ?? "\(amount) \(currencyCode)"
     }
 }
 

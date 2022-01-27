@@ -53,10 +53,10 @@ class TerminalModel: NSObject {
         }
     }
     
-    func charge(amount: NSDecimalNumber, currency: String, completion: @escaping (ChargeResult)->()) {
+    func charge(amount: Amount, completion: @escaping (ChargeResult)->()) {
         switch state {
         case .readerConnected (_):
-            paymentProcessor.charge(amount: Amount(amount: amount, currency: currency), completion: completion)
+            paymentProcessor.charge(amount: amount, completion: completion)
         case .charging(_):
             let error = NSError(domain: #function, code: 0, userInfo: [NSLocalizedDescriptionKey: "Can not charge now. The Terminal is already charging."])
             delegate?.stripeTerminalModel(_sender: self, didFailWithError: error)

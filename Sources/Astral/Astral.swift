@@ -12,7 +12,6 @@ import StripeTerminal
 public class Astral {
     public init(apiClient: AstralApiClient) {
         self.model = TerminalModel(apiClient: apiClient)
-        //super.init()
         self.model.delegate = self
     }
     
@@ -29,12 +28,13 @@ public class Astral {
     public func charge(amount: NSDecimalNumber, currency: String, presentFrom presentingViewController: UIViewController, onSuccess: @escaping (PaymentInfo)->(), onError: @escaping (Error)->()) {
         self.presentingViewController = presentingViewController
         
+        let amountInCurrency = Amount(amount: amount, currency: currency)
         let chargeCoordinator = ChargeCoordinator()
         chargeCoordinator.delegate = self
-        chargeCoordinator.present(for: .charging(amount: amount, currencyCode: currency), from: presentingViewController)
+        chargeCoordinator.present(for: .charging(amount: amountInCurrency), from: presentingViewController)
         coordinator = .charge(chargeCoordinator)
         
-        model.charge(amount: amount, currency: currency) { result in
+        model.charge(amount: amountInCurrency) { result in
             DispatchQueue.main.async {
                 chargeCoordinator.dismiss()
                 

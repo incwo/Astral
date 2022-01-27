@@ -45,3 +45,12 @@ public struct Amount {
         self.currency = currency.lowercased() // Stripe wants lowercase codes
     }
 }
+
+public extension Amount {
+    var localizedString: String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .currency
+        numberFormatter.currencyCode = currency
+        return numberFormatter.string(from: amount) ?? "\(amount) \(currency)"
+    }
+}
