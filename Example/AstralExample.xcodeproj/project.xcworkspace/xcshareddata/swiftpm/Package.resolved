@@ -2,21 +2,12 @@
   "object": {
     "pins": [
       {
-        "package": "Astral",
-        "repositoryURL": "https://github.com/incwo/Astral",
-        "state": {
-          "branch": "main",
-          "revision": "ae6d37190736f0d4bed7a497504c590bdeda8974",
-          "version": null
-        }
-      },
-      {
         "package": "StripeTerminal",
         "repositoryURL": "https://github.com/stripe/stripe-terminal-ios",
         "state": {
-          "branch": "master",
-          "revision": "4a3dff5fbfbdde9e946c1fec728461d92c478462",
-          "version": null
+          "branch": null,
+          "revision": "09883b0ce8b5d337d7eb92e44f1b150903aa0f86",
+          "version": "2.5.0"
         }
       }
     ]

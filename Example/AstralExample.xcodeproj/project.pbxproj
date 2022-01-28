@@ -14,7 +14,6 @@
 		DF58314127A1A0FA00F8A1FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF58313F27A1A0FA00F8A1FC /* LaunchScreen.storyboard */; };
 		DF58314E27A289BC00F8A1FC /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF58314D27A289BC00F8A1FC /* MainTableViewController.swift */; };
 		DF58316727A2A21400F8A1FC /* Astral in Frameworks */ = {isa = PBXBuildFile; productRef = DF58316627A2A21400F8A1FC /* Astral */; };
-		DF58318F27A2AC4C00F8A1FC /* StripeTerminal in Frameworks */ = {isa = PBXBuildFile; productRef = DF58318E27A2AC4C00F8A1FC /* StripeTerminal */; };
 		DF58319227A2B3E600F8A1FC /* ExampleApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF58319127A2B3E600F8A1FC /* ExampleApiClient.swift */; };
 /* End PBXBuildFile section */
 
@@ -52,7 +51,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DF58316727A2A21400F8A1FC /* Astral in Frameworks */,
-				DF58318F27A2AC4C00F8A1FC /* StripeTerminal in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,7 +133,6 @@
 			name = AstralExample;
 			packageProductDependencies = (
 				DF58316627A2A21400F8A1FC /* Astral */,
-				DF58318E27A2AC4C00F8A1FC /* StripeTerminal */,
 			);
 			productName = AstralExample;
 			productReference = DF58313127A1A0F800F8A1FC /* AstralExample.app */;
@@ -168,7 +165,6 @@
 			mainGroup = DF58312827A1A0F700F8A1FC;
 			packageReferences = (
 				DF58316527A2A21400F8A1FC /* XCRemoteSwiftPackageReference "Astral" */,
-				DF58318D27A2AC4C00F8A1FC /* XCRemoteSwiftPackageReference "stripe-terminal-ios" */,
 			);
 			productRefGroup = DF58313227A1A0F800F8A1FC /* Products */;
 			projectDirPath = "";
@@ -435,14 +431,6 @@
 				kind = branch;
 			};
 		};
-		DF58318D27A2AC4C00F8A1FC /* XCRemoteSwiftPackageReference "stripe-terminal-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/stripe/stripe-terminal-ios";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -450,11 +438,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DF58316527A2A21400F8A1FC /* XCRemoteSwiftPackageReference "Astral" */;
 			productName = Astral;
-		};
-		DF58318E27A2AC4C00F8A1FC /* StripeTerminal */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = DF58318D27A2AC4C00F8A1FC /* XCRemoteSwiftPackageReference "stripe-terminal-ios" */;
-			productName = StripeTerminal;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
