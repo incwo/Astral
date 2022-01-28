@@ -22,3 +22,7 @@ extension UIColor {
     static let astralLabel = UIColor(named: "astral.label", in: .module, compatibleWith: nil)
     static let astralLabelSecondary = UIColor(named: "astral.label.secondary", in: .module, compatibleWith: nil)
 }
+
+extension UIImage {
+    static let terminalLogo = UIImage(named: "astral.terminalLogo", in: .module, compatibleWith: nil)
+}

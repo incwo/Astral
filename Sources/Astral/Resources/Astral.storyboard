@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="ipad10_2" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -57,14 +58,14 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="connecting" id="MlS-cb-cYX">
-                                <rect key="frame" x="0.0" y="187.5" width="540" height="44"/>
+                                <rect key="frame" x="0.0" y="187.5" width="540" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="MlS-cb-cYX" id="haU-cd-6RT">
-                                    <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connecting to the Reader…" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vXK-Oe-2zY">
-                                            <rect key="frame" x="20" y="11" width="213" height="21.5"/>
+                                            <rect key="frame" x="20" y="11" width="213" height="21"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                             <color key="textColor" name="astral.label"/>
                                             <nil key="highlightedColor"/>
@@ -83,14 +84,14 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="searching" id="Mfc-RO-LEx">
-                                <rect key="frame" x="0.0" y="231.5" width="540" height="44"/>
+                                <rect key="frame" x="0.0" y="231" width="540" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Mfc-RO-LEx" id="WPn-MR-iGZ">
-                                    <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Looking for the Reader…" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oAK-Bg-0gZ">
-                                            <rect key="frame" x="20" y="11" width="190" height="21.5"/>
+                                            <rect key="frame" x="20" y="11" width="190" height="21"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                             <color key="textColor" name="astral.label"/>
                                             <nil key="highlightedColor"/>
@@ -109,7 +110,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="reader" id="44r-k9-BTd" customClass="ReaderCell" customModule="Astral">
-                                <rect key="frame" x="0.0" y="275.5" width="540" height="63.5"/>
+                                <rect key="frame" x="0.0" y="274.5" width="540" height="63.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="44r-k9-BTd" id="u5g-dt-K3u">
                                     <rect key="frame" x="0.0" y="0.0" width="540" height="63.5"/>
@@ -159,20 +160,20 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="softwareUpdate" id="NAC-cp-3ty">
-                                <rect key="frame" x="0.0" y="339" width="540" height="43.5"/>
+                                <rect key="frame" x="0.0" y="338" width="540" height="43"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="NAC-cp-3ty" id="2hp-Eb-s4P">
-                                    <rect key="frame" x="0.0" y="0.0" width="511.5" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="511.5" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="A software update is available" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZkN-jc-5U2">
-                                            <rect key="frame" x="48" y="11" width="237" height="21.5"/>
+                                            <rect key="frame" x="48" y="11" width="237" height="21"/>
                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                             <color key="textColor" name="astral.label"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="astral.info" translatesAutoresizingMaskIntoConstraints="NO" id="bgv-5M-PTl">
-                                            <rect key="frame" x="20" y="12" width="20" height="20"/>
+                                            <rect key="frame" x="20" y="11.5" width="20" height="20"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="20" id="GVk-Jl-UXZ"/>
                                                 <constraint firstAttribute="width" constant="20" id="NXi-RX-b8M"/>
@@ -189,14 +190,14 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="disconnectReader" id="Fg0-uv-SNO">
-                                <rect key="frame" x="0.0" y="382.5" width="540" height="43.5"/>
+                                <rect key="frame" x="0.0" y="381" width="540" height="43"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Fg0-uv-SNO" id="FoH-a7-OUT">
-                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Disconnect this Reader" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jdX-zC-qRq">
-                                            <rect key="frame" x="182" y="11" width="176.5" height="21.5"/>
+                                            <rect key="frame" x="182" y="11" width="176.5" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" name="astral.accent"/>
                                             <nil key="highlightedColor"/>
@@ -230,17 +231,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="operation" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l41-Bf-EVb">
-                                <rect key="frame" x="20" y="56" width="85" height="23"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="19"/>
-                                <color key="textColor" name="astral.label"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="astral.terminalLogo" translatesAutoresizingMaskIntoConstraints="NO" id="tJh-X0-gaY">
+                                <rect key="frame" x="20" y="56" width="260" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="260" id="9Yi-r1-cD2"/>
+                                    <constraint firstAttribute="height" constant="50" id="XA7-74-CCU"/>
+                                </constraints>
+                            </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="29Y-J5-Gr1">
-                                <rect key="frame" x="20" y="135" width="500" height="465"/>
+                                <rect key="frame" x="20" y="226" width="500" height="374"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="status" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kfd-au-4Nr">
-                                        <rect key="frame" x="8" y="220" width="484" height="25.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="status" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="kfd-au-4Nr">
+                                        <rect key="frame" x="8" y="174.5" width="484" height="25.5"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="21"/>
                                         <color key="textColor" name="astral.label"/>
                                         <nil key="highlightedColor"/>
@@ -251,15 +253,17 @@
                                     <constraint firstItem="kfd-au-4Nr" firstAttribute="leading" secondItem="29Y-J5-Gr1" secondAttribute="leadingMargin" id="Bfw-oH-b1c"/>
                                     <constraint firstItem="kfd-au-4Nr" firstAttribute="trailing" secondItem="29Y-J5-Gr1" secondAttribute="trailingMargin" id="PHD-Dh-hfJ"/>
                                     <constraint firstItem="kfd-au-4Nr" firstAttribute="centerY" secondItem="29Y-J5-Gr1" secondAttribute="centerY" id="cLn-xD-oFx"/>
+                                    <constraint firstItem="kfd-au-4Nr" firstAttribute="top" relation="greaterThanOrEqual" secondItem="29Y-J5-Gr1" secondAttribute="top" constant="20" symbolic="YES" id="qCq-mo-lrS"/>
+                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="kfd-au-4Nr" secondAttribute="bottom" constant="20" symbolic="YES" id="xSi-Au-TTP"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="20"/>
+                                        <integer key="value" value="8"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="amount" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AXM-pR-tMn">
-                                <rect key="frame" x="214" y="87" width="112" height="40"/>
+                                <rect key="frame" x="214" y="146" width="112" height="40"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="33"/>
                                 <color key="textColor" name="astral.accent"/>
                                 <nil key="highlightedColor"/>
@@ -268,12 +272,12 @@
                         <viewLayoutGuide key="safeArea" id="fV2-hj-6Tt"/>
                         <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="29Y-J5-Gr1" firstAttribute="top" secondItem="AXM-pR-tMn" secondAttribute="bottom" constant="8" symbolic="YES" id="5lj-0k-I69"/>
-                            <constraint firstItem="l41-Bf-EVb" firstAttribute="leading" secondItem="fV2-hj-6Tt" secondAttribute="leading" constant="20" id="DGt-gE-5x0"/>
+                            <constraint firstItem="29Y-J5-Gr1" firstAttribute="top" secondItem="AXM-pR-tMn" secondAttribute="bottom" constant="40" id="5lj-0k-I69"/>
                             <constraint firstItem="AXM-pR-tMn" firstAttribute="centerX" secondItem="fV2-hj-6Tt" secondAttribute="centerX" id="Jt1-32-XQg"/>
+                            <constraint firstItem="tJh-X0-gaY" firstAttribute="leading" secondItem="fV2-hj-6Tt" secondAttribute="leading" constant="20" id="L26-N4-W7c"/>
                             <constraint firstItem="fV2-hj-6Tt" firstAttribute="bottom" secondItem="29Y-J5-Gr1" secondAttribute="bottom" constant="20" id="Pn4-nj-pbF"/>
-                            <constraint firstItem="AXM-pR-tMn" firstAttribute="top" secondItem="l41-Bf-EVb" secondAttribute="bottom" constant="8" symbolic="YES" id="auR-0F-TAP"/>
-                            <constraint firstItem="l41-Bf-EVb" firstAttribute="top" secondItem="fV2-hj-6Tt" secondAttribute="top" id="hfg-Go-8RF"/>
+                            <constraint firstItem="AXM-pR-tMn" firstAttribute="top" secondItem="tJh-X0-gaY" secondAttribute="bottom" constant="40" id="V4g-md-9nM"/>
+                            <constraint firstItem="tJh-X0-gaY" firstAttribute="top" secondItem="fV2-hj-6Tt" secondAttribute="top" id="cso-KR-wKL"/>
                             <constraint firstItem="fV2-hj-6Tt" firstAttribute="trailing" secondItem="29Y-J5-Gr1" secondAttribute="trailing" constant="20" id="l9s-7B-1Zf"/>
                             <constraint firstItem="29Y-J5-Gr1" firstAttribute="leading" secondItem="fV2-hj-6Tt" secondAttribute="leading" constant="20" id="zLB-B4-rCn"/>
                         </constraints>
@@ -282,7 +286,6 @@
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="amountLabel" destination="AXM-pR-tMn" id="nro-HO-mtX"/>
-                        <outlet property="operationLabel" destination="l41-Bf-EVb" id="Zgo-dq-WIU"/>
                         <outlet property="statusLabel" destination="kfd-au-4Nr" id="PGj-tc-wOW"/>
                     </connections>
                 </viewController>
@@ -374,20 +377,20 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="upToDate" id="qLs-tg-pf5">
-                                <rect key="frame" x="0.0" y="133.5" width="540" height="43"/>
+                                <rect key="frame" x="0.0" y="133.5" width="540" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="qLs-tg-pf5" id="Zeb-JR-I3p">
-                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="The Reader's software is up to date." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="68r-gm-hN3">
-                                            <rect key="frame" x="48" y="11" width="274" height="21"/>
+                                            <rect key="frame" x="48" y="11" width="274" height="21.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" name="astral.label"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="astral.info" translatesAutoresizingMaskIntoConstraints="NO" id="Ect-Wi-WNK">
-                                            <rect key="frame" x="20" y="11.5" width="20" height="20"/>
+                                            <rect key="frame" x="20" y="12" width="20" height="20"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="20" id="abl-RH-4XZ"/>
                                                 <constraint firstAttribute="height" constant="20" id="pEF-Bx-qks"/>
@@ -404,14 +407,14 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="update" id="eDv-Za-53j">
-                                <rect key="frame" x="0.0" y="176.5" width="540" height="43.5"/>
+                                <rect key="frame" x="0.0" y="177" width="540" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="eDv-Za-53j" id="jhA-xf-RPu">
-                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Update Now" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e9y-Vt-3WL">
-                                            <rect key="frame" x="222.5" y="11" width="95" height="21"/>
+                                            <rect key="frame" x="222.5" y="11" width="95" height="21.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" name="astral.accent"/>
                                             <nil key="highlightedColor"/>
@@ -425,7 +428,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="updating" rowHeight="82" id="YbS-Ap-3Vh" customClass="UpdatingCell" customModule="Astral">
-                                <rect key="frame" x="0.0" y="220" width="540" height="82"/>
+                                <rect key="frame" x="0.0" y="221" width="540" height="82"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YbS-Ap-3Vh" id="fyi-fW-MX5">
                                     <rect key="frame" x="0.0" y="0.0" width="540" height="82"/>

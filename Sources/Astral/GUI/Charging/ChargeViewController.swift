@@ -11,9 +11,7 @@ class ChargeViewController: UIViewController {
 
     var operationTitle: String? {
         didSet {
-            if isViewLoaded {
-                operationLabel.text = operationTitle
-            }
+            self.title = operationTitle
         }
     }
     
@@ -36,13 +34,11 @@ class ChargeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        operationLabel.text = operationTitle
         amountLabel.text = amount
         statusLabel.text = status
     }
     
 
-    @IBOutlet private weak var operationLabel: UILabel!
     @IBOutlet private weak var amountLabel: UILabel!
     @IBOutlet private weak var statusLabel: UILabel!
 }
