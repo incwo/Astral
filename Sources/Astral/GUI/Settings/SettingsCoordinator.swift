@@ -248,7 +248,7 @@ class SettingsCoordinator: NSObject {
             return
         }
         
-        let alert = UIAlertController(title: "Error from Stripe Terminal", message: error.localizedDescription, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Stripe Terminal", message: error.localizedDescription, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         viewController.present(alert, animated: true, completion: nil)
     }

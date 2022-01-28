@@ -27,7 +27,7 @@ class ReaderCell: UITableViewCell {
             if let batteryLevel = batteryLevel {
                 batteryLevelLabel.text = "\(Int(batteryLevel*100.0))%"
             } else {
-                batteryLevelLabel.text = "N/A"
+                batteryLevelLabel.text = "--"
             }
         }
     }

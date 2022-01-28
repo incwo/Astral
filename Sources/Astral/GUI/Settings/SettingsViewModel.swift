@@ -49,25 +49,26 @@ class SettingsViewModel {
     }
     
     var sections: [Section] {
+        let sectionTitle = locz("SettingsViewModel.sectionHeader.reader")
         switch content {
         case .noReaderConnected:
             return [
-                Section(title: "Reader", rows: [.setupReader])
+                Section(title: sectionTitle, rows: [.setupReader])
             ]
             
         case .searchingReader:
             return [
-                Section(title: "Reader", rows: [.searchingReader])
+                Section(title: sectionTitle, rows: [.searchingReader])
             ]
             
         case .connecting:
             return [
-                Section(title: "Reader", rows: [.connecting])
+                Section(title: sectionTitle, rows: [.connecting])
             ]
             
         case .connected(let reader):
             return [
-                Section(title: "Reader", rows: [.readerDescription(reader)]),
+                Section(title: sectionTitle, rows: [.readerDescription(reader)]),
                 makeUpdateSection(reader: reader),
                 Section(rows: [.disconnect])
             ].compactMap({ $0 })

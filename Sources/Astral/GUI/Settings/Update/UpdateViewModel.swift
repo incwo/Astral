@@ -89,22 +89,23 @@ class UpdateViewModel {
 
 private extension UpdateTimeEstimate {
     var localizedString: String {
+        let prefix = "Terminal.updateTimeEstimate."
         switch self {
         case .estimateLessThan1Minute:
-            return "less than 1 minute"
+            return locz(prefix+"estimateLessThan1Minute")
         case .estimate1To2Minutes:
-            return "1 to 2 minutes"
+            return locz(prefix+"estimate1To2Minutes")
         case .estimate2To5Minutes:
-            return "2 to 5 minutes"
+            return locz(prefix+"estimate2To5Minutes")
         case .estimate5To15Minutes:
-            return "5 to 15 minutes"
+            return locz(prefix+"estimate5To15Minutes")
         default:
             return "Unknown"
         }
     }
     
     var displayedString: String {
-        "Estimated updating time: \(self.localizedString)"
+        return String(format: locz("Terminal.updateTimeEstimate.estimatedTime"), localizedString))
     }
 }
 

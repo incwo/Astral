@@ -79,7 +79,7 @@ private extension ChargeCoordinator.Operation {
     var title: String {
         switch self {
         case .charging:
-            return "Charging"
+            return locz("ChargeCoordinator.operation.charging")
         }
     }
     
@@ -97,11 +97,11 @@ private extension ChargeCoordinator.Status {
         case .none:
             return ""
         case .searchingReader:
-            return "Searching the Reader"
+            return locz("ChargeCoordinator.status.searchingReader")
         case .connectingReader:
-            return "Connecting to the Reader"
+            return locz("ChargeCoordinator.status.connectingReader")
         case .connected:
-            return "Connected"
+            return locz("ChargeCoordinator.status.connected")
         case .charging(let message):
             return message
         }
