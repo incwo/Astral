@@ -105,7 +105,7 @@ private extension UpdateTimeEstimate {
     }
     
     var displayedString: String {
-        return String(format: locz("Terminal.updateTimeEstimate.estimatedTime"), localizedString))
+        return String(format: locz("Terminal.updateTimeEstimate.estimatedTime"), localizedString)
     }
 }
 

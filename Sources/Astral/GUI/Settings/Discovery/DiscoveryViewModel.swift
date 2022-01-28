@@ -104,7 +104,7 @@ class DiscoveryViewModel {
         }
     }
     private var readersSection: Section {
-        let header = "DiscoveryViewModel.sectionHeader.readers"
+        let header = locz("DiscoveryViewModel.sectionHeader.readers")
         if let _ = location {
             return Section(header: header, rows: readers.compactMap({ .reader($0) }))
         } else {

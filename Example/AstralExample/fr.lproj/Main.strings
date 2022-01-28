@@ -1,0 +1,27 @@
+
+/* Class = "UILabel"; text = "Amount"; ObjectID = "1PT-wU-cuZ"; */
+"1PT-wU-cuZ.text" = "Montant";
+
+/* Class = "UITableViewController"; title = "Astral Example"; ObjectID = "5Uq-HT-B1m"; */
+"5Uq-HT-B1m.title" = "Example Astral";
+
+/* Class = "UIButton"; configuration.title = "Setup"; ObjectID = "U46-Ca-RX7"; */
+"U46-Ca-RX7.configuration.title" = "Configuration";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "U46-Ca-RX7"; */
+"U46-Ca-RX7.normalTitle" = "Configuration";
+
+/* Class = "UITextField"; text = "EUR"; ObjectID = "WkX-dS-1ce"; */
+"WkX-dS-1ce.text" = "EUR";
+
+/* Class = "UITextField"; text = "1"; ObjectID = "gNE-cP-aad"; */
+"gNE-cP-aad.text" = "1";
+
+/* Class = "UIButton"; configuration.title = "Charge"; ObjectID = "mIv-O1-0PF"; */
+"mIv-O1-0PF.configuration.title" = "Régler";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "mIv-O1-0PF"; */
+"mIv-O1-0PF.normalTitle" = "Régler";
+
+/* Class = "UILabel"; text = "Currency"; ObjectID = "p1G-Su-6wD"; */
+"p1G-Su-6wD.text" = "Devise";

@@ -1,0 +1,52 @@
+/* 
+  Localizable.strings
+  Astral
+
+  Created by Renaud Pradenc on 25/01/2022.
+  
+*/
+
+/* General */
+"close" = "Fermer";
+"ok" = "OK";
+
+/* ChargeCoordinator */
+"ChargeCoordinator.operation.charging" = "Régler";
+
+"ChargeCoordinator.status.searchingReader" = "Recherche du lecteur";
+"ChargeCoordinator.status.connectingReader" = "Connexion au lecteur";
+"ChargeCoordinator.status.connected" = "Connecté";
+
+/* SettingsViewModel */
+"SettingsViewModel.sectionHeader.reader" = "Lecteur";
+
+/* DiscoveryViewModel */
+"DiscoveryViewModel.sectionHeader.location" = "Emplacement";
+"DiscoveryViewModel.sectionHeader.readers" = "Lecteurs";
+
+/* StripeTerminal.SCPReaderInputOptions */
+"Terminal.inputOption.swipe" = "Glisser la carte";
+"Terminal.inputOption.insert" = "Insérer la carte";
+"Terminal.inputOption.tap" = "Approcher la carte";
+"Terminal.inputOption.swipe_insert" = "Glisser ou insérer la carte";
+"Terminal.inputOption.swipe_tap" = "Glisser ou approcher la carte";
+"Terminal.inputOption.insert_tap" = "Insérer ou approcher la carte";
+"Terminal.inputOption.swipe_insert_tap" = "Glisser, insérer ou approcher la carte";
+
+
+/* StripeTerminal.SCPReaderDisplayMessage */
+"Terminal.readerDisplayMessage.retryCard" = "Réessayer la carte";
+"Terminal.readerDisplayMessage.insertCard" = "Insérer la carte";
+"Terminal.readerDisplayMessage.insertOrSwipeCard" = "Insérer ou glisser la carte";
+"Terminal.readerDisplayMessage.swipeCard" = "Glisser la carte";
+"Terminal.readerDisplayMessage.removeCard" = "Retirer la carte";
+"Terminal.readerDisplayMessage.multipleContactlessCardsDetected" = "Le lecteur a détecté plusieurs cartes sans contact. Assurez-vous qu'une seule carte ou qu'un seul dispositif NFC soit à proximité du lecteur.";
+"Terminal.readerDisplayMessage.tryAnotherReadMethod" = "Impossible de lire la carte. Présentez la carte différement au lecteur, ou essayez une autre carte.";
+"Terminal.readerDisplayMessage.tryAnotherCard" = "Cette carte est invalide. Essayez-en un autre.";
+
+/* StripeTerminal.SCPUpdateTimeEstimate */
+"Terminal.updateTimeEstimate.estimateLessThan1Minute" = "moins d'une minute";
+"Terminal.updateTimeEstimate.estimate1To2Minutes" = "1 à 2 minutes";
+"Terminal.updateTimeEstimate.estimate2To5Minutes" = "2 à 5 minutes";
+"Terminal.updateTimeEstimate.estimate5To15Minutes" = "5 à 15 minutes";
+"Terminal.updateTimeEstimate.estimatedTime" = "Durée estimée de la mise à jour: %@";

@@ -1,0 +1,111 @@
+
+/* Class = "UILabel"; text = "_line1"; ObjectID = "07s-Aw-UXL"; */
+"07s-Aw-UXL.text" = "_line1";
+
+/* Class = "UILabel"; text = "Pick a location"; ObjectID = "0aH-cq-kPQ"; */
+"0aH-cq-kPQ.text" = "Pick a location";
+
+/* Class = "UILabel"; text = "_state"; ObjectID = "3vg-n9-PZe"; */
+"3vg-n9-PZe.text" = "_state";
+
+/* Class = "UITableViewController"; title = "Stripe Terminal Settings"; ObjectID = "426-pZ-fFz"; */
+"426-pZ-fFz.title" = "Stripe Terminal Settings";
+
+/* Class = "UILabel"; text = "The Reader's software is up to date."; ObjectID = "68r-gm-hN3"; */
+"68r-gm-hN3.text" = "The Reader's software is up to date.";
+
+/* Class = "UILabel"; text = "_locationName"; ObjectID = "7gH-uN-SDI"; */
+"7gH-uN-SDI.text" = "_locationName";
+
+/* Class = "UILabel"; text = "_readerModel"; ObjectID = "8Hg-WQ-E0D"; */
+"8Hg-WQ-E0D.text" = "_readerModel";
+
+/* Class = "UILabel"; text = "Current version"; ObjectID = "9B5-jq-0vR"; */
+"9B5-jq-0vR.text" = "Current version";
+
+/* Class = "UILabel"; text = "_€9999.99"; ObjectID = "AXM-pR-tMn"; */
+"AXM-pR-tMn.text" = "_€9999.99";
+
+/* Class = "UILabel"; text = "Discovering readers…"; ObjectID = "BMX-3o-S4J"; */
+"BMX-3o-S4J.text" = "Discovering readers…";
+
+/* Class = "UILabel"; text = "🔋"; ObjectID = "BO6-sO-XKH"; */
+"BO6-sO-XKH.text" = "🔋";
+
+/* Class = "UILabel"; text = "_locationName"; ObjectID = "EDi-Tm-ihd"; */
+"EDi-Tm-ihd.text" = "_locationName";
+
+/* Class = "UILabel"; text = "_serialNumber"; ObjectID = "Epd-pE-T9Z"; */
+"Epd-pE-T9Z.text" = "_serialNumber";
+
+/* Class = "UILabel"; text = "Update"; ObjectID = "F9c-f6-Yu3"; */
+"F9c-f6-Yu3.text" = "Update";
+
+/* Class = "UILabel"; text = "_readerModel"; ObjectID = "HLE-ie-oqD"; */
+"HLE-ie-oqD.text" = "_readerModel";
+
+/* Class = "UILabel"; text = "Set up a Reader"; ObjectID = "KMc-qh-Hmx"; */
+"KMc-qh-Hmx.text" = "Set up a Reader";
+
+/* Class = "UILabel"; text = "_city"; ObjectID = "L6q-4t-2nE"; */
+"L6q-4t-2nE.text" = "_city";
+
+/* Class = "UILabel"; text = "_serialNumber"; ObjectID = "Nev-W5-jFB"; */
+"Nev-W5-jFB.text" = "_serialNumber";
+
+/* Class = "UITableViewController"; title = "Update"; ObjectID = "QxL-pj-Lfk"; */
+"QxL-pj-Lfk.title" = "Update";
+
+/* Class = "UILabel"; text = "Please select a Location first"; ObjectID = "SeP-QD-q2V"; */
+"SeP-QD-q2V.text" = "Please select a Location first";
+
+/* Class = "UILabel"; text = "_version"; ObjectID = "UQd-j9-Bwb"; */
+"UQd-j9-Bwb.text" = "_version";
+
+/* Class = "UILabel"; text = "Updating…"; ObjectID = "Vrd-bR-5xq"; */
+"Vrd-bR-5xq.text" = "Updating…";
+
+/* Class = "UILabel"; text = "_country"; ObjectID = "Xvv-VX-keJ"; */
+"Xvv-VX-keJ.text" = "_country";
+
+/* Class = "UILabel"; text = "A software update is available"; ObjectID = "ZkN-jc-5U2"; */
+"ZkN-jc-5U2.text" = "A software update is available";
+
+/* Class = "UILabel"; text = "_100%"; ObjectID = "b4q-1q-Isc"; */
+"b4q-1q-Isc.text" = "_100%";
+
+/* Class = "UILabel"; text = "_city"; ObjectID = "cfa-Eq-nlE"; */
+"cfa-Eq-nlE.text" = "_city";
+
+/* Class = "UILabel"; text = "Update Now"; ObjectID = "e9y-Vt-3WL"; */
+"e9y-Vt-3WL.text" = "Update Now";
+
+/* Class = "UILabel"; text = "_line2"; ObjectID = "ejV-De-96T"; */
+"ejV-De-96T.text" = "_line2";
+
+/* Class = "UITableViewController"; title = "Readers discovery"; ObjectID = "g2Y-ee-6gs"; */
+"g2Y-ee-6gs.title" = "Readers discovery";
+
+/* Class = "UILabel"; text = "Disconnect this Reader"; ObjectID = "jdX-zC-qRq"; */
+"jdX-zC-qRq.text" = "Disconnect this Reader";
+
+/* Class = "UILabel"; text = "_status"; ObjectID = "kfd-au-4Nr"; */
+"kfd-au-4Nr.text" = "_status";
+
+/* Class = "UITableViewController"; title = "Locations"; ObjectID = "ltk-xa-uE1"; */
+"ltk-xa-uE1.title" = "Locations";
+
+/* Class = "UILabel"; text = "Looking for the Reader…"; ObjectID = "oAK-Bg-0gZ"; */
+"oAK-Bg-0gZ.text" = "Looking for the Reader…";
+
+/* Class = "UILabel"; text = "_line1"; ObjectID = "tAX-iA-7dL"; */
+"tAX-iA-7dL.text" = "_line1";
+
+/* Class = "UILabel"; text = "_version"; ObjectID = "ugs-nv-uMC"; */
+"ugs-nv-uMC.text" = "_version";
+
+/* Class = "UILabel"; text = "_100%"; ObjectID = "urR-ZW-W0J"; */
+"urR-ZW-W0J.text" = "_100%";
+
+/* Class = "UILabel"; text = "Connecting to the Reader…"; ObjectID = "vXK-Oe-2zY"; */
+"vXK-Oe-2zY.text" = "Connecting to the Reader…";

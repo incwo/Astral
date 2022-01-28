@@ -18,7 +18,22 @@
 		DF58319227A2B3E600F8A1FC /* ExampleApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF58319127A2B3E600F8A1FC /* ExampleApiClient.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		DF27253827A3F48F0066F4A5 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		DF27253227A3F48F0066F4A5 /* Dummy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dummy.h; sourceTree = "<group>"; };
+		DF27255D27A400B00066F4A5 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
 		DF58313127A1A0F800F8A1FC /* AstralExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AstralExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF58313427A1A0F800F8A1FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DF58313627A1A0F800F8A1FC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -44,11 +59,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DF27253127A3F48F0066F4A5 /* Dummy */ = {
+			isa = PBXGroup;
+			children = (
+				DF27253227A3F48F0066F4A5 /* Dummy.h */,
+			);
+			path = Dummy;
+			sourceTree = "<group>";
+		};
 		DF58312827A1A0F700F8A1FC = {
 			isa = PBXGroup;
 			children = (
 				DF58315927A2970800F8A1FC /* Packages */,
 				DF58313327A1A0F800F8A1FC /* AstralExample */,
+				DF27253127A3F48F0066F4A5 /* Dummy */,
 				DF58313227A1A0F800F8A1FC /* Products */,
 				DF58315127A28C8300F8A1FC /* Frameworks */,
 			);
@@ -102,6 +126,7 @@
 				DF58312D27A1A0F800F8A1FC /* Sources */,
 				DF58312E27A1A0F800F8A1FC /* Frameworks */,
 				DF58312F27A1A0F800F8A1FC /* Resources */,
+				DF27253827A3F48F0066F4A5 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -138,6 +163,7 @@
 			knownRegions = (
 				en,
 				Base,
+				fr,
 			);
 			mainGroup = DF58312827A1A0F700F8A1FC;
 			packageReferences = (
@@ -185,6 +211,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				DF58313B27A1A0F800F8A1FC /* Base */,
+				DF27255D27A400B00066F4A5 /* fr */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -204,6 +231,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -265,6 +293,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";

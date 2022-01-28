@@ -1,0 +1,53 @@
+/* 
+  Localizable.strings
+  Astral
+
+  Created by Renaud Pradenc on 25/01/2022.
+  
+*/
+
+/* General */
+"close" = "Close";
+"ok" = "OK";
+
+/* ChargeCoordinator */
+"ChargeCoordinator.operation.charging" = "Charging";
+
+"ChargeCoordinator.status.searchingReader" = "Searching the Reader";
+"ChargeCoordinator.status.connectingReader" = "Connecting to the Reader";
+"ChargeCoordinator.status.connected" = "Connected";
+
+/* SettingsViewModel */
+"SettingsViewModel.sectionHeader.reader" = "Reader";
+
+/* DiscoveryViewModel */
+"DiscoveryViewModel.sectionHeader.location" = "Location";
+"DiscoveryViewModel.sectionHeader.readers" = "Readers";
+
+/* StripeTerminal.SCPReaderInputOptions */
+"Terminal.inputOption.swipe" = "Swipe your card";
+"Terminal.inputOption.insert" = "Insert your card";
+"Terminal.inputOption.tap" = "Tap your card";
+"Terminal.inputOption.swipe_insert" = "Swipe or insert your card";
+"Terminal.inputOption.swipe_tap" = "Swipe or tap your card";
+"Terminal.inputOption.insert_tap" = "Insert or tap your card";
+"Terminal.inputOption.swipe_insert_tap" = "Swipe, Insert or tap your card";
+
+
+/* StripeTerminal.SCPReaderDisplayMessage */
+"Terminal.readerDisplayMessage.retryCard" = "Retry the card";
+"Terminal.readerDisplayMessage.insertCard" = "Insert the card";
+"Terminal.readerDisplayMessage.insertOrSwipeCard" = "Insert or swipe the card";
+"Terminal.readerDisplayMessage.swipeCard" = "Swipe the card";
+"Terminal.readerDisplayMessage.removeCard" = "Remove the card";
+"Terminal.readerDisplayMessage.multipleContactlessCardsDetected" = "The reader detected multiple contactless cards. Make sure only one contactless card or NFC device is near the reader.";
+"Terminal.readerDisplayMessage.tryAnotherReadMethod" = "The card could not be read. Try another read method on the same card, or use a different card.";
+"Terminal.readerDisplayMessage.tryAnotherCard" = "The card is invalid. Try another card.";
+
+/* StripeTerminal.SCPUpdateTimeEstimate */
+"Terminal.updateTimeEstimate.estimateLessThan1Minute" = "less than 1 minute";
+"Terminal.updateTimeEstimate.estimate1To2Minutes" = "1 to 2 minutes";
+"Terminal.updateTimeEstimate.estimate2To5Minutes" = "2 to 5 minutes";
+"Terminal.updateTimeEstimate.estimate5To15Minutes" = "5 to 15 minutes";
+"Terminal.updateTimeEstimate.estimatedTime" = "Estimated updating time: %@";
+
