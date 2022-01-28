@@ -15,11 +15,11 @@ class MainTableViewController: UITableViewController {
 
     }
     
-    private lazy var stralApiClient = ExampleApiClient()
-    private lazy var stripeManager = Astral(apiClient: stralApiClient)
+    private lazy var astralApiClient = ExampleApiClient()
+    private lazy var astral = Astral(apiClient: astralApiClient)
 
     @IBAction private func setup(_ sender: Any) {
-        stripeManager.presentSettings(from: self)
+        astral.presentSettings(from: self)
     }
     
     @IBOutlet private weak var amountTextField: UITextField!
@@ -39,7 +39,7 @@ class MainTableViewController: UITableViewController {
             return
         }
         
-        stripeManager.charge(amount: amount, currency: currency, presentFrom: self, onSuccess: { paymentInfo in
+        astral.charge(amount: amount, currency: currency, presentFrom: self, onSuccess: { paymentInfo in
             DispatchQueue.main.async {
                 let message: String
                 if paymentInfo.charges.count == 1, let charge = paymentInfo.charges.first {
