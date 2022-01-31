@@ -81,6 +81,38 @@ class SettingsCoordinator: NSObject {
         presentingViewController.present(navigationController, animated: true, completion: nil)
     }
     
+    // MARK: Model State
+    
+    func update(for state: TerminalModel.State) {
+        switch state {
+        case .noReaderConnected:
+            update(for: .didDisconnect)
+            
+        case .searchingReader(_):
+            update(for: .didBeginSearchingReader)
+            
+        case .discoveringReaders:
+            update(for: .didBeginDiscoveringReaders)
+            
+        case .connecting:
+            update(for: .didBeginConnecting)
+            
+        case .readerConnected (let reader):
+            update(for: .didConnectReader(reader))
+            
+        case .charging(_):
+            break
+            
+        case .installingUpdate (let reader, let progress):
+            if progress == 0.0 { // Begining
+                update(for: .didBeginInstallingUpdate(reader))
+            } else {
+                update(for: .didProgressInstallingUpdate(progress))
+            }
+        }
+    }
+    
+    
     // MARK: Events
     
     enum ModelEvent {
@@ -94,7 +126,7 @@ class SettingsCoordinator: NSObject {
         case didProgressInstallingUpdate (Float)
     }
     
-    func update(for modelEvent: ModelEvent) {
+    private func update(for modelEvent: ModelEvent) {
         switch modelEvent {
         case .didDisconnect:
             discoveryViewController.viewModel?.location = nil

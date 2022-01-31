@@ -39,6 +39,34 @@ class ChargeCoordinator: NSObject {
         navigationController.dismiss(animated: true, completion: nil)
     }
     
+    // MARK: Status
+    
+    func update(for state: TerminalModel.State) {
+        switch state {
+        case .noReaderConnected:
+            break
+            
+        case .searchingReader(_):
+            status = .searchingReader
+            
+        case .discoveringReaders:
+            break
+            
+        case .connecting:
+            status = .connectingReader
+            
+        case .readerConnected (_):
+            status = .connected
+            
+        case .charging(let message):
+            status = .charging(message: message)
+            
+        case .installingUpdate:
+            break
+        }
+    }
+    
+    
     enum Status {
         case none
         case searchingReader
@@ -46,7 +74,7 @@ class ChargeCoordinator: NSObject {
         case connected
         case charging (message: String)
     }
-    var status: Status = .none {
+    private var status: Status = .none {
         didSet {
             chargeViewController.status = status.statusString
         }

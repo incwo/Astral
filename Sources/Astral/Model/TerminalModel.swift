@@ -12,13 +12,8 @@ import StripeTerminal
 protocol TerminalModelDelegate: AnyObject {
     func stripeTerminalModel(_ sender: TerminalModel, didUpdateState state: TerminalModel.State)
     
-    /// Make the User pick a reader
-    ///
-    /// This method is called when trying to charge while no Reader is ready (not connected or updating, etc.).
+    /// Tells that no reader is usable and one needs to be set up
     func stripeTerminalModelNeedsSettingUp(_ sender: TerminalModel)
-    
-    /// The installation of an update is progressing
-    func stripeTerminalModel(_ sender: TerminalModel, softwareUpdateDidProgress progress: Float)
     
     /// Inform about an error
     func stripeTerminalModel(_sender: TerminalModel, didFailWithError error: Error)
@@ -42,7 +37,7 @@ class TerminalModel: NSObject {
         case connecting (Reader)
         case readerConnected (Reader)
         case charging (message: String)
-        case installingUpdate (Reader)
+        case installingUpdate (Reader, Float)
     }
     private(set) var state: State = .noReaderConnected {
         didSet {
@@ -192,11 +187,15 @@ extension TerminalModel: ReaderConnectionDelegate {
             fatalError("\(#function) There should be a reader connected at this point.")
         }
         
-        state = .installingUpdate(reader)
+        state = .installingUpdate(reader, 0.0)
     }
     
     func readerConnection(_ sender: ReaderConnection, softwareUpdateDidProgress progress: Float) {
-        delegate?.stripeTerminalModel(self, softwareUpdateDidProgress: progress)
+        guard let reader = reader else {
+            fatalError("\(#function) There should be a reader connected at this point.")
+        }
+        
+        state = .installingUpdate(reader, progress)
     }
     
     func readerConnectionDidFinishInstallingUpdate(_ sender: ReaderConnection) {
