@@ -97,7 +97,10 @@ class ChargeCoordinator: NSObject {
     }()
     
     private lazy var navigationController: UINavigationController = {
-        UINavigationController()
+        let navigationController = UINavigationController()
+        navigationController.navigationBar.tintColor = .astralAccent
+        navigationController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.astralLabel as Any]
+        return navigationController
     }()
     
     private func presentChargeViewController(for operation: Operation) {

@@ -193,7 +193,7 @@ extension TerminalModel: TerminalDelegate {
     
     // Call this method just before connecting the reader; simulatorConfiguration might be nil earlier.
     private func configureSimulator() {
-        Terminal.shared.simulatorConfiguration.availableReaderUpdate = .required // .random
+        Terminal.shared.simulatorConfiguration.availableReaderUpdate = .available // .random
     }
 }
 
