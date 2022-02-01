@@ -12,8 +12,13 @@ import StripeTerminal
 protocol TerminalModelDelegate: AnyObject {
     func stripeTerminalModel(_ sender: TerminalModel, didUpdateState state: TerminalModel.State)
     
-    /// Tells that no reader is usable and one needs to be set up
-    func stripeTerminalModelNeedsSettingUp(_ sender: TerminalModel)
+    /*
+     func stripeTerminalWillBeginInstallingUpdate(_ sender: TerminalModel, on reader: Reader)
+    
+    func stripeTerminalDidProgressInstallingUpdate(_ sender: TerminalModel, progress: Float)
+    
+    func stripeTerminalDidEndInstallingUpdate(_ sender: TerminalModel)
+     */
     
     /// Inform about an error
     func stripeTerminalModel(_sender: TerminalModel, didFailWithError error: Error)
@@ -30,12 +35,42 @@ class TerminalModel: NSObject {
     
     weak var delegate: TerminalModelDelegate?
     
+    /// Charge an amount
+    func charge(amount: Amount, completion: @escaping (ChargeResult)->()) {
+        switch state {
+        case .ready:
+            paymentProcessor.charge(amount: amount) { result in
+                if let _ = Terminal.shared.connectedReader { // Still connected
+                    self.state = .ready
+                } else {
+                    self.state = .noReaderConnected
+                }
+                completion(result)
+            }
+        default:
+            let error = NSError(domain: #function, code: 0, userInfo: [NSLocalizedDescriptionKey: "Can not charge now. The Terminal is in the state \(state)."])
+            delegate?.stripeTerminalModel(_sender: self, didFailWithError: error)
+        }
+    }
+    
+    /// Begin the installation of the software update
+    func installUpdate() {
+        Terminal.shared.installAvailableUpdate()
+    }
+    
+    private let paymentProcessor: PaymentProcessor
+    let discovery = ReadersDiscovery()
+    
+
+    // MARK: State
+    
     enum State {
         case noReaderConnected
         case searchingReader (_ serialNumber: String)
         case discoveringReaders
         case connecting (Reader)
         case readerConnected (Reader)
+        case ready
         case charging (message: String)
         case installingUpdate (Reader, Float)
     }
@@ -47,26 +82,6 @@ class TerminalModel: NSObject {
             }
         }
     }
-    
-    func charge(amount: Amount, completion: @escaping (ChargeResult)->()) {
-        switch state {
-        case .readerConnected (_):
-            paymentProcessor.charge(amount: amount, completion: completion)
-        case .charging(_):
-            let error = NSError(domain: #function, code: 0, userInfo: [NSLocalizedDescriptionKey: "Can not charge now. The Terminal is already charging."])
-            delegate?.stripeTerminalModel(_sender: self, didFailWithError: error)
-        default:
-            delegate?.stripeTerminalModelNeedsSettingUp(self)
-        }
-    }
-    
-    /// Begin the installation of the software update
-    func installUpdate() {
-        Terminal.shared.installAvailableUpdate()
-    }
-    
-    private let paymentProcessor: PaymentProcessor
-    let discovery = ReadersDiscovery()
     
     // MARK: Connection
     
@@ -107,7 +122,12 @@ class TerminalModel: NSObject {
         }
         
         connection?.connect(reader, locationId: locationId, onSuccess: { [weak self] in
-            self?.state = .readerConnected(reader)
+            guard let self = self else { return }
+            self.state = .readerConnected(reader)
+            if !reader.requiresImmediateUpdate {
+                /// The reader will not start updating right now
+                self.state = .ready
+            }
         }, onFailure: { [weak self] error in
             guard let self = self else { return }
             self.reader = nil // Forget this reader, an other one should probably be set up
@@ -173,7 +193,7 @@ extension TerminalModel: TerminalDelegate {
     
     // Call this method just before connecting the reader; simulatorConfiguration might be nil earlier.
     private func configureSimulator() {
-        Terminal.shared.simulatorConfiguration.availableReaderUpdate = .available// .random
+        Terminal.shared.simulatorConfiguration.availableReaderUpdate = .required // .random
     }
 }
 
@@ -201,11 +221,18 @@ extension TerminalModel: ReaderConnectionDelegate {
     func readerConnectionDidFinishInstallingUpdate(_ sender: ReaderConnection) {
         if let reader = reader,
             Terminal.shared.connectedReader == reader {
-            state = .readerConnected(reader)
+            state = .ready
         } else {
             // I think that for big updates, the reader disconnects after the installation
             state = .noReaderConnected
             reconnect()
         }
+    }
+}
+
+extension Reader {
+    var requiresImmediateUpdate: Bool {
+        guard let availableUpdate = availableUpdate else { return false }
+        return availableUpdate.requiredAt < Date()
     }
 }

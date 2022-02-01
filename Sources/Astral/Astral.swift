@@ -20,19 +20,21 @@ public class Astral {
     public func presentSettings(from presentingViewController: UIViewController) {
         self.presentingViewController = presentingViewController
         
-        coordinator = .settings(presentSettingsCoordinator())
+        presentSettingsCoordinator() { coordinator in
+            self.coordinator = .settings(coordinator)
+        }
     }
     
-    private func presentSettingsCoordinator() -> SettingsCoordinator {
+    private func presentSettingsCoordinator(completion: ((SettingsCoordinator)->())?) {
         guard let presentingViewController = presentingViewController else {
             fatalError("The presentingViewController should be set")
         }
         
         let settingsCoordinator = SettingsCoordinator(readersDiscovery: model.discovery)
         settingsCoordinator.delegate = self
-        settingsCoordinator.presentSettings(from: presentingViewController, reader: model.reader)
-        
-        return settingsCoordinator
+        settingsCoordinator.presentSettings(from: presentingViewController, reader: model.reader) {
+            completion?(settingsCoordinator)
+        }
     }
     
     private var presentingViewController: UIViewController?
@@ -41,19 +43,21 @@ public class Astral {
         
         // Present the charge panel immediately. It can show the Reader connecting.
         let amountInCurrency = Amount(amount: amount, currency: currency)
-        coordinator = .charge(presentChargeCoordinator(for: amountInCurrency))
-        
         let charging = {
             self.chargeInternal(amount: amountInCurrency, onSuccess: onSuccess, onError: onError)
         }
         
-        switch model.state {
-        case .readerConnected:
-            charging()
+        presentChargeCoordinator(for: amountInCurrency) { coordinator in
+            self.coordinator = .charge(coordinator)
             
-        default:
-            // No reader is connected yet, so we'll charge later
-            chargeLater = charging
+            switch self.model.state {
+            case .ready:
+                charging()
+                
+            default:
+                // No reader is connected yet, so we'll charge later
+                self.chargeLater = charging
+            }
         }
     }
     
@@ -63,31 +67,32 @@ public class Astral {
     private func chargeInternal(amount: Amount, onSuccess: @escaping (PaymentInfo)->(), onError: @escaping (Error)->()) {
         model.charge(amount: amount) { result in
             DispatchQueue.main.async {
-                self.presentingViewController?.dismiss(animated: true)
-                self.coordinator = .none
-                
-                switch result {
-                case .success(let stripePaymentInfo):
-                    onSuccess(stripePaymentInfo)
-                case .cancelled:
-                    break
-                case .error(let error):
-                    onError(error)
+                self.presentingViewController?.dismiss(animated: true) {
+                    self.coordinator = .none
+                    
+                    switch result {
+                    case .success(let stripePaymentInfo):
+                        onSuccess(stripePaymentInfo)
+                    case .cancelled:
+                        break
+                    case .error(let error):
+                        onError(error)
+                    }
                 }
             }
         }
     }
     
-    private func presentChargeCoordinator(for amount: Amount) -> ChargeCoordinator {
+    private func presentChargeCoordinator(for amount: Amount, completion: ((ChargeCoordinator)->())?) {
         guard let presentingViewController = presentingViewController else {
             fatalError("The presentingViewController should be set")
         }
         
         let chargeCoordinator = ChargeCoordinator()
         chargeCoordinator.delegate = self
-        chargeCoordinator.present(for: .charging(amount: amount), from: presentingViewController)
-    
-        return chargeCoordinator
+        chargeCoordinator.present(for: .charging(amount: amount), from: presentingViewController, completion: {
+            completion?(chargeCoordinator)
+        })
     }
     
     private enum PresentedCoordinator {
@@ -100,24 +105,25 @@ public class Astral {
 
 extension Astral: TerminalModelDelegate {
     func stripeTerminalModel(_ sender: TerminalModel, didUpdateState state: TerminalModel.State) {
+        update(for: state)
+        
         switch state {
-        case .readerConnected(_):
-            // A reader has just been connected, this is our chance to charge.
+        case .ready:
+            // The reader has just become ready, this is our chance to charge.
             if let chargeLater = chargeLater {
                 chargeLater()
                 self.chargeLater = nil
-            } else {
-                update(for: state)
             }
         default:
-            update(for: state)
+            break
         }
     }
     
     private func update(for state: TerminalModel.State) {
         switch coordinator {
         case .none:
-            NSLog("\(#function) Unexpected: receiving Model state update (\(state)) with no Coordinator presented.")
+            //NSLog("\(#function) Unexpected: receiving Model state update with no Coordinator presented.")
+            break
         case .charge(let coordinator):
             if !coordinator.update(for: state) {
                 switchCoordinator(andHandle: state)
@@ -130,36 +136,31 @@ extension Astral: TerminalModelDelegate {
     }
     
     private func switchCoordinator(andHandle state: TerminalModel.State) {
+        // Updates to the state can be received while the coordinator is presenting
+        let previousPresentedCoordinator = self.coordinator
+        self.coordinator = .none
+        
         presentingViewController?.dismiss(animated: true, completion: {
-            self.coordinator = .none
-            
-            switch self.coordinator {
+            switch previousPresentedCoordinator {
             case .none:
                 break
             case .charge:
-                let settingsCoordinator = self.presentSettingsCoordinator()
-                self.coordinator = .settings(settingsCoordinator)
-                let _ = settingsCoordinator.update(for: state)
+                self.presentSettingsCoordinator() { coordinator in
+                    self.coordinator = .settings(coordinator)
+                    let _ = coordinator.update(for: state)
+                }
             case .settings:
-                #warning("Amount en dur")
-                let chargeCoordinator = self.presentChargeCoordinator(for: Amount(amount: 1.0, currency: "EUR"))
-                self.coordinator = .charge(chargeCoordinator)
-                let _ = chargeCoordinator.update(for: state)
+            #warning("Amount en dur")
+                self.presentChargeCoordinator(for: Amount(amount: 1.0, currency: "EUR")) { coordinator in
+                    self.coordinator = .charge(coordinator)
+                    let _ = coordinator.update(for: state)
+                }
             }
         })
-
     }
     
     func stripeTerminalModel(_sender: TerminalModel, didFailWithError error: Error) {
         NSLog("\(#function) error: \(error)")
-    }
-    
-    func stripeTerminalModelNeedsSettingUp(_ sender: TerminalModel) {
-//        guard let presentingViewController = presentingViewController else {
-//            NSLog("\(#function) No presentingViewController")
-//            return
-//        }
-//        presentSettings(from: presentingViewController)
     }
 }
 

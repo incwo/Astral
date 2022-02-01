@@ -24,14 +24,14 @@ class ChargeCoordinator: NSObject {
     
     private var presentingViewController: UIViewController?
     
-    func present(for operation: Operation, from presentingViewController: UIViewController) {
+    func present(for operation: Operation, from presentingViewController: UIViewController, completion: (()->())?) {
         self.presentingViewController = presentingViewController
         
         presentChargeViewController(for: operation)
         
         navigationController.modalPresentationStyle = .formSheet
         navigationController.presentationController?.delegate = self
-        presentingViewController.present(navigationController, animated: true, completion: nil)
+        presentingViewController.present(navigationController, animated: true, completion: completion)
     }
     
     func dismiss() {
@@ -62,6 +62,10 @@ class ChargeCoordinator: NSObject {
             status = .connected
             return true
             
+        case .ready:
+            status = .ready
+            return true
+            
         case .charging(let message):
             status = .charging(message: message)
             return true
@@ -77,6 +81,7 @@ class ChargeCoordinator: NSObject {
         case searchingReader
         case connectingReader
         case connected
+        case ready
         case charging (message: String)
     }
     private var status: Status = .none {
@@ -135,6 +140,8 @@ private extension ChargeCoordinator.Status {
             return locz("ChargeCoordinator.status.connectingReader")
         case .connected:
             return locz("ChargeCoordinator.status.connected")
+        case .ready:
+            return locz("ChargeCoordinator.status.ready")
         case .charging(let message):
             return message
         }

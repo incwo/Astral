@@ -41,7 +41,7 @@ class SettingsCoordinator: NSObject {
     
     weak var delegate: SettingsCoordinatorDelegate?
     
-    func presentSettings(from presentingViewController: UIViewController, reader: Reader?) {
+    func presentSettings(from presentingViewController: UIViewController, reader: Reader?, completion: (()->())?) {
         guard let _ = delegate else {
             NSLog("\(#function) No delegate is set")
             return
@@ -78,7 +78,7 @@ class SettingsCoordinator: NSObject {
         screen = .settings
         navigationController.modalPresentationStyle = .formSheet
         navigationController.presentationController?.delegate = self
-        presentingViewController.present(navigationController, animated: true, completion: nil)
+        presentingViewController.present(navigationController, animated: true, completion: completion)
     }
     
     // MARK: Model State
@@ -104,6 +104,9 @@ class SettingsCoordinator: NSObject {
             
         case .readerConnected (let reader):
             update(for: .didConnectReader(reader))
+            return true
+            
+        case .ready:
             return true
             
         case .charging(_):
