@@ -41,28 +41,33 @@ class ChargeCoordinator: NSObject {
     
     // MARK: Status
     
-    func update(for state: TerminalModel.State) {
+    /// Returns false if the state can not be handled
+    func update(for state: TerminalModel.State) -> Bool {
         switch state {
         case .noReaderConnected:
-            break
+            return false
             
         case .searchingReader(_):
             status = .searchingReader
+            return true
             
         case .discoveringReaders:
-            break
+            return false
             
         case .connecting:
             status = .connectingReader
+            return true
             
         case .readerConnected (_):
             status = .connected
+            return true
             
         case .charging(let message):
             status = .charging(message: message)
+            return true
             
         case .installingUpdate:
-            break
+            return false
         }
     }
     

@@ -83,25 +83,31 @@ class SettingsCoordinator: NSObject {
     
     // MARK: Model State
     
-    func update(for state: TerminalModel.State) {
+    /// Returns false if the state can not be handled
+    func update(for state: TerminalModel.State) -> Bool {
         switch state {
         case .noReaderConnected:
             update(for: .didDisconnect)
+            return true
             
         case .searchingReader(_):
             update(for: .didBeginSearchingReader)
+            return true
             
         case .discoveringReaders:
             update(for: .didBeginDiscoveringReaders)
+            return true
             
         case .connecting:
             update(for: .didBeginConnecting)
+            return true
             
         case .readerConnected (let reader):
             update(for: .didConnectReader(reader))
+            return true
             
         case .charging(_):
-            break
+            return false
             
         case .installingUpdate (let reader, let progress):
             if progress == 0.0 { // Begining
@@ -109,6 +115,7 @@ class SettingsCoordinator: NSObject {
             } else {
                 update(for: .didProgressInstallingUpdate(progress))
             }
+            return true
         }
     }
     

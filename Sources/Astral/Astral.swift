@@ -18,25 +18,53 @@ public class Astral {
     private let model: TerminalModel
     
     public func presentSettings(from presentingViewController: UIViewController) {
+        self.presentingViewController = presentingViewController
+        
+        coordinator = .settings(presentSettingsCoordinator())
+    }
+    
+    private func presentSettingsCoordinator() -> SettingsCoordinator {
+        guard let presentingViewController = presentingViewController else {
+            fatalError("The presentingViewController should be set")
+        }
+        
         let settingsCoordinator = SettingsCoordinator(readersDiscovery: model.discovery)
         settingsCoordinator.delegate = self
         settingsCoordinator.presentSettings(from: presentingViewController, reader: model.reader)
-        coordinator = .settings(settingsCoordinator)
+        
+        return settingsCoordinator
     }
     
     private var presentingViewController: UIViewController?
     public func charge(amount: NSDecimalNumber, currency: String, presentFrom presentingViewController: UIViewController, onSuccess: @escaping (PaymentInfo)->(), onError: @escaping (Error)->()) {
         self.presentingViewController = presentingViewController
         
+        // Present the charge panel immediately. It can show the Reader connecting.
         let amountInCurrency = Amount(amount: amount, currency: currency)
-        let chargeCoordinator = ChargeCoordinator()
-        chargeCoordinator.delegate = self
-        chargeCoordinator.present(for: .charging(amount: amountInCurrency), from: presentingViewController)
-        coordinator = .charge(chargeCoordinator)
+        coordinator = .charge(presentChargeCoordinator(for: amountInCurrency))
         
-        model.charge(amount: amountInCurrency) { result in
+        let charging = {
+            self.chargeInternal(amount: amountInCurrency, onSuccess: onSuccess, onError: onError)
+        }
+        
+        switch model.state {
+        case .readerConnected:
+            charging()
+            
+        default:
+            // No reader is connected yet, so we'll charge later
+            chargeLater = charging
+        }
+    }
+    
+    /// A block to charge later, after the reader is set up and ready
+    private var chargeLater: (()->())?
+    
+    private func chargeInternal(amount: Amount, onSuccess: @escaping (PaymentInfo)->(), onError: @escaping (Error)->()) {
+        model.charge(amount: amount) { result in
             DispatchQueue.main.async {
-                chargeCoordinator.dismiss()
+                self.presentingViewController?.dismiss(animated: true)
+                self.coordinator = .none
                 
                 switch result {
                 case .success(let stripePaymentInfo):
@@ -50,6 +78,18 @@ public class Astral {
         }
     }
     
+    private func presentChargeCoordinator(for amount: Amount) -> ChargeCoordinator {
+        guard let presentingViewController = presentingViewController else {
+            fatalError("The presentingViewController should be set")
+        }
+        
+        let chargeCoordinator = ChargeCoordinator()
+        chargeCoordinator.delegate = self
+        chargeCoordinator.present(for: .charging(amount: amount), from: presentingViewController)
+    
+        return chargeCoordinator
+    }
+    
     private enum PresentedCoordinator {
         case none
         case charge (ChargeCoordinator)
@@ -60,18 +100,54 @@ public class Astral {
 
 extension Astral: TerminalModelDelegate {
     func stripeTerminalModel(_ sender: TerminalModel, didUpdateState state: TerminalModel.State) {
-        update(for: state)
+        switch state {
+        case .readerConnected(_):
+            // A reader has just been connected, this is our chance to charge.
+            if let chargeLater = chargeLater {
+                chargeLater()
+                self.chargeLater = nil
+            } else {
+                update(for: state)
+            }
+        default:
+            update(for: state)
+        }
     }
     
     private func update(for state: TerminalModel.State) {
         switch coordinator {
         case .none:
-            NSLog("\(#function) Unexpected: receiving Model state update with no Coordinator presented.")
+            NSLog("\(#function) Unexpected: receiving Model state update (\(state)) with no Coordinator presented.")
         case .charge(let coordinator):
-            coordinator.update(for: state)
+            if !coordinator.update(for: state) {
+                switchCoordinator(andHandle: state)
+            }
         case .settings(let coordinator):
-            coordinator.update(for: state)
+            if !coordinator.update(for: state) {
+                switchCoordinator(andHandle: state)
+            }
         }
+    }
+    
+    private func switchCoordinator(andHandle state: TerminalModel.State) {
+        presentingViewController?.dismiss(animated: true, completion: {
+            self.coordinator = .none
+            
+            switch self.coordinator {
+            case .none:
+                break
+            case .charge:
+                let settingsCoordinator = self.presentSettingsCoordinator()
+                self.coordinator = .settings(settingsCoordinator)
+                let _ = settingsCoordinator.update(for: state)
+            case .settings:
+                #warning("Amount en dur")
+                let chargeCoordinator = self.presentChargeCoordinator(for: Amount(amount: 1.0, currency: "EUR"))
+                self.coordinator = .charge(chargeCoordinator)
+                let _ = chargeCoordinator.update(for: state)
+            }
+        })
+
     }
     
     func stripeTerminalModel(_sender: TerminalModel, didFailWithError error: Error) {
@@ -79,11 +155,11 @@ extension Astral: TerminalModelDelegate {
     }
     
     func stripeTerminalModelNeedsSettingUp(_ sender: TerminalModel) {
-        guard let presentingViewController = presentingViewController else {
-            NSLog("\(#function) No presentingViewController")
-            return
-        }
-        presentSettings(from: presentingViewController)
+//        guard let presentingViewController = presentingViewController else {
+//            NSLog("\(#function) No presentingViewController")
+//            return
+//        }
+//        presentSettings(from: presentingViewController)
     }
 }
 
