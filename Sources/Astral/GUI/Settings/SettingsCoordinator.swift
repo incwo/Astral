@@ -87,90 +87,44 @@ class SettingsCoordinator: NSObject {
     func update(for state: TerminalModel.State) -> Bool {
         switch state {
         case .noReaderConnected:
-            update(for: .didDisconnect)
+            discoveryViewController.viewModel?.location = nil
+            settingsViewController.viewModel?.content = .noReaderConnected
+            settingsViewController.reload()
             return true
             
         case .searchingReader(_):
-            update(for: .didBeginSearchingReader)
+            settingsViewController.viewModel?.content = .searchingReader
+            settingsViewController.reload()
             return true
             
         case .discoveringReaders:
-            update(for: .didBeginDiscoveringReaders)
             return true
             
         case .connecting:
-            update(for: .didBeginConnecting)
+            settingsViewController.viewModel?.content = .connecting
+            settingsViewController.reload()
             return true
             
-        case .readerConnected (let reader):
-            update(for: .didConnectReader(reader))
-            return true
-            
-        case .ready:
+        case .readerConnected (let reader), .ready (let reader):
+            settingsViewController.viewModel?.content = .connected(reader)
+            settingsViewController.reload()
+            screen = .settings
             return true
             
         case .charging(_):
             return false
             
         case .installingUpdate (let reader, let progress):
-            if progress == 0.0 { // Begining
-                update(for: .didBeginInstallingUpdate(reader))
+            if progress == 0.0 { // Beginning
+                updateViewController.viewModel?.content = .updating(reader)
+                updateViewController.viewModel?.progress = progress
+                updateViewController.reload()
+                screen = .update // We might already be on this screen, but maybe not because mandatory updates begin right after a connection
             } else {
-                update(for: .didProgressInstallingUpdate(progress))
+                updateViewController.viewModel?.progress = progress
+                updateViewController.updateProgress(progress)
             }
             return true
-        }
-    }
-    
-    
-    // MARK: Events
-    
-    enum ModelEvent {
-        case didDisconnect
-        case didBeginSearchingReader
-        case didBeginDiscoveringReaders
-        case didBeginConnecting
-        case didConnectReader (Reader)
-        case didBeginCharging
-        case didBeginInstallingUpdate (Reader)
-        case didProgressInstallingUpdate (Float)
-    }
-    
-    private func update(for modelEvent: ModelEvent) {
-        switch modelEvent {
-        case .didDisconnect:
-            discoveryViewController.viewModel?.location = nil
-            settingsViewController.viewModel?.content = .noReaderConnected
-            settingsViewController.reload()
-            
-        case .didBeginSearchingReader:
-            settingsViewController.viewModel?.content = .searchingReader
-            settingsViewController.reload()
-            
-        case .didBeginDiscoveringReaders:
-            break
-            
-        case .didBeginConnecting:
-            settingsViewController.viewModel?.content = .connecting
-            settingsViewController.reload()
-            
-        case .didConnectReader(let reader):
-            settingsViewController.viewModel?.content = .connected(reader)
-            settingsViewController.reload()
-            screen = .settings
-            
-        case .didBeginCharging:
-            break
-            
-        case .didBeginInstallingUpdate (let reader):
-            updateViewController.viewModel?.content = .updating(reader)
-            updateViewController.viewModel?.progress = 0.0
-            updateViewController.reload()
-            screen = .update // We might already be on this screen, but maybe not because mandatory updates begin right after a connection
-            
-        case .didProgressInstallingUpdate(let progress):
-            updateViewController.viewModel?.progress = progress
-            updateViewController.updateProgress(progress)
         }
     }
     

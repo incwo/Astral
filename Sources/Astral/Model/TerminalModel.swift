@@ -12,14 +12,6 @@ import StripeTerminal
 protocol TerminalModelDelegate: AnyObject {
     func stripeTerminalModel(_ sender: TerminalModel, didUpdateState state: TerminalModel.State)
     
-    /*
-     func stripeTerminalWillBeginInstallingUpdate(_ sender: TerminalModel, on reader: Reader)
-    
-    func stripeTerminalDidProgressInstallingUpdate(_ sender: TerminalModel, progress: Float)
-    
-    func stripeTerminalDidEndInstallingUpdate(_ sender: TerminalModel)
-     */
-    
     /// Inform about an error
     func stripeTerminalModel(_sender: TerminalModel, didFailWithError error: Error)
 }
@@ -40,8 +32,8 @@ class TerminalModel: NSObject {
         switch state {
         case .ready:
             paymentProcessor.charge(amount: amount) { result in
-                if let _ = Terminal.shared.connectedReader { // Still connected
-                    self.state = .ready
+                if let reader = Terminal.shared.connectedReader { // Still connected
+                    self.state = .ready (reader)
                 } else {
                     self.state = .noReaderConnected
                 }
@@ -70,7 +62,7 @@ class TerminalModel: NSObject {
         case discoveringReaders
         case connecting (Reader)
         case readerConnected (Reader)
-        case ready
+        case ready (Reader)
         case charging (message: String)
         case installingUpdate (Reader, Float)
     }
@@ -126,7 +118,7 @@ class TerminalModel: NSObject {
             self.state = .readerConnected(reader)
             if !reader.requiresImmediateUpdate {
                 /// The reader will not start updating right now
-                self.state = .ready
+                self.state = .ready (reader)
             }
         }, onFailure: { [weak self] error in
             guard let self = self else { return }
@@ -221,7 +213,7 @@ extension TerminalModel: ReaderConnectionDelegate {
     func readerConnectionDidFinishInstallingUpdate(_ sender: ReaderConnection) {
         if let reader = reader,
             Terminal.shared.connectedReader == reader {
-            state = .ready
+            state = .ready (reader)
         } else {
             // I think that for big updates, the reader disconnects after the installation
             state = .noReaderConnected

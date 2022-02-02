@@ -31,7 +31,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		DF27253227A3F48F0066F4A5 /* Dummy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dummy.h; sourceTree = "<group>"; };
 		DF27255D27A400B00066F4A5 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
 		DF58313127A1A0F800F8A1FC /* AstralExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AstralExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF58313427A1A0F800F8A1FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -57,20 +56,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DF27253127A3F48F0066F4A5 /* Dummy */ = {
-			isa = PBXGroup;
-			children = (
-				DF27253227A3F48F0066F4A5 /* Dummy.h */,
-			);
-			path = Dummy;
-			sourceTree = "<group>";
-		};
 		DF58312827A1A0F700F8A1FC = {
 			isa = PBXGroup;
 			children = (
 				DF58315927A2970800F8A1FC /* Packages */,
 				DF58313327A1A0F800F8A1FC /* AstralExample */,
-				DF27253127A3F48F0066F4A5 /* Dummy */,
 				DF58313227A1A0F800F8A1FC /* Products */,
 				DF58315127A28C8300F8A1FC /* Frameworks */,
 			);
