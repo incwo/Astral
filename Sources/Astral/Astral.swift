@@ -39,14 +39,36 @@ public class Astral {
     
     private var presentingViewController: UIViewController?
     public func charge(amount: NSDecimalNumber, currency: String, presentFrom presentingViewController: UIViewController, onSuccess: @escaping (PaymentInfo)->(), onError: @escaping (Error)->()) {
+        switch coordinator {
+        case .none:
+            break
+        case .charge(_):
+            onError(NSError(domain: #file, code: 0, userInfo: [NSLocalizedDescriptionKey: "Cannot charge. The Charge panel is already shown."]))
+            return
+        case .settings(_):
+            onError(NSError(domain: #file, code: 0, userInfo: [NSLocalizedDescriptionKey: "Cannot charge. The Setup panel is already shown."]))
+            return
+        }
+        
         self.presentingViewController = presentingViewController
         
-        // Present the charge panel immediately. It can show the Reader connecting.
+        // If no reader is set up, show the Settings panel
+        switch model.state {
+        case .noReader:
+            presentSettings(from: presentingViewController)
+            return
+        default:
+            break
+        }
+        
+        // Present the charge panel.
+        // It might close soon if a required update begins
+        
         let amountInCurrency = Amount(amount: amount, currency: currency)
         let charging = {
             self.chargeInternal(amount: amountInCurrency, onSuccess: onSuccess, onError: onError)
         }
-        
+    
         presentChargeCoordinator(for: amountInCurrency) { coordinator in
             self.coordinator = .charge(coordinator)
             

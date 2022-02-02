@@ -19,10 +19,19 @@ protocol TerminalModelDelegate: AnyObject {
 class TerminalModel: NSObject {
     init(apiClient: AstralApiClient) {
         self.paymentProcessor = PaymentProcessor(apiClient: apiClient)
+        
+        if let _ = Self.serialNumber {
+            self.state = .readerSavedNotConnected
+        } else {
+            self.state = .noReader
+        }
+        
         super.init()
         
         Terminal.shared.delegate = self
-        reconnect()
+        if let serialNumber = Self.serialNumber {
+            reconnect(serialNumber: serialNumber)
+        }
     }
     
     weak var delegate: TerminalModelDelegate?
@@ -31,11 +40,12 @@ class TerminalModel: NSObject {
     func charge(amount: Amount, completion: @escaping (ChargeResult)->()) {
         switch state {
         case .ready:
+            state = .charging(message: "")
             paymentProcessor.charge(amount: amount) { result in
                 if let reader = Terminal.shared.connectedReader { // Still connected
                     self.state = .ready (reader)
                 } else {
-                    self.state = .noReaderConnected
+                    self.state = .readerSavedNotConnected
                 }
                 completion(result)
             }
@@ -57,8 +67,15 @@ class TerminalModel: NSObject {
     // MARK: State
     
     enum State {
-        case noReaderConnected
+        /// No reader is connected and no serial number is saved either
+        case noReader
+        
+        /// No reader is connected, but a serial number is saved, so reconnecting can be attempted
+        case readerSavedNotConnected
+        
+        /// A reader is being searched by its serial number
         case searchingReader (_ serialNumber: String)
+        
         case discoveringReaders
         case connecting (Reader)
         case readerConnected (Reader)
@@ -66,7 +83,7 @@ class TerminalModel: NSObject {
         case charging (message: String)
         case installingUpdate (Reader, Float)
     }
-    private(set) var state: State = .noReaderConnected {
+    private(set) var state: State {
         didSet {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
@@ -123,7 +140,7 @@ class TerminalModel: NSObject {
         }, onFailure: { [weak self] error in
             guard let self = self else { return }
             self.reader = nil // Forget this reader, an other one should probably be set up
-            self.state = .noReaderConnected
+            self.state = .readerSavedNotConnected
             DispatchQueue.main.async {
                 self.delegate?.stripeTerminalModel(_sender: self, didFailWithError: error)
             }
@@ -135,7 +152,7 @@ class TerminalModel: NSObject {
             guard let self = self else { return }
             self.location = nil
             self.reader = nil
-            self.state = .noReaderConnected
+            self.state = .noReader
         }, onFailure: { error in
             DispatchQueue.main.async {
                 self.delegate?.stripeTerminalModel(_sender: self, didFailWithError: error)
@@ -143,15 +160,7 @@ class TerminalModel: NSObject {
         })
     }
     
-    private func saveReaderSerialNumber() {
-        UserDefaults.standard.set(reader?.serialNumber, forKey: serialNumberUserDefaultsKey)
-    }
-    
-    private func reconnect() {
-        guard let serialNumber = UserDefaults.standard.string(forKey: serialNumberUserDefaultsKey) else {
-            return
-        }
-        
+    private func reconnect(serialNumber: String) {
         state = .searchingReader(serialNumber)
         
         discovery.findReader(serialNumber: serialNumber) { [weak self] result in
@@ -163,11 +172,11 @@ class TerminalModel: NSObject {
                 self.connect()
                 
             case .notFound:
-                self.state = .noReaderConnected
+                self.state = .readerSavedNotConnected
                 
             case .failure(let error):
                 self.reader = nil // Forget this reader, an other one should probably be set up
-                self.state = .noReaderConnected
+                self.state = .noReader
                 DispatchQueue.main.async {
                     self.delegate?.stripeTerminalModel(_sender: self, didFailWithError: error)
                 }
@@ -175,7 +184,19 @@ class TerminalModel: NSObject {
         }
     }
     
-    private let serialNumberUserDefaultsKey = "Astral.reader.serialNumber"
+    // MARK: Serial Number
+    
+    // The serial number of the last reader is saved to the User defaults, so it can be reconnected automatically
+    
+    private func saveReaderSerialNumber() {
+        UserDefaults.standard.set(reader?.serialNumber, forKey: Self.serialNumberUserDefaultsKey)
+    }
+    
+    private static var serialNumber: String? {
+        UserDefaults.standard.string(forKey: serialNumberUserDefaultsKey)
+    }
+    
+    private static let serialNumberUserDefaultsKey = "Astral.reader.serialNumber"
 }
 
 extension TerminalModel: TerminalDelegate {
@@ -216,8 +237,12 @@ extension TerminalModel: ReaderConnectionDelegate {
             state = .ready (reader)
         } else {
             // I think that for big updates, the reader disconnects after the installation
-            state = .noReaderConnected
-            reconnect()
+            if let serialNumber = Self.serialNumber {
+                self.state = .readerSavedNotConnected
+                reconnect(serialNumber: serialNumber)
+            } else {
+                self.state = .noReader
+            }
         }
     }
 }

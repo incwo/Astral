@@ -71,8 +71,10 @@ class SettingsCoordinator: NSObject {
         
         settingsViewController.viewModel = settingsViewModel
         settingsViewController.onClose = { [weak self] in
-            self?.navigationController.dismiss(animated: true, completion: nil)
-            self?.screen = .none
+            guard let self = self else { return }
+            self.delegate?.settingsCoordinatorWillDismiss(self)
+            self.navigationController.dismiss(animated: true, completion: nil)
+            self.screen = .none
         }
         
         screen = .settings
@@ -86,7 +88,7 @@ class SettingsCoordinator: NSObject {
     /// Returns false if the state can not be handled
     func update(for state: TerminalModel.State) -> Bool {
         switch state {
-        case .noReaderConnected:
+        case .noReader, .readerSavedNotConnected:
             discoveryViewController.viewModel?.location = nil
             settingsViewController.viewModel?.content = .noReaderConnected
             settingsViewController.reload()

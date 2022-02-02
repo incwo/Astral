@@ -44,8 +44,11 @@ class ChargeCoordinator: NSObject {
     /// Returns false if the state can not be handled
     func update(for state: TerminalModel.State) -> Bool {
         switch state {
-        case .noReaderConnected:
+        case .noReader:
             return false
+            
+        case .readerSavedNotConnected:
+            return true
             
         case .searchingReader(_):
             status = .searchingReader
