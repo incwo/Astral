@@ -12,8 +12,10 @@ import StripeTerminal
 class ReadersDiscovery: NSObject {
     typealias OnUpdate = ([Reader])->()
     typealias OnError = (Error)->()
+    typealias OnCanceled = ()->()
     private var onUpdate: OnUpdate?
     private var onError: OnError?
+    private var onCanceled: OnCanceled?
     private var cancelable: Cancelable?
     
     private(set) var isDiscovering: Bool = false
@@ -26,6 +28,7 @@ class ReadersDiscovery: NSObject {
         
         self.onUpdate = onUpdate
         self.onError = onError
+        self.onCanceled = nil
         
 #if targetEnvironment(simulator)
         let simulated = true
@@ -37,15 +40,11 @@ class ReadersDiscovery: NSObject {
         let config = DiscoveryConfiguration(discoveryMethod: .bluetoothScan, simulated: simulated)
         cancelable = Terminal.shared.discoverReaders(config, delegate: self, completion: { [weak self] error in
             guard let self = self else { return }
-            self.isDiscovering = false
-            
-            if let error = error {
+            if let onCanceled = self.onCanceled {
+                onCanceled()
+            } else if let error = error {
                 self.onError?(error)
             }
-            
-            self.cancelable = nil
-            self.onUpdate = nil
-            self.onError = nil
         })
     }
     
@@ -72,11 +71,17 @@ class ReadersDiscovery: NSObject {
         })
     }
     
-    func cancel() {
+    func cancel(completion: @escaping OnCanceled) {
         cancelable?.cancel { [weak self] error in
-            self?.isDiscovering = false
+            // The completion block does not indicate that the cancelation is complete, but that it's acknowledged.
             if let error = error {
                 self?.onError?(error)
+            } else {
+                self?.isDiscovering = false
+                self?.cancelable = nil
+                self?.onUpdate = nil
+                self?.onError = nil
+                self?.onCanceled = completion
             }
         }
     }

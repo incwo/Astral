@@ -27,7 +27,9 @@ class DiscoveryViewModel {
         didSet {
             if let _ = location {
                 reloadSections([.location, .readers])
-                startDiscovery()
+                cancelDiscovery {
+                    self.startDiscovery()
+                }
             } else { // The location is removed, e.g. after disconnecting a reader
                 reloadSections([.location, .readers])
             }
@@ -35,7 +37,7 @@ class DiscoveryViewModel {
     }
     
     deinit {
-        readersDiscovery.cancel()
+        cancelDiscovery { }
     }
     
     /// The readers found at this location
@@ -53,6 +55,11 @@ class DiscoveryViewModel {
     
     // MARK: Discovery
     private func startDiscovery() {
+        guard !isDiscovering else {
+            NSLog("\(#function) Already discovering")
+            return
+        }
+        
         isDiscovering = true
         readers = []
         
@@ -70,10 +77,17 @@ class DiscoveryViewModel {
         })
     }
     
-    private func cancelDiscovery() {
-        readersDiscovery.cancel()
-        isDiscovering = false
-        readers = []
+    private func cancelDiscovery(completion: @escaping ()->()) {
+        guard isDiscovering else {
+            completion()
+            return
+        }
+        
+        readersDiscovery.cancel {
+            self.isDiscovering = false
+            self.readers = []
+            completion()
+        }
     }
     
     // MARK: Content

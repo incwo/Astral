@@ -18,6 +18,13 @@ class DiscoveryTableViewController: UITableViewController {
     /// Closure called when a Reader is chosen by the user
     var onReaderPicked: ((Reader)->())?
     
+    /// If set, shows a Progress indicator
+    var isDiscovering: Bool = false {
+        didSet {
+            activityIndicator.isHidden = !isDiscovering
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,7 +39,8 @@ class DiscoveryTableViewController: UITableViewController {
             style = .gray
         }
         let indicator = UIActivityIndicatorView(style: style)
-        indicator.hidesWhenStopped = true
+        indicator.startAnimating()
+        indicator.isHidden = true
         return indicator
     }()
     
@@ -94,6 +102,8 @@ extension DiscoveryTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch row(at: indexPath) {
         case .pickLocation:
+            onPickLocation?()
+        case .location(_):
             onPickLocation?()
         case .reader(let reader):
             onReaderPicked?(reader)

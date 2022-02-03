@@ -194,7 +194,7 @@ class SettingsCoordinator: NSObject {
         discoveryViewController.viewModel = DiscoveryViewModel(
             readersDiscovery: readersDiscovery,
             onUpdateDiscovering: { isDiscovering in
-                
+                discoveryViewController.isDiscovering = isDiscovering
             },
             onUpdateSections: { indexes in
                 discoveryViewController.reloadSections(indexes: indexes)
