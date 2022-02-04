@@ -49,20 +49,25 @@ class PaymentProcessor: NSObject {
     }
     
     func cancel() {
-        collectCancellable?.cancel { error in
-            if let _ = error {
-                print("The operation is not cancelable.")
+        cancelable?.cancel { error in
+            // The completion block does not indicate that the cancelation is complete, but that it's acknowledged.
+            if let error = error {
+                NSLog("\(#function) \(error)")
             }
         }
     }
+    private var cancelable: Cancelable?
     
-    private var collectCancellable: Cancelable?
     private func collectPaymentMethod(_ paymentIntent: PaymentIntent, completion: @escaping (ChargeResult)->()) {
-        self.collectCancellable = Terminal.shared.collectPaymentMethod(paymentIntent) { paymentIntentToCollect, error in
-            self.collectCancellable = nil
+        cancelable = Terminal.shared.collectPaymentMethod(paymentIntent) { paymentIntentToCollect, error in
+            self.cancelable = nil
             
             if let error = error {
-                completion(.error(error))
+                if error.isCancelation {
+                    completion(.cancelled)
+                } else {
+                    completion(.error(error))
+                }
             } else if let paymentIntent = paymentIntentToCollect {
                 self.processPayment(paymentIntent, completion: completion)
             }
@@ -152,4 +157,9 @@ private extension Charge {
     }
 }
 
-
+extension Error {
+    var isCancelation: Bool {
+        let nsError = self as NSError
+        return nsError.domain == ErrorCode.errorDomain && nsError.code == ErrorCode.Code.canceled.rawValue
+    }
+}

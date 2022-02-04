@@ -55,6 +55,10 @@ class TerminalModel: NSObject {
         }
     }
     
+    func cancelCharging() {
+        paymentProcessor.cancel()
+    }
+    
     /// Begin the installation of the software update
     func installUpdate() {
         Terminal.shared.installAvailableUpdate()

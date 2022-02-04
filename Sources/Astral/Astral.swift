@@ -191,6 +191,10 @@ extension Astral: ChargeCoordinatorDelegate {
     func chargeCoordinatorWillDismiss() {
         coordinator = .none
     }
+    
+    func chargeCoordinatorCancel() {
+        model.cancelCharging()
+    }
 }
 
 extension Astral: SettingsCoordinatorDelegate {

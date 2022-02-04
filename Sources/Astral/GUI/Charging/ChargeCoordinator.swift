@@ -11,6 +11,9 @@ import UIKit
 protocol ChargeCoordinatorDelegate: AnyObject {
     /// Tells that the panel is about to close
     func chargeCoordinatorWillDismiss()
+    
+    /// Asks to cancel (charging)
+    func chargeCoordinatorCancel()
 }
 
 class ChargeCoordinator: NSObject {
@@ -114,7 +117,11 @@ class ChargeCoordinator: NSObject {
     }
     
     private lazy var chargeViewController: ChargeViewController = {
-        storyboard.instantiateViewController(withIdentifier: "charge") as! ChargeViewController
+        let viewController = storyboard.instantiateViewController(withIdentifier: "charge") as! ChargeViewController
+        viewController.onCancel = { [weak self] in
+            self?.delegate?.chargeCoordinatorCancel()
+        }
+        return viewController
     }()
     
 }

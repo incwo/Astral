@@ -31,11 +31,19 @@ class ChargeViewController: UIViewController {
         }
     }
     
+    var onCancel: (()->())?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel(_:)))
+        
         amountLabel.text = amount
         statusLabel.text = status
+    }
+    
+    @objc private func cancel(_ sender: UIBarButtonItem) {
+        onCancel?()
     }
     
 
