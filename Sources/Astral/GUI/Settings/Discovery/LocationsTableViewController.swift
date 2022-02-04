@@ -19,6 +19,12 @@ class LocationsTableViewController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: activityIndicator)
     }
     
+    private var isLoading: Bool = false {
+        didSet {
+            activityIndicator.isHidden = !isLoading
+        }
+    }
+    
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let style: UIActivityIndicatorView.Style
         if #available(iOS 13, *) {
@@ -34,12 +40,16 @@ class LocationsTableViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        isLoading = true
         // By default, only the first 10 locations are returned. This is sufficient for our needs.
         Terminal.shared.listLocations(parameters: nil) { [weak self] locations, hasMore, error in
             guard let self = self else { return }
             self.locations = locations ?? []
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                self.isLoading = false
                 if let error = error {
                     self.presentAlert(for: error)
                 }
