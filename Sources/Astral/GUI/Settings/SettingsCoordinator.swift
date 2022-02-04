@@ -224,6 +224,9 @@ class SettingsCoordinator: NSObject {
             self.discoveryViewController.viewModel?.location = location
             self.screen = .discovery
         }
+        locationsViewController.onError = { [weak self] error in
+            self?.presentAlert(for: error)
+        }
         
         return locationsViewController
     }()

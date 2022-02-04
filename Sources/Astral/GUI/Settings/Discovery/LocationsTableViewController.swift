@@ -12,6 +12,8 @@ class LocationsTableViewController: UITableViewController {
     
     var onLocationPicked: ((Location)->())?
     private var locations: [Location] = []
+    
+    var onError: ((Error)->())?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,17 +53,11 @@ class LocationsTableViewController: UITableViewController {
                 
                 self.isLoading = false
                 if let error = error {
-                    self.presentAlert(for: error)
+                    self.onError?(error)
                 }
                 self.tableView.reloadData()
             }
         }
-    }
-    
-    private func presentAlert(for error: Error) {
-        let alert = UIAlertController(title: "Error while getting Locations", message: error.localizedDescription, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-        present(alert, animated: true, completion: nil)
     }
 }
 
