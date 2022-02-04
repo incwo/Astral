@@ -90,7 +90,7 @@ class SettingsCoordinator: NSObject {
         switch state {
         case .noReader, .readerSavedNotConnected:
             discoveryViewController.viewModel?.location = nil
-            settingsViewController.viewModel?.content = .noReaderConnected
+            settingsViewController.viewModel?.content = .needsSettingUpReader
             settingsViewController.reload()
             return true
             

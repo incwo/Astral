@@ -33,6 +33,7 @@ public class Astral {
         let settingsCoordinator = SettingsCoordinator(readersDiscovery: model.discovery)
         settingsCoordinator.delegate = self
         settingsCoordinator.presentSettings(from: presentingViewController, reader: model.reader) {
+            let _ = settingsCoordinator.update(for: self.model.state)
             completion?(settingsCoordinator)
         }
     }

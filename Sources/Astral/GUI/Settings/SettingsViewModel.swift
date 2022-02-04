@@ -22,12 +22,13 @@ class SettingsViewModel {
     // MARK: Content
     
     enum Content {
-        case noReaderConnected
+        case none
+        case needsSettingUpReader
         case searchingReader
         case connecting
         case connected (Reader)
     }
-    var content: Content = .noReaderConnected
+    var content: Content = .none
     
     struct Section {
         internal init(title: String? = nil, rows: [Row]) {
@@ -51,7 +52,10 @@ class SettingsViewModel {
     var sections: [Section] {
         let sectionTitle = locz("SettingsViewModel.sectionHeader.reader")
         switch content {
-        case .noReaderConnected:
+        case .none:
+            return []
+            
+        case .needsSettingUpReader:
             return [
                 Section(title: sectionTitle, rows: [.setupReader])
             ]
