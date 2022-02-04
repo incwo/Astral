@@ -72,17 +72,21 @@ class ReadersDiscovery: NSObject {
     }
     
     func cancel(completion: @escaping OnCanceled) {
-        cancelable?.cancel { [weak self] error in
-            // The completion block does not indicate that the cancelation is complete, but that it's acknowledged.
-            if let error = error {
-                self?.onError?(error)
-            } else {
-                self?.isDiscovering = false
-                self?.cancelable = nil
-                self?.onUpdate = nil
-                self?.onError = nil
-                self?.onCanceled = completion
+        if let cancelable = cancelable {
+            cancelable.cancel { [weak self] error in
+                // The completion block does not indicate that the cancelation is complete, but that it's acknowledged.
+                if let error = error {
+                    self?.onError?(error)
+                } else {
+                    self?.isDiscovering = false
+                    self?.cancelable = nil
+                    self?.onUpdate = nil
+                    self?.onError = nil
+                    self?.onCanceled = completion
+                }
             }
+        } else {
+            completion()
         }
     }
 }

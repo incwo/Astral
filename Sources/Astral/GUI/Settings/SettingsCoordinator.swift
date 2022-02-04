@@ -208,6 +208,7 @@ class SettingsCoordinator: NSObject {
         }
         discoveryViewController.onReaderPicked = { [weak self] reader in
             guard let self = self else { return }
+            self.readersDiscovery.cancel { }
             self.delegate?.settingsCoordinator(self, didPick: reader)
             self.screen = .settings
         }
