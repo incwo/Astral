@@ -27,9 +27,9 @@ class DiscoveryViewModel {
         didSet {
             if let _ = location {
                 reloadSections([.location, .readers])
-                cancelDiscovery {
+                //cancelDiscovery {
                     self.startDiscovery()
-                }
+                //}
             } else { // The location is removed, e.g. after disconnecting a reader
                 reloadSections([.location, .readers])
             }
