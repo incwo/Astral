@@ -21,12 +21,6 @@ public protocol AstralApiClient {
     func capturePaymentIntent(id: String, onSuccess: @escaping ()->(), onError: @escaping (Error)->())
 }
 
-enum ChargeResult {
-    case success (PaymentInfo)
-    case cancelled
-    case error (Error)
-}
-
 class PaymentProcessor: NSObject {
     let apiClient: AstralApiClient
     init(apiClient: AstralApiClient) {
@@ -41,7 +35,7 @@ class PaymentProcessor: NSObject {
         let params = PaymentIntentParameters(amount: amount.smallestUnitAmount, currency: amount.currency)
         Terminal.shared.createPaymentIntent(params) { paymentIntent, error in
             if let error = error {
-                completion(.error(error))
+                completion(.failure(error))
             } else if let paymentIntent = paymentIntent {
                 self.collectPaymentMethod(paymentIntent, completion: completion)
             }
@@ -64,9 +58,9 @@ class PaymentProcessor: NSObject {
             
             if let error = error {
                 if error.isCancelation {
-                    completion(.cancelled)
+                    completion(.cancelation)
                 } else {
-                    completion(.error(error))
+                    completion(.failure(error))
                 }
             } else if let paymentIntent = paymentIntentToCollect {
                 self.processPayment(paymentIntent, completion: completion)
@@ -86,7 +80,7 @@ class PaymentProcessor: NSObject {
                         // Call collectPaymentMethod() with the updated PaymentIntent to try charging another card.
                         self.collectPaymentMethod(updatedPaymentIntent, completion: completion)
                     default:
-                        completion(.error(error))
+                        completion(.failure(error))
                     }
                 } else {
                     // The request to Stripe's server timed out and the PaymentIntent's status is unknown.
@@ -97,7 +91,7 @@ class PaymentProcessor: NSObject {
                 let charges = paymentIntent.charges
                 guard charges.count > 0 else {
                     let error = NSError(domain: NSStringFromClass(self.classForCoder), code: 0, userInfo: [NSLocalizedDescriptionKey: "The PaymentIntent should have charges at this point."])
-                    completion(.error(error))
+                    completion(.failure(error))
                     return
                 }
                 self.apiClient.capturePaymentIntent(id: paymentIntent.stripeId, onSuccess: {
@@ -108,7 +102,7 @@ class PaymentProcessor: NSObject {
                     let paymentInfo = PaymentInfo(id: paymentIntent.stripeId, date: Date(), charges: charges)
                     completion(.success(paymentInfo))
                 }, onError: { error in
-                    completion(.error(error))
+                    completion(.failure(error))
                 })
             }
         }

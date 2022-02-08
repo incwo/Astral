@@ -39,25 +39,34 @@ class MainTableViewController: UITableViewController {
             return
         }
         
-        astral.charge(amount: amount, currency: currency, presentFrom: self, onSuccess: { paymentInfo in
-            DispatchQueue.main.async {
-                let message: String
-                if paymentInfo.charges.count == 1, let charge = paymentInfo.charges.first {
-                    if let cardDetails = charge.cardDetails {
-                        message = "The card \(cardDetails.brand) ending with \(cardDetails.last4) was charged an amount of \(charge.amount.localizedString) successfully."
+        astral.charge(amount: amount, currency: currency, presentFrom: self) { result in
+            switch result {
+            case .success(let paymentInfo):
+                DispatchQueue.main.async {
+                    let message: String
+                    if paymentInfo.charges.count == 1, let charge = paymentInfo.charges.first {
+                        if let cardDetails = charge.cardDetails {
+                            message = "The card \(cardDetails.brand) ending with \(cardDetails.last4) was charged an amount of \(charge.amount.localizedString) successfully."
+                        } else {
+                            message = "The amount of \(charge.amount.amount) \(charge.amount.currency.uppercased()) was charged successfully."
+                        }
                     } else {
-                        message = "The amount of \(charge.amount.amount) \(charge.amount.currency.uppercased()) was charged successfully."
+                        message = "The amounts were charged successfully."
                     }
-                } else {
-                    message = "The amounts were charged successfully."
+                    self.presentAlert(title: "Transaction completed", message: message)
                 }
-                self.presentAlert(title: "Transaction completed", message: message)
+                
+            case .cancelation:
+                DispatchQueue.main.async {
+                    self.presentAlert(title: "Cancelation", message: "The payment was canceled by the user.")
+                }
+                
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.presentAlert(title: "An error occured", message: error.localizedDescription)
+                }
             }
-        }, onError: { error in
-            DispatchQueue.main.async {
-                self.presentAlert(title: "An error occured", message: error.localizedDescription)
-            }
-        })
+        }
     }
     
     private lazy var amountNumberFormatter: NumberFormatter = {

@@ -35,6 +35,7 @@ It is currently used in our Point-of-Sale app, [incwo POS](https://go.incwo.com/
 ### Limitations
 
 - Only Bluetooth readers are supported
+- Refunds are not supported
 
 ## Integration
 
@@ -74,7 +75,17 @@ Then you can show settings:
     astral.presentSettings(from: viewController)
 
 Or charge an amount:
-    astral.charge(amount: 9.90, currency: "EUR", presentFrom: viewController, onSuccess: { … }, onError: { … })
+
+    astral.charge(amount: 9.90, currency: "EUR", presentFrom: viewController) { result in
+        switch result {
+            case .success (let paymentInfo):
+                …
+            case .cancelation:
+                …
+            case .failure (let error):
+                …
+        }
+    }
 
 ## Example project
 

@@ -1,11 +1,17 @@
 //
-//  PaymentInfo.swift
+//  ChargeResult.swift
 //  Astral
 //
 //  Created by Renaud Pradenc on 12/01/2022.
 //
 
 import Foundation
+
+public enum ChargeResult {
+    case success (PaymentInfo)
+    case cancelation
+    case failure (Error)
+}
 
 public struct CardDetails {
     public let brand: String

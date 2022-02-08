@@ -39,15 +39,15 @@ public class Astral {
     }
     
     private var presentingViewController: UIViewController?
-    public func charge(amount: NSDecimalNumber, currency: String, presentFrom presentingViewController: UIViewController, onSuccess: @escaping (PaymentInfo)->(), onError: @escaping (Error)->()) {
+    public func charge(amount: NSDecimalNumber, currency: String, presentFrom presentingViewController: UIViewController, completion: @escaping (ChargeResult)->()) {
         switch coordinator {
         case .none:
             break
         case .charge(_):
-            onError(NSError(domain: #file, code: 0, userInfo: [NSLocalizedDescriptionKey: "Cannot charge. The Charge panel is already shown."]))
+            completion(.failure(NSError(domain: #file, code: 0, userInfo: [NSLocalizedDescriptionKey: "Cannot charge. The Charge panel is already shown."])))
             return
         case .settings(_):
-            onError(NSError(domain: #file, code: 0, userInfo: [NSLocalizedDescriptionKey: "Cannot charge. The Setup panel is already shown."]))
+            completion(.failure(NSError(domain: #file, code: 0, userInfo: [NSLocalizedDescriptionKey: "Cannot charge. The Setup panel is already shown."])))
             return
         }
         
@@ -67,7 +67,7 @@ public class Astral {
         
         let amountInCurrency = Amount(amount: amount, currency: currency)
         let charging = {
-            self.chargeInternal(amount: amountInCurrency, onSuccess: onSuccess, onError: onError)
+            self.chargeInternal(amount: amountInCurrency, completion: completion)
         }
     
         presentChargeCoordinator(for: amountInCurrency) { coordinator in
@@ -87,20 +87,12 @@ public class Astral {
     /// A block to charge later, after the reader is set up and ready
     private var chargeLater: (()->())?
     
-    private func chargeInternal(amount: Amount, onSuccess: @escaping (PaymentInfo)->(), onError: @escaping (Error)->()) {
+    private func chargeInternal(amount: Amount, completion: @escaping (ChargeResult)->()) {
         model.charge(amount: amount) { result in
             DispatchQueue.main.async {
                 self.presentingViewController?.dismiss(animated: true) {
                     self.coordinator = .none
-                    
-                    switch result {
-                    case .success(let stripePaymentInfo):
-                        onSuccess(stripePaymentInfo)
-                    case .cancelled:
-                        break
-                    case .error(let error):
-                        onError(error)
-                    }
+                    completion(result)
                 }
             }
         }
