@@ -3,7 +3,7 @@
 "07s-Aw-UXL.text" = "_line1";
 
 /* Class = "UILabel"; text = "Pick a location"; ObjectID = "0aH-cq-kPQ"; */
-"0aH-cq-kPQ.text" = "Choisissez un emplacement";
+"0aH-cq-kPQ.text" = "Choisissez un lieu";
 
 /* Class = "UILabel"; text = "_state"; ObjectID = "3vg-n9-PZe"; */
 "3vg-n9-PZe.text" = "_state";
@@ -57,7 +57,7 @@
 "QxL-pj-Lfk.title" = "Mise à jour";
 
 /* Class = "UILabel"; text = "Please select a Location first"; ObjectID = "SeP-QD-q2V"; */
-"SeP-QD-q2V.text" = "Choisissez d'abord un emplacement";
+"SeP-QD-q2V.text" = "Choisissez d'abord un lieu";
 
 /* Class = "UILabel"; text = "_version"; ObjectID = "UQd-j9-Bwb"; */
 "UQd-j9-Bwb.text" = "_version";
@@ -93,7 +93,7 @@
 "kfd-au-4Nr.text" = "_status";
 
 /* Class = "UITableViewController"; title = "Locations"; ObjectID = "ltk-xa-uE1"; */
-"ltk-xa-uE1.title" = "Emplacements";
+"ltk-xa-uE1.title" = "Lieux";
 
 /* Class = "UILabel"; text = "Looking for the Reader…"; ObjectID = "oAK-Bg-0gZ"; */
 "oAK-Bg-0gZ.text" = "Recherche du lecteur…";

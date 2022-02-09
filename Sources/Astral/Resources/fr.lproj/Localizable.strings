@@ -22,7 +22,7 @@
 "SettingsViewModel.sectionHeader.reader" = "Lecteur";
 
 /* DiscoveryViewModel */
-"DiscoveryViewModel.sectionHeader.location" = "Emplacement";
+"DiscoveryViewModel.sectionHeader.location" = "Lieux";
 "DiscoveryViewModel.sectionHeader.readers" = "Lecteurs";
 
 /* StripeTerminal.SCPReaderInputOptions */
