@@ -8,8 +8,13 @@
 import Foundation
 import StripeTerminal
 
+enum ReadersDiscoveryError: Error {
+    case alreadyDiscovering
+}
+
 /// Discover Stripe Readers
 class ReadersDiscovery: NSObject {
+    
     typealias OnUpdate = ([Reader])->()
     typealias OnError = (Error)->()
     typealias OnCanceled = ()->()
@@ -20,9 +25,19 @@ class ReadersDiscovery: NSObject {
     
     private(set) var isDiscovering: Bool = false
     
+#if targetEnvironment(simulator)
+    private let isSimulated = true
+#else
+    private let isSimulated = false
+#endif
+    
+    /// Launch the discovery of readers
+    /// - Parameters:
+    ///   - onUpdate: a closure called on updates of the list of detected readers
+    ///   - onError: a closure called when an error occurs during the discovery
     func discoverReaders(onUpdate: @escaping OnUpdate, onError: @escaping OnError) {
         guard isDiscovering == false else {
-            NSLog("\(#function) Already discovering")
+            onError(ReadersDiscoveryError.alreadyDiscovering)
             return
         }
         
@@ -30,14 +45,8 @@ class ReadersDiscovery: NSObject {
         self.onError = onError
         self.onCanceled = nil
         
-#if targetEnvironment(simulator)
-        let simulated = true
-#else
-        let simulated = false
-#endif
-        
         isDiscovering = true
-        let config = DiscoveryConfiguration(discoveryMethod: .bluetoothScan, simulated: simulated)
+        let config = DiscoveryConfiguration(discoveryMethod: .bluetoothScan, simulated: isSimulated)
         cancelable = Terminal.shared.discoverReaders(config, delegate: self, completion: { [weak self] error in
             guard let self = self else { return }
             if let error = error {
@@ -51,8 +60,13 @@ class ReadersDiscovery: NSObject {
     }
     
     enum SearchResult {
+        /// The reader was found
         case found (Reader)
+        
+        /// No reader was found before the 60 second timeout
         case notFound
+        
+        /// An error occured
         case failure (Error)
     }
     
@@ -60,35 +74,45 @@ class ReadersDiscovery: NSObject {
     func findReader(serialNumber: String, completion: @escaping (SearchResult)->()) {
         let start = Date()
         let timeOut = TimeInterval(60.0)
-        discoverReaders(onUpdate: { readers in
+        discoverReaders(onUpdate: { [weak self] readers in
             if let match = readers.first(where: { $0.serialNumber == serialNumber} ) {
                 completion(.found(match))
+                self?.cancel(completion: nil)
             } else {
                 if Date() > start + timeOut {
                     completion(.notFound)
+                    self?.cancel(completion: nil)
                 }
             }
-        }, onError: { error in
+        }, onError: { [weak self] error in
             completion(.failure(error))
+            self?.cancel(completion: nil)
         })
     }
     
-    func cancel(completion: @escaping OnCanceled) {
+    
+    /// Cancel (end) the discovery of readers
+    /// - Parameter completion: a closure called when the discovery has been canceled
+    func cancel(completion: OnCanceled?) {
         if let cancelable = cancelable {
             cancelable.cancel { [weak self] error in
+                guard let self = self else { return }
                 // The completion block does not indicate that the cancelation is complete, only that it's acknowledged.
+                self.isDiscovering = false
+                self.cancelable = nil
+                self.onUpdate = nil
+                
                 if let error = error {
-                    self?.onError?(error)
+                    // An error occured when canceling — probably the discovery has already been canceled
+                    self.onError?(error)
+                    self.onCanceled = nil
                 } else {
-                    self?.isDiscovering = false
-                    self?.cancelable = nil
-                    self?.onUpdate = nil
-                    self?.onError = nil
-                    self?.onCanceled = completion
+                    self.onError = nil
+                    self.onCanceled = completion // Will be called in discoverReaders()
                 }
             }
-        } else {
-            completion()
+        } else { // Not cancelable
+            completion?()
         }
     }
 }

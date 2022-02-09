@@ -208,8 +208,8 @@ class SettingsCoordinator: NSObject {
         }
         discoveryViewController.onReaderPicked = { [weak self] reader in
             guard let self = self else { return }
-            //self.readersDiscovery.cancel { }
             self.delegate?.settingsCoordinator(self, didPick: reader)
+            self.readersDiscovery.cancel(completion: nil) // Discovery must be stopped AFTER connecting to the Reader, or we get an error message.
             self.screen = .settings
         }
         
