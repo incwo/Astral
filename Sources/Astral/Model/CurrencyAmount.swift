@@ -1,5 +1,5 @@
 //
-//  Amount.swift
+//  CurrencyAmount.swift
 //  Astral
 //
 //  Created by Renaud Pradenc on 12/01/2022.
@@ -8,7 +8,7 @@
 import Foundation
 
 /// An amount in a given currency
-public struct Amount {
+public struct CurrencyAmount {
     /// Amount in the smallest unit of the currency (i.e: in cents if the currency has them).
     let smallestUnitAmount: UInt
     
@@ -46,7 +46,7 @@ public struct Amount {
     }
 }
 
-public extension Amount {
+public extension CurrencyAmount {
     var localizedString: String {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .currency

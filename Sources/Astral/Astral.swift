@@ -65,7 +65,7 @@ public class Astral {
         // Present the charge panel.
         // It might close soon if a required update begins
         
-        let amountInCurrency = Amount(amount: amount, currency: currency)
+        let amountInCurrency = CurrencyAmount(amount: amount, currency: currency)
         let charging = {
             self.chargeInternal(amount: amountInCurrency, completion: completion)
         }
@@ -87,8 +87,8 @@ public class Astral {
     /// A block to charge later, after the reader is set up and ready
     private var chargeLater: (()->())?
     
-    private func chargeInternal(amount: Amount, completion: @escaping (ChargeResult)->()) {
-        model.charge(amount: amount) { result in
+    private func chargeInternal(amount: CurrencyAmount, completion: @escaping (ChargeResult)->()) {
+        model.charge(currencyAmount: amount) { result in
             DispatchQueue.main.async {
                 self.presentingViewController?.dismiss(animated: true) {
                     self.coordinator = .none
@@ -98,7 +98,7 @@ public class Astral {
         }
     }
     
-    private func presentChargeCoordinator(for amount: Amount, completion: ((ChargeCoordinator)->())?) {
+    private func presentChargeCoordinator(for amount: CurrencyAmount, completion: ((ChargeCoordinator)->())?) {
         guard let presentingViewController = presentingViewController else {
             fatalError("The presentingViewController should be set")
         }
@@ -166,7 +166,7 @@ extension Astral: TerminalModelDelegate {
                 }
             case .settings:
             #warning("Amount en dur")
-                self.presentChargeCoordinator(for: Amount(amount: 1.0, currency: "EUR")) { coordinator in
+                self.presentChargeCoordinator(for: CurrencyAmount(amount: 1.0, currency: "EUR")) { coordinator in
                     self.coordinator = .charge(coordinator)
                     let _ = coordinator.update(for: state)
                 }

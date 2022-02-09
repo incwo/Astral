@@ -21,7 +21,7 @@ class ChargeCoordinator: NSObject {
     weak var delegate: ChargeCoordinatorDelegate?
     
     enum Operation {
-        case charging (amount: Amount)
+        case charging (amount: CurrencyAmount)
         // case refund  // Not supported yet
     }
     

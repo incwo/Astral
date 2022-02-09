@@ -37,11 +37,11 @@ class TerminalModel: NSObject {
     weak var delegate: TerminalModelDelegate?
     
     /// Charge an amount
-    func charge(amount: Amount, completion: @escaping (ChargeResult)->()) {
+    func charge(currencyAmount: CurrencyAmount, completion: @escaping (ChargeResult)->()) {
         switch state {
         case .ready:
             state = .charging(message: "")
-            paymentProcessor.charge(amount: amount) { result in
+            paymentProcessor.charge(currencyAmount: currencyAmount) { result in
                 if let reader = Terminal.shared.connectedReader { // Still connected
                     self.state = .ready (reader)
                 } else {

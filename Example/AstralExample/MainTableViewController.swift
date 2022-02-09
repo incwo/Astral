@@ -46,9 +46,9 @@ class MainTableViewController: UITableViewController {
                     let message: String
                     if paymentInfo.charges.count == 1, let charge = paymentInfo.charges.first {
                         if let cardDetails = charge.cardDetails {
-                            message = "The card \(cardDetails.brand) ending with \(cardDetails.last4) was charged an amount of \(charge.amount.localizedString) successfully."
+                            message = "The card \(cardDetails.brand) ending with \(cardDetails.last4) was charged an amount of \(charge.currencyAmount.localizedString) successfully."
                         } else {
-                            message = "The amount of \(charge.amount.amount) \(charge.amount.currency.uppercased()) was charged successfully."
+                            message = "The amount of \(charge.currencyAmount.amount) \(charge.currencyAmount.currency.uppercased()) was charged successfully."
                         }
                     } else {
                         message = "The amounts were charged successfully."

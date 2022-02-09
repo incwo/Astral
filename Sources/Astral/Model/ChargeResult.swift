@@ -27,7 +27,7 @@ public struct PaymentInfo {
     public struct Charge {
         /// Stripe identifier of the Charge
         public let id: String
-        public let amount: Amount
+        public let currencyAmount: CurrencyAmount
         public let cardDetails: CardDetails?
     }
     public let charges: [Charge]

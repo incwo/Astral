@@ -31,8 +31,8 @@ class PaymentProcessor: NSObject {
         Terminal.setTokenProvider(self)
     }
     
-    func charge(amount: Amount, completion: @escaping (ChargeResult)->()) {
-        let params = PaymentIntentParameters(amount: amount.smallestUnitAmount, currency: amount.currency)
+    func charge(currencyAmount: CurrencyAmount, completion: @escaping (ChargeResult)->()) {
+        let params = PaymentIntentParameters(amount: currencyAmount.smallestUnitAmount, currency: currencyAmount.currency)
         Terminal.shared.createPaymentIntent(params) { paymentIntent, error in
             if let error = error {
                 completion(.failure(error))
@@ -121,7 +121,7 @@ extension PaymentProcessor: ConnectionTokenProvider {
 
 private extension Charge {
     func asPaymentInfoCharge() -> PaymentInfo.Charge {
-        return .init(id: self.stripeId, amount: Amount(smallestUnitAmount: self.amount, currency: self.currency), cardDetails: self.cardDetails)
+        return .init(id: self.stripeId, currencyAmount: CurrencyAmount(smallestUnitAmount: self.amount, currency: self.currency), cardDetails: self.cardDetails)
     }
     
     private var cardDetails: CardDetails? {
