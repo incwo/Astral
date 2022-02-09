@@ -38,6 +38,9 @@
 /* Class = "UILabel"; text = "_serialNumber"; ObjectID = "Epd-pE-T9Z"; */
 "Epd-pE-T9Z.text" = "_serialNumber";
 
+/* Class = "UILabel"; text = "Go to dashboard.stripe.com/terminal to define the locations associated with your account."; ObjectID = "F7b-uD-xmb"; */
+"F7b-uD-xmb.text" = "Go to dashboard.stripe.com/terminal to define the locations associated with your account.";
+
 /* Class = "UILabel"; text = "Update"; ObjectID = "F9c-f6-Yu3"; */
 "F9c-f6-Yu3.text" = "Update";
 
@@ -94,6 +97,9 @@
 
 /* Class = "UITableViewController"; title = "Locations"; ObjectID = "ltk-xa-uE1"; */
 "ltk-xa-uE1.title" = "Locations";
+
+/* Class = "UILabel"; text = "No location defined"; ObjectID = "m6C-Qe-t5f"; */
+"m6C-Qe-t5f.text" = "No location defined";
 
 /* Class = "UILabel"; text = "Looking for the Reader…"; ObjectID = "oAK-Bg-0gZ"; */
 "oAK-Bg-0gZ.text" = "Looking for the Reader…";

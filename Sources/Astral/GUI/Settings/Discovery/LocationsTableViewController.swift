@@ -11,7 +11,7 @@ import StripeTerminal
 class LocationsTableViewController: UITableViewController {
     
     var onLocationPicked: ((Location)->())?
-    private var locations: [Location] = []
+    private var locations: [Location]?
     
     var onError: ((Error)->())?
 
@@ -46,7 +46,7 @@ class LocationsTableViewController: UITableViewController {
         // By default, only the first 10 locations are returned. This is sufficient for our needs.
         Terminal.shared.listLocations(parameters: nil) { [weak self] locations, hasMore, error in
             guard let self = self else { return }
-            self.locations = locations ?? []
+            self.locations = locations
             
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
@@ -59,6 +59,25 @@ class LocationsTableViewController: UITableViewController {
             }
         }
     }
+    
+    // MARK: Content
+    
+    private enum Row {
+        case noLocationFound
+        case location (Location)
+    }
+    
+    private var rows: [Row] {
+        if let locations = locations {  // We have a result
+            if locations.count == 0 {  // No locations returned
+                return [.noLocationFound]
+            } else {
+                return locations.map { Row.location($0) }
+            }
+        } else {  // No result yet
+            return []
+        }
+    }
 }
 
 // MARK: UITableViewDataSource
@@ -69,13 +88,19 @@ extension LocationsTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return locations.count
+        rows.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "location", for: indexPath) as! LocationCell
-        cell.location = locations[indexPath.row]
-        return cell
+        switch rows[indexPath.row] {
+        case .noLocationFound:
+            return tableView.dequeueReusableCell(withIdentifier: "noLocationDefined", for: indexPath)
+            
+        case .location(let location):
+            let cell = tableView.dequeueReusableCell(withIdentifier: "location", for: indexPath) as! LocationCell
+            cell.location = location
+            return cell
+        }
     }
 }
 
@@ -83,6 +108,12 @@ extension LocationsTableViewController {
 
 extension LocationsTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        onLocationPicked?(locations[indexPath.row])
+        switch rows[indexPath.row] {
+        case .noLocationFound:
+            break
+            
+        case .location(let location):
+            onLocationPicked?(location)
+        }
     }
 }
