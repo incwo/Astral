@@ -163,7 +163,27 @@ extension Astral: TerminalModelDelegate {
     }
     
     func stripeTerminalModel(_sender: TerminalModel, didFailWithError error: Error) {
-        NSLog("\(#function) error: \(error)")
+        presentAlert(for: error)
+    }
+    
+    private func presentAlert(for error: Error) {
+        let presentationViewController: UIViewController?
+        switch presentedCoordinator {
+        case .none:
+            presentationViewController = nil
+        case .charge(let coordinator):
+            presentationViewController = coordinator.presentationViewController
+        case .settings(let coordinator):
+            presentationViewController = coordinator.presentationViewController
+        }
+        
+        if let presentationViewController = presentationViewController {
+            let alert = UIAlertController(title: "Stripe Terminal", message: error.localizedDescription, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            presentationViewController.present(alert, animated: true, completion: nil)
+        } else {
+            NSLog("[Astral] an error occured: \(error)")
+        }
     }
 }
 

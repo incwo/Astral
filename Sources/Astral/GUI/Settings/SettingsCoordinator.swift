@@ -244,8 +244,12 @@ class SettingsCoordinator: NSObject {
         return updateViewController
     }()
     
+    var presentationViewController: UIViewController? {
+        viewControllerForScreen(screen)
+    }
+    
     private func presentAlert(for error: Error) {
-        guard let viewController = viewControllerForScreen(screen) else {
+        guard let viewController = presentationViewController else {
             NSLog(error.localizedDescription)
             return
         }

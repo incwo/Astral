@@ -26,6 +26,7 @@ class ChargeCoordinator: NSObject {
     }
     
     private var presentingViewController: UIViewController?
+    private var isPresented: Bool = false
     
     func present(for operation: Operation, from presentingViewController: UIViewController, completion: (()->())?) {
         self.presentingViewController = presentingViewController
@@ -34,10 +35,14 @@ class ChargeCoordinator: NSObject {
         
         navigationController.modalPresentationStyle = .formSheet
         navigationController.presentationController?.delegate = self
-        presentingViewController.present(navigationController, animated: true, completion: completion)
+        presentingViewController.present(navigationController, animated: true) {
+            self.isPresented = true
+            completion?()
+        }
     }
     
     func dismiss() {
+        isPresented = false
         delegate?.chargeCoordinatorWillDismiss()
         navigationController.dismiss(animated: true, completion: nil)
     }
@@ -124,6 +129,12 @@ class ChargeCoordinator: NSObject {
         return viewController
     }()
     
+    var presentationViewController: UIViewController? {
+        guard isPresented else {
+            return nil
+        }
+        return chargeViewController
+    }
 }
 
 private extension ChargeCoordinator.Operation {
@@ -166,5 +177,6 @@ extension ChargeCoordinator: UIAdaptivePresentationControllerDelegate {
     // This is for the navigationController.
     func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
         delegate?.chargeCoordinatorWillDismiss()
+        isPresented = false
     }
 }
