@@ -13,6 +13,9 @@ protocol SettingsCoordinatorDelegate: AnyObject {
     /// Tells that the Settings panel is about to close
     func settingsCoordinatorWillDismiss(_ sender: SettingsCoordinator)
     
+    /// Informs that an error occured
+    func settingsCoordinator(_ sender: SettingsCoordinator, didFail error: Error)
+    
     /// Tells that the User chose a Location among the list
     func settingsCoordinator(_ sender: SettingsCoordinator, didPick location: Location)
     
@@ -199,8 +202,9 @@ class SettingsCoordinator: NSObject {
             onUpdateSections: { indexes in
                 discoveryViewController.reloadSections(indexes: indexes)
             },
-            onError: { error in
-                self.presentAlert(for: error)
+            onError: { [weak self] error in
+                guard let self = self else { return }
+                self.delegate?.settingsCoordinator(self, didFail: error)
             })
         
         discoveryViewController.onPickLocation = {
@@ -226,7 +230,8 @@ class SettingsCoordinator: NSObject {
             self.screen = .discovery
         }
         locationsViewController.onError = { [weak self] error in
-            self?.presentAlert(for: error)
+            guard let self = self else { return }
+            self.delegate?.settingsCoordinator(self, didFail: error)
         }
         
         return locationsViewController
@@ -246,17 +251,6 @@ class SettingsCoordinator: NSObject {
     
     var presentationViewController: UIViewController? {
         viewControllerForScreen(screen)
-    }
-    
-    private func presentAlert(for error: Error) {
-        guard let viewController = presentationViewController else {
-            NSLog(error.localizedDescription)
-            return
-        }
-        
-        let alert = UIAlertController(title: "Stripe Terminal", message: error.localizedDescription, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        viewController.present(alert, animated: true, completion: nil)
     }
 }
 

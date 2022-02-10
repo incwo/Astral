@@ -202,6 +202,10 @@ extension Astral: SettingsCoordinatorDelegate {
         presentedCoordinator = .none
     }
     
+    func settingsCoordinator(_ sender: SettingsCoordinator, didFail error: Error) {
+        presentAlert(for: error)
+    }
+    
     func settingsCoordinator(_ sender: SettingsCoordinator, didPick location: Location) {
         model.location = location
     }
