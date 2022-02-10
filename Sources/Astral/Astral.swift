@@ -21,7 +21,7 @@ public class Astral {
         self.presentingViewController = presentingViewController
         
         presentSettingsCoordinator() { coordinator in
-            self.coordinator = .settings(coordinator)
+            self.presentedCoordinator = .settings(coordinator)
         }
     }
     
@@ -40,7 +40,7 @@ public class Astral {
     
     private var presentingViewController: UIViewController?
     public func charge(amount: NSDecimalNumber, currency: String, presentFrom presentingViewController: UIViewController, completion: @escaping (ChargeResult)->()) {
-        switch coordinator {
+        switch presentedCoordinator {
         case .none:
             break
         case .charge(_):
@@ -71,7 +71,7 @@ public class Astral {
         }
     
         presentChargeCoordinator(for: amountInCurrency) { coordinator in
-            self.coordinator = .charge(coordinator)
+            self.presentedCoordinator = .charge(coordinator)
             
             switch self.model.state {
             case .ready:
@@ -91,7 +91,7 @@ public class Astral {
         model.charge(currencyAmount: amount) { result in
             DispatchQueue.main.async {
                 self.presentingViewController?.dismiss(animated: true) {
-                    self.coordinator = .none
+                    self.presentedCoordinator = .none
                     completion(result)
                 }
             }
@@ -115,7 +115,7 @@ public class Astral {
         case charge (ChargeCoordinator)
         case settings (SettingsCoordinator)
     }
-    private var coordinator: PresentedCoordinator = .none
+    private var presentedCoordinator: PresentedCoordinator = .none
 }
 
 extension Astral: TerminalModelDelegate {
@@ -135,7 +135,7 @@ extension Astral: TerminalModelDelegate {
     }
     
     private func update(for state: TerminalModel.State) {
-        switch coordinator {
+        switch presentedCoordinator {
         case .none:
             //NSLog("\(#function) Unexpected: receiving Model state update with no Coordinator presented.")
             break
@@ -151,10 +151,10 @@ extension Astral: TerminalModelDelegate {
     }
     
     private func switchToSettingsCoordinator(andHandle state: TerminalModel.State) {
-        self.coordinator = .none
+        self.presentedCoordinator = .none
         presentingViewController?.dismiss(animated: true, completion: {
             self.presentSettingsCoordinator() { coordinator in
-                self.coordinator = .settings(coordinator)
+                self.presentedCoordinator = .settings(coordinator)
                 if !coordinator.update(for: state) {
                     NSLog("\(#function) Unexpected state received by SettingsCoordinator: \(state)")
                 }
@@ -169,7 +169,7 @@ extension Astral: TerminalModelDelegate {
 
 extension Astral: ChargeCoordinatorDelegate {
     func chargeCoordinatorWillDismiss() {
-        coordinator = .none
+        presentedCoordinator = .none
     }
     
     func chargeCoordinatorCancel() {
@@ -179,7 +179,7 @@ extension Astral: ChargeCoordinatorDelegate {
 
 extension Astral: SettingsCoordinatorDelegate {
     func settingsCoordinatorWillDismiss(_ sender: SettingsCoordinator) {
-        coordinator = .none
+        presentedCoordinator = .none
     }
     
     func settingsCoordinator(_ sender: SettingsCoordinator, didPick location: Location) {
