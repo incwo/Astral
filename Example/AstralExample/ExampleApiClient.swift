@@ -26,7 +26,7 @@ class ExampleApiClient: AstralApiClient {
      https://github.com/stripe/example-terminal-backend
      which is quite simple but will allow testing your integration easily.
      In this example, we've chosen to deploy this example using Docker. */
-    static let backendUrl: String = "http://localhost:4567"  // Docker
+    static let backendUrl: String = "http://192.168.1.61:4567"  // Docker
     
     func fetchConnectionToken(onSuccess: @escaping (String) -> (), onError: @escaping (Error) -> ()) {
         guard let url = URL(string: "\(Self.backendUrl)/connection_token") else {

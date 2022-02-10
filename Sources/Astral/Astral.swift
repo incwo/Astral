@@ -141,34 +141,22 @@ extension Astral: TerminalModelDelegate {
             break
         case .charge(let coordinator):
             if !coordinator.update(for: state) {
-                switchCoordinator(andHandle: state)
+                switchToSettingsCoordinator(andHandle: state)
             }
         case .settings(let coordinator):
             if !coordinator.update(for: state) {
-                switchCoordinator(andHandle: state)
+                NSLog("\(#function) Unexpected state received by SettingsCoordinator: \(state)")
             }
         }
     }
     
-    private func switchCoordinator(andHandle state: TerminalModel.State) {
-        // Updates to the state can be received while the coordinator is presenting
-        let previousPresentedCoordinator = self.coordinator
+    private func switchToSettingsCoordinator(andHandle state: TerminalModel.State) {
         self.coordinator = .none
-        
         presentingViewController?.dismiss(animated: true, completion: {
-            switch previousPresentedCoordinator {
-            case .none:
-                break
-            case .charge:
-                self.presentSettingsCoordinator() { coordinator in
-                    self.coordinator = .settings(coordinator)
-                    let _ = coordinator.update(for: state)
-                }
-            case .settings:
-            #warning("Amount en dur")
-                self.presentChargeCoordinator(for: CurrencyAmount(amount: 1.0, currency: "EUR")) { coordinator in
-                    self.coordinator = .charge(coordinator)
-                    let _ = coordinator.update(for: state)
+            self.presentSettingsCoordinator() { coordinator in
+                self.coordinator = .settings(coordinator)
+                if !coordinator.update(for: state) {
+                    NSLog("\(#function) Unexpected state received by SettingsCoordinator: \(state)")
                 }
             }
         })
