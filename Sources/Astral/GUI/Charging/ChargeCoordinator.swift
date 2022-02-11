@@ -10,10 +10,10 @@ import UIKit
 
 protocol ChargeCoordinatorDelegate: AnyObject {
     /// Tells that the panel is about to close
-    func chargeCoordinatorWillDismiss()
+    func chargeCoordinatorWillDismiss(_ sender: ChargeCoordinator)
     
-    /// Asks to cancel (charging)
-    func chargeCoordinatorCancel()
+    /// The Cancel button was pressed
+    func chargeCoordinatorCancel(_ sender: ChargeCoordinator)
 }
 
 class ChargeCoordinator: NSObject {
@@ -43,7 +43,7 @@ class ChargeCoordinator: NSObject {
     
     func dismiss() {
         isPresented = false
-        delegate?.chargeCoordinatorWillDismiss()
+        delegate?.chargeCoordinatorWillDismiss(self)
         navigationController.dismiss(animated: true, completion: nil)
     }
     
@@ -117,6 +117,7 @@ class ChargeCoordinator: NSObject {
     private func presentChargeViewController(for operation: Operation) {
         chargeViewController.operationTitle = operation.title
         chargeViewController.amount = operation.amountString
+        chargeViewController.status = status.statusString
         
         navigationController.viewControllers = [chargeViewController]
     }
@@ -124,7 +125,8 @@ class ChargeCoordinator: NSObject {
     private lazy var chargeViewController: ChargeViewController = {
         let viewController = storyboard.instantiateViewController(withIdentifier: "charge") as! ChargeViewController
         viewController.onCancel = { [weak self] in
-            self?.delegate?.chargeCoordinatorCancel()
+            guard let self = self else { return }
+            self.delegate?.chargeCoordinatorCancel(self)
         }
         return viewController
     }()
@@ -176,7 +178,7 @@ extension ChargeCoordinator: UIAdaptivePresentationControllerDelegate {
     // Called for "Swipe to dismiss" on iOS 13+
     // This is for the navigationController.
     func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
-        delegate?.chargeCoordinatorWillDismiss()
+        delegate?.chargeCoordinatorWillDismiss(self)
         isPresented = false
     }
 }

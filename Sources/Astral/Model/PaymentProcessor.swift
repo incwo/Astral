@@ -42,7 +42,9 @@ class PaymentProcessor: NSObject {
         }
     }
     
-    func cancel() {
+    typealias OnCancelation = ()->()
+    
+    func cancel(completion: OnCancelation?) {
         cancelable?.cancel { error in
             // The completion block does not indicate that the cancelation is complete, but that it's acknowledged.
             if let error = error {
@@ -51,20 +53,24 @@ class PaymentProcessor: NSObject {
         }
     }
     private var cancelable: Cancelable?
+    private var onCancelation: OnCancelation?
     
     private func collectPaymentMethod(_ paymentIntent: PaymentIntent, completion: @escaping (ChargeResult)->()) {
-        cancelable = Terminal.shared.collectPaymentMethod(paymentIntent) { paymentIntentToCollect, error in
-            self.cancelable = nil
-            
+        cancelable = Terminal.shared.collectPaymentMethod(paymentIntent) { [weak self] paymentIntentToCollect, error in
+            guard let self = self else { return }
             if let error = error {
                 if error.isCancelation {
                     completion(.cancelation)
+                    self.onCancelation?()
                 } else {
                     completion(.failure(error))
                 }
             } else if let paymentIntent = paymentIntentToCollect {
                 self.processPayment(paymentIntent, completion: completion)
             }
+            
+            self.cancelable = nil
+            self.onCancelation = nil
         }
     }
     

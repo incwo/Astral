@@ -63,26 +63,16 @@ class ReadersDiscovery: NSObject {
         /// The reader was found
         case found (Reader)
         
-        /// No reader was found before the 60 second timeout
-        case notFound
-        
         /// An error occured
         case failure (Error)
     }
     
     /// Find a reader using its serial number
     func findReader(serialNumber: String, completion: @escaping (SearchResult)->()) {
-        let start = Date()
-        let timeOut = TimeInterval(60.0)
         discoverReaders(onUpdate: { [weak self] readers in
             if let match = readers.first(where: { $0.serialNumber == serialNumber} ) {
                 completion(.found(match))
                 self?.cancel(completion: nil)
-            } else {
-                if Date() > start + timeOut {
-                    completion(.notFound)
-                    self?.cancel(completion: nil)
-                }
             }
         }, onError: { [weak self] error in
             completion(.failure(error))

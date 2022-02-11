@@ -55,10 +55,6 @@ class TerminalModel: NSObject {
         }
     }
     
-    func cancelCharging() {
-        paymentProcessor.cancel()
-    }
-    
     /// Begin the installation of the software update
     func installUpdate() {
         Terminal.shared.installAvailableUpdate()
@@ -91,6 +87,7 @@ class TerminalModel: NSObject {
         didSet {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
+                NSLog("[Astral] State = \(self.state)")
                 self.delegate?.stripeTerminalModel(self, didUpdateState: self.state)
             }
         }
@@ -175,9 +172,6 @@ class TerminalModel: NSObject {
                 self.reader = reader
                 self.connect()
                 
-            case .notFound:
-                self.state = .readerSavedNotConnected
-                
             case .failure(let error):
                 self.reader = nil // Forget this reader, an other one should probably be set up
                 self.state = .noReader
@@ -185,6 +179,27 @@ class TerminalModel: NSObject {
                     self.delegate?.stripeTerminalModel(_sender: self, didFailWithError: error)
                 }
             }
+        }
+    }
+    
+    /// Cancel the current operation
+    func cancel(completion: (()->())?) {
+        switch state {
+        case .searchingReader:
+            discovery.cancel {
+                self.state = .readerSavedNotConnected
+                completion?()
+            }
+        case .discoveringReaders:
+            discovery.cancel(completion: completion)
+        case .charging:
+            paymentProcessor.cancel {
+                completion?()
+            }
+        case .installingUpdate:
+            NSLog("[Astral] \(#function) Canceling the installation of updates is not implemented yet.")
+        default:
+            NSLog("[Astral] \(#function) The current operation can not be canceled.")
         }
     }
     
@@ -205,7 +220,16 @@ class TerminalModel: NSObject {
 
 extension TerminalModel: TerminalDelegate {
     func terminal(_ terminal: Terminal, didReportUnexpectedReaderDisconnect reader: Reader) {
-        // You might want to display UI to notify the user and start re-discovering readers
+        switch state {
+        case .noReader:
+            break
+        case .discoveringReaders:
+            state = .noReader
+            
+        default:
+            // In all other states, the connection is lost, but the Reader is still known
+            state = .readerSavedNotConnected
+        }
     }
     
     // Call this method just before connecting the reader; simulatorConfiguration might be nil earlier.

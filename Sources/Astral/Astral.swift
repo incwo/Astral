@@ -106,6 +106,7 @@ public class Astral {
         let chargeCoordinator = ChargeCoordinator()
         chargeCoordinator.delegate = self
         chargeCoordinator.present(for: .charging(amount: amount), from: presentingViewController, completion: {
+            let _ = chargeCoordinator.update(for: self.model.state)
             completion?(chargeCoordinator)
         })
     }
@@ -188,12 +189,15 @@ extension Astral: TerminalModelDelegate {
 }
 
 extension Astral: ChargeCoordinatorDelegate {
-    func chargeCoordinatorWillDismiss() {
+    func chargeCoordinatorWillDismiss(_ sender: ChargeCoordinator) {
         presentedCoordinator = .none
+        model.cancel(completion: nil)
     }
     
-    func chargeCoordinatorCancel() {
-        model.cancelCharging()
+    func chargeCoordinatorCancel(_ sender: ChargeCoordinator) {
+        model.cancel {
+            sender.dismiss()
+        }
     }
 }
 
