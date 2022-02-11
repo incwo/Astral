@@ -10,6 +10,7 @@ import StripeTerminal
 
 class SettingsTableViewController: UITableViewController {
     var onClose: (()->())?
+    var onCancelSearching: (()->())?
     
     var viewModel: SettingsViewModel? {
         didSet {
@@ -76,7 +77,9 @@ extension SettingsTableViewController {
             return tableView.dequeueReusableCell(withIdentifier: "setupReader", for: indexPath)
             
         case .searchingReader:
-            return tableView.dequeueReusableCell(withIdentifier: "searching", for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "searching", for: indexPath) as! SearchingReaderCell
+            cell.onCancel = self.onCancelSearching
+            return cell
             
         case .connecting:
             return tableView.dequeueReusableCell(withIdentifier: "connecting", for: indexPath)

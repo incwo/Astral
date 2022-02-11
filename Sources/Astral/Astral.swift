@@ -219,6 +219,10 @@ extension Astral: SettingsCoordinatorDelegate {
         model.connect()
     }
     
+    func settingsCoordinatorCancelSearchingReader(_ sender: SettingsCoordinator) {
+        model.cancel(completion: nil)
+    }
+    
     func settingsCoordinatorRequestsReaderToUpdate(_ sender: SettingsCoordinator) -> Reader? {
         model.reader
     }

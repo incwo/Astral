@@ -57,53 +57,67 @@
                                     </constraints>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="connecting" id="MlS-cb-cYX">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="searching" id="MlS-cb-cYX" customClass="SearchingReaderCell" customModule="Astral">
                                 <rect key="frame" x="0.0" y="187.5" width="540" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="MlS-cb-cYX" id="haU-cd-6RT">
                                     <rect key="frame" x="0.0" y="0.0" width="540" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connecting to the Reader…" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vXK-Oe-2zY">
-                                            <rect key="frame" x="20" y="11" width="213" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Looking for the Reader…" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vXK-Oe-2zY">
+                                            <rect key="frame" x="48" y="11" width="190" height="21"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                             <color key="textColor" name="astral.label"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="tkh-Gq-ybe">
-                                            <rect key="frame" x="504" y="12" width="20" height="20"/>
+                                            <rect key="frame" x="20" y="12" width="20" height="20"/>
                                         </activityIndicatorView>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aIV-jb-0Me">
+                                            <rect key="frame" x="472" y="7" width="48" height="30"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            <state key="normal" title="Cancel">
+                                                <color key="titleColor" name="astral.accent"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="cancel:" destination="MlS-cb-cYX" eventType="touchUpInside" id="fly-7F-F8C"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="vXK-Oe-2zY" firstAttribute="leading" secondItem="haU-cd-6RT" secondAttribute="leadingMargin" id="5Q8-5w-euN"/>
+                                        <constraint firstItem="vXK-Oe-2zY" firstAttribute="leading" secondItem="tkh-Gq-ybe" secondAttribute="trailing" constant="8" symbolic="YES" id="AOg-Qc-hqw"/>
+                                        <constraint firstItem="aIV-jb-0Me" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="vXK-Oe-2zY" secondAttribute="trailing" constant="8" symbolic="YES" id="GrM-Qj-Rpv"/>
                                         <constraint firstItem="tkh-Gq-ybe" firstAttribute="centerY" secondItem="haU-cd-6RT" secondAttribute="centerY" id="IAm-YL-t8b"/>
+                                        <constraint firstItem="aIV-jb-0Me" firstAttribute="centerY" secondItem="haU-cd-6RT" secondAttribute="centerY" id="Mfl-g0-96c"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="vXK-Oe-2zY" secondAttribute="bottom" constant="0.5" id="Rl4-G1-EJb"/>
+                                        <constraint firstAttribute="trailing" secondItem="aIV-jb-0Me" secondAttribute="trailing" constant="20" symbolic="YES" id="f4E-YX-gbd"/>
                                         <constraint firstItem="vXK-Oe-2zY" firstAttribute="top" secondItem="haU-cd-6RT" secondAttribute="topMargin" id="qp5-Zt-vcN"/>
-                                        <constraint firstItem="tkh-Gq-ybe" firstAttribute="trailing" secondItem="haU-cd-6RT" secondAttribute="trailingMargin" id="tec-A7-0a8"/>
+                                        <constraint firstItem="tkh-Gq-ybe" firstAttribute="leading" secondItem="haU-cd-6RT" secondAttribute="leadingMargin" id="xkM-hT-bNf"/>
                                     </constraints>
                                 </tableViewCellContentView>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="searching" id="Mfc-RO-LEx">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="connecting" id="Mfc-RO-LEx">
                                 <rect key="frame" x="0.0" y="231" width="540" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Mfc-RO-LEx" id="WPn-MR-iGZ">
                                     <rect key="frame" x="0.0" y="0.0" width="540" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Looking for the Reader…" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oAK-Bg-0gZ">
-                                            <rect key="frame" x="20" y="11" width="190" height="21"/>
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="TK4-0g-kZg">
+                                            <rect key="frame" x="20" y="12" width="20" height="20"/>
+                                        </activityIndicatorView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connecting to the Reader…" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oAK-Bg-0gZ">
+                                            <rect key="frame" x="48" y="11" width="476" height="21"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                             <color key="textColor" name="astral.label"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="TK4-0g-kZg">
-                                            <rect key="frame" x="504" y="12" width="20" height="20"/>
-                                        </activityIndicatorView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="TK4-0g-kZg" firstAttribute="trailing" secondItem="WPn-MR-iGZ" secondAttribute="trailingMargin" id="3No-aQ-XKk"/>
-                                        <constraint firstItem="oAK-Bg-0gZ" firstAttribute="leading" secondItem="WPn-MR-iGZ" secondAttribute="leadingMargin" id="7Qu-PC-vat"/>
+                                        <constraint firstItem="oAK-Bg-0gZ" firstAttribute="leading" secondItem="TK4-0g-kZg" secondAttribute="trailing" constant="8" symbolic="YES" id="A8M-fD-LVk"/>
                                         <constraint firstItem="TK4-0g-kZg" firstAttribute="centerY" secondItem="WPn-MR-iGZ" secondAttribute="centerY" id="G3d-d2-Xt1"/>
+                                        <constraint firstItem="oAK-Bg-0gZ" firstAttribute="trailing" secondItem="WPn-MR-iGZ" secondAttribute="trailingMargin" id="aSX-NH-4g6"/>
+                                        <constraint firstItem="TK4-0g-kZg" firstAttribute="leading" secondItem="WPn-MR-iGZ" secondAttribute="leading" constant="20" symbolic="YES" id="sT8-sw-tEJ"/>
                                         <constraint firstItem="oAK-Bg-0gZ" firstAttribute="top" secondItem="WPn-MR-iGZ" secondAttribute="topMargin" id="ugh-Vd-e44"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="oAK-Bg-0gZ" secondAttribute="bottom" constant="0.5" id="yiX-57-qCR"/>
                                     </constraints>
@@ -377,20 +391,20 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="upToDate" id="qLs-tg-pf5">
-                                <rect key="frame" x="0.0" y="133.5" width="540" height="43"/>
+                                <rect key="frame" x="0.0" y="133.5" width="540" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="qLs-tg-pf5" id="Zeb-JR-I3p">
-                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="The Reader's software is up to date." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="68r-gm-hN3">
-                                            <rect key="frame" x="48" y="11" width="274" height="21"/>
+                                            <rect key="frame" x="48" y="11" width="274" height="21.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" name="astral.label"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="astral.info" translatesAutoresizingMaskIntoConstraints="NO" id="Ect-Wi-WNK">
-                                            <rect key="frame" x="20" y="11.5" width="20" height="20"/>
+                                            <rect key="frame" x="20" y="12" width="20" height="20"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="20" id="abl-RH-4XZ"/>
                                                 <constraint firstAttribute="height" constant="20" id="pEF-Bx-qks"/>
@@ -407,14 +421,14 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="update" id="eDv-Za-53j">
-                                <rect key="frame" x="0.0" y="176.5" width="540" height="43.5"/>
+                                <rect key="frame" x="0.0" y="177" width="540" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="eDv-Za-53j" id="jhA-xf-RPu">
-                                    <rect key="frame" x="0.0" y="0.0" width="540" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Update Now" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e9y-Vt-3WL">
-                                            <rect key="frame" x="222.5" y="11" width="95" height="21"/>
+                                            <rect key="frame" x="222.5" y="11" width="95" height="21.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" name="astral.accent"/>
                                             <nil key="highlightedColor"/>
@@ -428,7 +442,7 @@
                                 </tableViewCellContentView>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="updating" rowHeight="82" id="YbS-Ap-3Vh" customClass="UpdatingCell" customModule="Astral">
-                                <rect key="frame" x="0.0" y="220" width="540" height="82"/>
+                                <rect key="frame" x="0.0" y="221" width="540" height="82"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YbS-Ap-3Vh" id="fyi-fW-MX5">
                                     <rect key="frame" x="0.0" y="0.0" width="540" height="82"/>

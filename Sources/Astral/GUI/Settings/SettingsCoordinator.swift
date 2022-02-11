@@ -22,6 +22,9 @@ protocol SettingsCoordinatorDelegate: AnyObject {
     /// Tells that the User chose a Reader among the list of ones available at the current location
     func settingsCoordinator(_ sender: SettingsCoordinator, didPick reader: Reader)
     
+    /// Asks to cancel Searching for the reader
+    func settingsCoordinatorCancelSearchingReader(_ sender: SettingsCoordinator)
+    
     /// Asks the delegate for the Reader to update.
     ///
     /// The reader object is needed to show the current version and the one to install.
@@ -78,6 +81,10 @@ class SettingsCoordinator: NSObject {
             self.delegate?.settingsCoordinatorWillDismiss(self)
             self.navigationController.dismiss(animated: true, completion: nil)
             self.screen = .none
+        }
+        settingsViewController.onCancelSearching = { [weak self] in
+            guard let self = self else { return }
+            self.delegate?.settingsCoordinatorCancelSearchingReader(self)
         }
         
         screen = .settings
