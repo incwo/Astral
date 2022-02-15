@@ -191,6 +191,10 @@ class SettingsCoordinator: NSObject {
         let navigationController = UINavigationController()
         navigationController.navigationBar.tintColor = .astralAccent
         navigationController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.astralLabel as Any]
+        if #available(iOS 15.0, *) {
+            // I don't quite understand why, but in some integrations, the background color is clear whereas it takes the top view controller's background color in other
+            navigationController.view.backgroundColor = .systemGroupedBackground
+        }
         return navigationController
     }()
     
