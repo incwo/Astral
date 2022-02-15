@@ -10,7 +10,16 @@ import UIKit
 import StripeTerminal
 
 public class Astral {
-    public init(apiClient: AstralApiClient) {
+    public static func initSharedInstance(apiClient: AstralApiClient) {
+        guard shared == nil else {
+            NSLog("[Astral] initSharedInstance may only be called once.")
+            return
+        }
+        shared = Astral(apiClient: apiClient)
+    }
+    public static var shared: Astral?
+    
+    private init(apiClient: AstralApiClient) {
         self.model = TerminalModel(apiClient: apiClient)
         self.model.delegate = self
     }

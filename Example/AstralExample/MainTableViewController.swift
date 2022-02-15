@@ -14,12 +14,9 @@ class MainTableViewController: UITableViewController {
         super.viewDidLoad()
 
     }
-    
-    private lazy var astralApiClient = ExampleApiClient()
-    private lazy var astral = Astral(apiClient: astralApiClient)
 
     @IBAction private func setup(_ sender: Any) {
-        astral.presentSettings(from: self)
+        Astral.shared?.presentSettings(from: self)
     }
     
     @IBOutlet private weak var amountTextField: UITextField!
@@ -39,7 +36,7 @@ class MainTableViewController: UITableViewController {
             return
         }
         
-        astral.charge(amount: amount, currency: currency, presentFrom: self) { result in
+        Astral.shared?.charge(amount: amount, currency: currency, presentFrom: self) { result in
             switch result {
             case .success(let paymentInfo):
                 DispatchQueue.main.async {

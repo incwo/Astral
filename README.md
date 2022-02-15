@@ -9,7 +9,7 @@ An integration of Stripe Terminal for iOS. (Unofficial).
 
 ⚠️ **This library is neither endorsed nor supported by Stripe.** ⚠️
 
-ℹ️ *This library is still in early stage of development and has only been tested on a WisePad3. Your feedback, through github issues, is very welcome.*
+ℹ️ *This library is still in early stage of development and has only been tested on a WisePad3. Your feedback and contributions are very welcome.*
 
 Astral relies on [Stripe Terminal iOS SDK](https://github.com/stripe/stripe-terminal-ios) to provide an out-of-the-box solution for handling payments:
 
@@ -67,17 +67,19 @@ https://stripe.com/docs/terminal/quickstart
 
 Make a class (or struct) which conforms to the `AstralApiClient` protocol. The methods of this object will be called when your app must send requests to your backend. See `ExampleApiClient` for an example.
 
-Create an instance of `Astral`:
+Set up the shared instance of `Astral`, typically in your `AppDelegate`:
 
-    lazy var astral = Astral(apiClient: YourApiClient())
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        Astral.initSharedInstance(apiClient: ExampleApiClient())
+    }
 
 Then you can show settings:
 
-    astral.presentSettings(from: viewController)
+    Astral.shared?.presentSettings(from: viewController)
 
 Or charge an amount:
 
-    astral.charge(amount: 9.90, currency: "EUR", presentFrom: viewController) { result in
+    Astral.shared?.charge(amount: 9.90, currency: "EUR", presentFrom: viewController) { result in
         switch result {
             case .success (let paymentInfo):
                 …
