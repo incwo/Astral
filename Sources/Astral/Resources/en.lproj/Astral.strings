@@ -71,6 +71,9 @@
 /* Class = "UILabel"; text = "_country"; ObjectID = "Xvv-VX-keJ"; */
 "Xvv-VX-keJ.text" = "_country";
 
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "aIV-jb-0Me"; */
+"aIV-jb-0Me.normalTitle" = "Cancel";
+
 /* Class = "UILabel"; text = "A software update is available"; ObjectID = "ZkN-jc-5U2"; */
 "ZkN-jc-5U2.text" = "A software update is available";
 
