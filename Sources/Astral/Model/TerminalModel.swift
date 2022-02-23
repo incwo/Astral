@@ -21,7 +21,7 @@ class TerminalModel: NSObject {
         self.paymentProcessor = PaymentProcessor(apiClient: apiClient)
         
         if let _ = Self.serialNumber {
-            self.state = .readerSavedNotConnected
+            self.state = .disconnected
         } else {
             self.state = .noReader
         }
@@ -45,7 +45,7 @@ class TerminalModel: NSObject {
                 if let reader = Terminal.shared.connectedReader { // Still connected
                     self.state = .ready (reader)
                 } else {
-                    self.state = .readerSavedNotConnected
+                    self.state = .disconnected
                 }
                 completion(result)
             }
@@ -71,14 +71,14 @@ class TerminalModel: NSObject {
         case noReader
         
         /// No reader is connected, but a serial number is saved, so reconnecting can be attempted
-        case readerSavedNotConnected
+        case disconnected
         
         /// A reader is being searched by its serial number
         case searchingReader (_ serialNumber: String)
         
         case discoveringReaders
         case connecting (Reader)
-        case readerConnected (Reader)
+        case connected (Reader)
         case ready (Reader)
         case charging (message: String)
         case installingUpdate (Reader, Float)
@@ -133,7 +133,7 @@ class TerminalModel: NSObject {
         
         connection?.connect(reader, locationId: locationId, onSuccess: { [weak self] in
             guard let self = self else { return }
-            self.state = .readerConnected(reader)
+            self.state = .connected(reader)
             if !reader.requiresImmediateUpdate {
                 /// The reader will not start updating right now
                 self.state = .ready (reader)
@@ -141,7 +141,7 @@ class TerminalModel: NSObject {
         }, onFailure: { [weak self] error in
             guard let self = self else { return }
             self.reader = nil // Forget this reader, an other one should probably be set up
-            self.state = .readerSavedNotConnected
+            self.state = .disconnected
             DispatchQueue.main.async {
                 self.delegate?.stripeTerminalModel(_sender: self, didFailWithError: error)
             }
@@ -187,7 +187,7 @@ class TerminalModel: NSObject {
         switch state {
         case .searchingReader:
             discovery.cancel {
-                self.state = .readerSavedNotConnected
+                self.state = .disconnected
                 completion?()
             }
         case .discoveringReaders:
@@ -228,7 +228,7 @@ extension TerminalModel: TerminalDelegate {
             
         default:
             // In all other states, the connection is lost, but the Reader is still known
-            state = .readerSavedNotConnected
+            state = .disconnected
         }
     }
     
@@ -266,7 +266,7 @@ extension TerminalModel: ReaderConnectionDelegate {
         } else {
             // I think that for big updates, the reader disconnects after the installation
             if let serialNumber = Self.serialNumber {
-                self.state = .readerSavedNotConnected
+                self.state = .disconnected
                 reconnect(serialNumber: serialNumber)
             } else {
                 self.state = .noReader

@@ -98,7 +98,7 @@ class SettingsCoordinator: NSObject {
     /// Returns false if the state can not be handled
     func update(for state: TerminalModel.State) -> Bool {
         switch state {
-        case .noReader, .readerSavedNotConnected:
+        case .noReader, .disconnected:
             discoveryViewController.viewModel?.location = nil
             settingsViewController.viewModel?.content = .needsSettingUpReader
             settingsViewController.reload()
@@ -117,7 +117,7 @@ class SettingsCoordinator: NSObject {
             settingsViewController.reload()
             return true
             
-        case .readerConnected (let reader), .ready (let reader):
+        case .connected (let reader), .ready (let reader):
             settingsViewController.viewModel?.content = .connected(reader)
             settingsViewController.reload()
             screen = .settings

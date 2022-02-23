@@ -55,7 +55,7 @@ class ChargeCoordinator: NSObject {
         case .noReader:
             return false
             
-        case .readerSavedNotConnected:
+        case .disconnected:
             return true
             
         case .searchingReader(_):
@@ -69,7 +69,7 @@ class ChargeCoordinator: NSObject {
             status = .connectingReader
             return true
             
-        case .readerConnected (_):
+        case .connected (_):
             status = .connected
             return true
             
