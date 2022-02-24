@@ -104,8 +104,8 @@
 /* Class = "UILabel"; text = "No location defined"; ObjectID = "m6C-Qe-t5f"; */
 "m6C-Qe-t5f.text" = "Aucun lieu défini";
 
-/* Class = "UILabel"; text = "Looking for the Reader…"; ObjectID = "oAK-Bg-0gZ"; */
-"oAK-Bg-0gZ.text" = "Recherche du lecteur…";
+/* Class = "UILabel"; text = "Connecting to the Reader…"; ObjectID = "oAK-Bg-0gZ"; */
+"oAK-Bg-0gZ.text" = "Connexion au lecteur…";
 
 /* Class = "UILabel"; text = "_line1"; ObjectID = "tAX-iA-7dL"; */
 "tAX-iA-7dL.text" = "_line1";
@@ -116,5 +116,7 @@
 /* Class = "UILabel"; text = "_100%"; ObjectID = "urR-ZW-W0J"; */
 "urR-ZW-W0J.text" = "_100%";
 
-/* Class = "UILabel"; text = "Connecting to the Reader…"; ObjectID = "vXK-Oe-2zY"; */
-"vXK-Oe-2zY.text" = "Connexion au lecteur…";
+/* Class = "UILabel"; text = "Looking for the Reader…" ; ObjectID = "vXK-Oe-2zY"; */
+"vXK-Oe-2zY.text" = "Recherche du lecteur…";
+
+

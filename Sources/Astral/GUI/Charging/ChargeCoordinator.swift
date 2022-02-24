@@ -50,7 +50,7 @@ class ChargeCoordinator: NSObject {
     // MARK: Status
     
     /// Returns false if the state can not be handled
-    func update(for state: TerminalModel.State) -> Bool {
+    func update(for state: TerminalStateMachine.State) -> Bool {
         switch state {
         case .noReader:
             return false
@@ -73,12 +73,8 @@ class ChargeCoordinator: NSObject {
             status = .connected
             return true
             
-        case .ready:
-            status = .ready
-            return true
-            
-        case .charging(let message):
-            status = .charging(message: message)
+        case .charging:
+            status = .charging
             return true
             
         case .installingUpdate:
@@ -92,13 +88,16 @@ class ChargeCoordinator: NSObject {
         case searchingReader
         case connectingReader
         case connected
-        case ready
-        case charging (message: String)
+        case charging
     }
     private var status: Status = .none {
         didSet {
             chargeViewController.status = status.statusString
         }
+    }
+    
+    func displayMessage(_ message: String) {
+        chargeViewController.status = message
     }
     
     // MARK: View Controllers
@@ -170,10 +169,8 @@ private extension ChargeCoordinator.Status {
             return locz("ChargeCoordinator.status.connectingReader")
         case .connected:
             return locz("ChargeCoordinator.status.connected")
-        case .ready:
-            return locz("ChargeCoordinator.status.ready")
-        case .charging(let message):
-            return message
+        case .charging:
+            return locz("ChargeCoordinator.status.charging")
         }
     }
 }

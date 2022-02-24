@@ -16,7 +16,7 @@
 "ChargeCoordinator.status.searchingReader" = "Recherche du lecteur";
 "ChargeCoordinator.status.connectingReader" = "Connexion au lecteur";
 "ChargeCoordinator.status.connected" = "Connecté";
-"ChargeCoordinator.status.ready" = "Prêt";
+"ChargeCoordinator.status.charging" = "Règlement";
 
 /* SettingsViewModel */
 "SettingsViewModel.sectionHeader.reader" = "Lecteur";

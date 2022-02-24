@@ -112,6 +112,10 @@ Stripe should have sent you a number of Test Cards along with your Reader. Your 
 
 Please note that the **amount which is charged matters**. The last two digits [have a special meaning](https://stripe.com/docs/terminal/references/testing). For instance, paying an amount of 1.55, will cause an *incorrect PIN* error.
 
+## Participate in the development of Astral
+
+See [the Development documentation](/docs/Development.md) for a description of the architecture of Astral.
+
 ## License
 
 MIT License

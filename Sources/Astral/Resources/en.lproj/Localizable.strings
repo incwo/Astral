@@ -16,7 +16,7 @@
 "ChargeCoordinator.status.searchingReader" = "Searching the Reader";
 "ChargeCoordinator.status.connectingReader" = "Connecting to the Reader";
 "ChargeCoordinator.status.connected" = "Connected";
-"ChargeCoordinator.status.ready" = "Ready";
+"ChargeCoordinator.status.charging" = "Ready";
 
 /* SettingsViewModel */
 "SettingsViewModel.sectionHeader.reader" = "Reader";

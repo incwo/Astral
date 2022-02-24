@@ -39,6 +39,13 @@ public class Astral {
             fatalError("The presentingViewController should be set")
         }
         
+        switch model.state {
+        case .disconnected(_):
+            model.reconnect()
+        default:
+            break
+        }
+        
         let settingsCoordinator = SettingsCoordinator(readersDiscovery: model.discovery)
         settingsCoordinator.delegate = self
         settingsCoordinator.presentSettings(from: presentingViewController, reader: model.reader) {
@@ -83,8 +90,12 @@ public class Astral {
             self.presentedCoordinator = .charge(coordinator)
             
             switch self.model.state {
-            case .ready:
+            case .connected(_):
                 charging()
+                
+            case .disconnected(_):
+                self.model.reconnect()
+                self.chargeLater = charging
                 
             default:
                 // No reader is connected yet, so we'll charge later
@@ -129,11 +140,11 @@ public class Astral {
 }
 
 extension Astral: TerminalModelDelegate {
-    func stripeTerminalModel(_ sender: TerminalModel, didUpdateState state: TerminalModel.State) {
+    func stripeTerminalModel(_ sender: TerminalModel, didUpdateState state: TerminalStateMachine.State) {
         update(for: state)
         
         switch state {
-        case .ready:
+        case .connected(_):
             // The reader has just become ready, this is our chance to charge.
             if let chargeLater = chargeLater {
                 chargeLater()
@@ -144,7 +155,7 @@ extension Astral: TerminalModelDelegate {
         }
     }
     
-    private func update(for state: TerminalModel.State) {
+    private func update(for state: TerminalStateMachine.State) {
         switch presentedCoordinator {
         case .none:
             //NSLog("\(#function) Unexpected: receiving Model state update with no Coordinator presented.")
@@ -160,7 +171,7 @@ extension Astral: TerminalModelDelegate {
         }
     }
     
-    private func switchToSettingsCoordinator(andHandle state: TerminalModel.State) {
+    private func switchToSettingsCoordinator(andHandle state: TerminalStateMachine.State) {
         self.presentedCoordinator = .none
         presentingViewController?.dismiss(animated: true, completion: {
             self.presentSettingsCoordinator() { coordinator in
@@ -170,6 +181,28 @@ extension Astral: TerminalModelDelegate {
                 }
             }
         })
+    }
+    
+    func stripeTerminalModel(_ sender: TerminalModel, display message: String) {
+        switch presentedCoordinator {
+        case .none:
+            break
+        case .charge(let coordinator):
+            coordinator.displayMessage(message)
+        case .settings(_):
+            break
+        }
+    }
+    
+    func stripeTerminalModel(_ sender: TerminalModel, installingUpdateDidProgress progress: Float) {
+        switch presentedCoordinator {
+        case .none:
+            break
+        case .charge(_):
+            break
+        case .settings(let coordinator):
+            coordinator.updateProgress = progress
+        }
     }
     
     func stripeTerminalModel(_sender: TerminalModel, didFailWithError error: Error) {
@@ -220,12 +253,11 @@ extension Astral: SettingsCoordinatorDelegate {
     }
     
     func settingsCoordinator(_ sender: SettingsCoordinator, didPick location: Location) {
-        model.location = location
+        model.didSelectLocation(location)
     }
     
     func settingsCoordinator(_ sender: SettingsCoordinator, didPick reader: Reader) {
-        model.reader = reader
-        model.connect()
+        model.didSelectReader(reader)
     }
     
     func settingsCoordinatorCancelSearchingReader(_ sender: SettingsCoordinator) {
@@ -237,7 +269,7 @@ extension Astral: SettingsCoordinatorDelegate {
     }
     
     func settingsCoordinatorDisconnectReader(_ sender: SettingsCoordinator) {
-        model.disconnect()
+        model.forgetReader()
     }
     
     func settingsCoordinatorInstallSoftwareUpdate(_ sender: SettingsCoordinator) {
