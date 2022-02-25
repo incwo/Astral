@@ -40,7 +40,7 @@ public class Astral {
         }
         
         switch model.state {
-        case .disconnected(_):
+        case is DisconnectedState:
             model.reconnect()
         default:
             break
@@ -71,7 +71,7 @@ public class Astral {
         
         // If no reader is set up, show the Settings panel
         switch model.state {
-        case .noReader:
+        case is NoReaderState:
             presentSettings(from: presentingViewController)
             return
         default:
@@ -90,10 +90,10 @@ public class Astral {
             self.presentedCoordinator = .charge(coordinator)
             
             switch self.model.state {
-            case .connected(_):
+            case is ConnectedState:
                 charging()
                 
-            case .disconnected(_):
+            case is DisconnectedState:
                 self.model.reconnect()
                 self.chargeLater = charging
                 
@@ -140,11 +140,11 @@ public class Astral {
 }
 
 extension Astral: TerminalModelDelegate {
-    func stripeTerminalModel(_ sender: TerminalModel, didUpdateState state: TerminalStateMachine.State) {
+    func stripeTerminalModel(_ sender: TerminalModel, didUpdateState state: TerminalState) {
         update(for: state)
         
         switch state {
-        case .connected(_):
+        case is ConnectedState:
             // The reader has just become ready, this is our chance to charge.
             if let chargeLater = chargeLater {
                 chargeLater()
@@ -155,7 +155,7 @@ extension Astral: TerminalModelDelegate {
         }
     }
     
-    private func update(for state: TerminalStateMachine.State) {
+    private func update(for state: TerminalState) {
         switch presentedCoordinator {
         case .none:
             //NSLog("\(#function) Unexpected: receiving Model state update with no Coordinator presented.")
@@ -171,7 +171,7 @@ extension Astral: TerminalModelDelegate {
         }
     }
     
-    private func switchToSettingsCoordinator(andHandle state: TerminalStateMachine.State) {
+    private func switchToSettingsCoordinator(andHandle state: TerminalState) {
         self.presentedCoordinator = .none
         presentingViewController?.dismiss(animated: true, completion: {
             self.presentSettingsCoordinator() { coordinator in

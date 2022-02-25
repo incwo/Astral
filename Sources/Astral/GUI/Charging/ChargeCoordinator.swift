@@ -50,37 +50,41 @@ class ChargeCoordinator: NSObject {
     // MARK: Status
     
     /// Returns false if the state can not be handled
-    func update(for state: TerminalStateMachine.State) -> Bool {
+    func update(for state: TerminalState) -> Bool {
         switch state {
-        case .noReader:
+        case is NoReaderState:
             return false
             
-        case .disconnected:
+        case is DisconnectedState:
             return true
             
-        case .searchingReader(_):
+        case is SearchingReaderState:
             status = .searchingReader
             return true
             
-        case .discoveringReaders:
+        case is DiscoveringReadersState:
             return false
             
-        case .connecting:
+        case is ConnectingState:
             status = .connectingReader
             return true
             
-        case .connected (_):
+        case is ConnectedState:
             status = .connected
             return true
             
-        case .charging:
+        case is ChargingState:
             status = .charging
             return true
             
-        case .userInitiatedUpdate(_):
+        case is UserInitiatedUpdateState:
             return false
             
-        case .automaticUpdate(_):
+        case is AutomaticUpdateState:
+            return false
+            
+        default:
+            NSLog("[Astral] \(#function) State not handled: \(state)")
             return false
         }
     }

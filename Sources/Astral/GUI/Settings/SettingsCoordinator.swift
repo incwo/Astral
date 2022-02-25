@@ -103,41 +103,54 @@ class SettingsCoordinator: NSObject {
     // MARK: Model State
     
     /// Returns false if the state can not be handled
-    func update(for state: TerminalStateMachine.State) -> Bool {
+    func update(for state: TerminalState) -> Bool {
         switch state {
-        case .noReader:
+        case is NoReaderState:
             discoveryViewController.viewModel?.location = nil
             settingsViewController.viewModel?.content = .needsSettingUpReader
             settingsViewController.reload()
             return true
             
-        case .disconnected, .searchingReader(_):
+        case is DisconnectedState, is SearchingReaderState:
             settingsViewController.viewModel?.content = .searchingReader
             settingsViewController.reload()
             return true
             
-        case .discoveringReaders:
+        case is DiscoveringReadersState:
             return true
             
-        case .connecting:
+        case is ConnectingState:
             settingsViewController.viewModel?.content = .connecting
             settingsViewController.reload()
             return true
             
-        case .connected (let reader):
+        case is ConnectedState:
+            let reader = (state as! ConnectedState).reader
             settingsViewController.viewModel?.content = .connected(reader)
             settingsViewController.reload()
             screen = .settings
             return true
             
-        case .charging(_):
+        case is ChargingState:
             return false
             
-        case .userInitiatedUpdate(let reader), .automaticUpdate(let reader):
+        case is UserInitiatedUpdateState:
+            let reader = (state as! UserInitiatedUpdateState).reader
             updateViewController.viewModel?.content = .updating(reader)
             updateViewController.reload()
             screen = .update
             return true
+            
+        case is AutomaticUpdateState:
+            let reader = (state as! AutomaticUpdateState).reader
+            updateViewController.viewModel?.content = .updating(reader)
+            updateViewController.reload()
+            screen = .update
+            return true
+            
+        default:
+            NSLog("[Astral] \(#function) State not handled: \(state)")
+            return false
         }
     }
     

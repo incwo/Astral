@@ -10,7 +10,7 @@ import StripeTerminal
 
 // All these methods are called on the main thread
 protocol TerminalModelDelegate: AnyObject {
-    func stripeTerminalModel(_ sender: TerminalModel, didUpdateState state: TerminalStateMachine.State)
+    func stripeTerminalModel(_ sender: TerminalModel, didUpdateState state: TerminalState)
     
     /// Asks to show a payment message issued by the terminal
     func stripeTerminalModel(_ sender: TerminalModel, display message: String)
@@ -79,19 +79,19 @@ class TerminalModel: NSObject {
     /// Cancel the current operation
     func cancel(completion: (()->())?) {
         switch stateMachine.state {
-        case .searchingReader:
+        case is SearchingReaderState:
             discovery.cancel {
                 self.handleEvent(.cancel)
             }
-        case .discoveringReaders:
+        case is DiscoveringReadersState:
             discovery.cancel() {
                 self.handleEvent(.cancel)
             }
-        case .charging:
+        case is ChargingState:
             paymentProcessor.cancel {
                 completion?()
             }
-        case .userInitiatedUpdate:
+        case is UserInitiatedUpdateState:
             NSLog("[Astral] \(#function) Canceling the installation of updates is not implemented yet.")
         default:
             NSLog("[Astral] \(#function) The current operation can not be canceled.")
@@ -112,7 +112,7 @@ class TerminalModel: NSObject {
     let stateMachine: TerminalStateMachine
     
     /// Relays the current state of the state machine
-    var state: TerminalStateMachine.State {
+    var state: TerminalState {
         stateMachine.state
     }
 
@@ -142,15 +142,16 @@ class TerminalModel: NSObject {
         }
     }
     
-    private func handleTransition(to newState: TerminalStateMachine.State, completion: @escaping ((Error?)->())) {
+    private func handleTransition(to newState: TerminalState, completion: @escaping ((Error?)->())) {
         switch newState {
-        case .noReader:
+        case is NoReaderState:
             disconnectReader(completion: completion)
             
-        case .disconnected(_):
+        case is DisconnectedState:
             completion(nil)
             
-        case .searchingReader(let serialNumber):
+        case is SearchingReaderState:
+            let serialNumber = (state as! SearchingReaderState).serialNumber
             discovery.findReader(serialNumber: serialNumber) { result in
                 switch result {
                 case .found(let reader):
@@ -162,11 +163,12 @@ class TerminalModel: NSObject {
                 }
             }
             
-        case .discoveringReaders:
+        case is DiscoveringReadersState:
             // Discovering is done by the DiscoveryTableViewController
             completion(nil)
             
-        case .connecting(let reader):
+        case is ConnectingState:
+            let reader = (state as! ConnectingState).reader
             connect(to: reader) { error in
                 if let error = error {
                     completion(error)
@@ -176,18 +178,21 @@ class TerminalModel: NSObject {
                 }
             }
             
-        case .connected(_):
+        case is ConnectedState:
             completion(nil)
             
-        case .userInitiatedUpdate(_):
+        case is UserInitiatedUpdateState:
             completion(nil)
             
-        case .automaticUpdate(_):
+        case is AutomaticUpdateState:
             completion(nil)
             
-        case .charging(_):
+        case is ChargingState:
             // Charging is done in charge()
             completion(nil)
+            
+        default:
+            NSLog("[Astral] \(#function) State not handled: \(state)")
         }
     }
     
