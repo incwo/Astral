@@ -91,7 +91,7 @@ class TerminalModel: NSObject {
             paymentProcessor.cancel {
                 completion?()
             }
-        case .installingUpdate:
+        case .userInitiatedUpdate:
             NSLog("[Astral] \(#function) Canceling the installation of updates is not implemented yet.")
         default:
             NSLog("[Astral] \(#function) The current operation can not be canceled.")
@@ -179,7 +179,10 @@ class TerminalModel: NSObject {
         case .connected(_):
             completion(nil)
             
-        case .installingUpdate(_):
+        case .userInitiatedUpdate(_):
+            completion(nil)
+            
+        case .automaticUpdate(_):
             completion(nil)
             
         case .charging(_):
@@ -251,7 +254,7 @@ extension TerminalModel: TerminalDelegate {
     
     // Call this method just before connecting the reader; simulatorConfiguration might be nil earlier.
     private func configureSimulator() {
-        Terminal.shared.simulatorConfiguration.availableReaderUpdate = .required // .random
+        Terminal.shared.simulatorConfiguration.availableReaderUpdate = .random
     }
 }
 

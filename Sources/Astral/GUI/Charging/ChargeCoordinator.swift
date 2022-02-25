@@ -77,7 +77,10 @@ class ChargeCoordinator: NSObject {
             status = .charging
             return true
             
-        case .installingUpdate:
+        case .userInitiatedUpdate(_):
+            return false
+            
+        case .automaticUpdate(_):
             return false
         }
     }

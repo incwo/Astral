@@ -1,6 +1,24 @@
 # Development documentation
 
+## Architecture
+
+    Astral
+        TerminalModel
+            TerminalStateMachine
+            ReadersDiscovery
+            ReaderConnection
+            PaymentProcessor
+        ChargeCoordinator
+            ChargeViewController
+        SettingsCoordinator
+            SettingsViewModel -> SettingsTableViewController
+            DiscoveryViewModel -> DiscoveryTableViewController
+            UpdateViewModel -> UpdateTableViewController 
+         
+
 ### TerminalStateMachine
+
+`TerminalModel` uses a state machine to keep its internal state, which ensures consistency and that all cases are handled.
 
 ```mermaid
     stateDiagram-v2 
@@ -12,15 +30,16 @@
         disconnected --> searchingReader: reconnect
         searchingReader --> connecting: didFindReader
 
-        %%connecting --> installingUpdate: didBeginInstallingUpdate
-        connecting --> connected: didConnect
-        connected --> installingUpdate: didBeginInstallingUpdate
-        connected --> charging: charge
-        connected --> noReader: forgetReader
-        
+        connecting --> automaticUpdate: didBeginInstallingUpdate
+        automaticUpdate --> connecting: didEndInstallingUpdate
 
+        connecting --> connected: didConnect
+        connected --> userInitiatedUpdate: didBeginInstallingUpdate
+        userInitiatedUpdate --> connected: didEndInstallingUpdate
+
+        connected --> charging: charge
         charging --> connected: didEndCharging 
-        installingUpdate --> connected: didEndInstallingUpdate
+        connected --> noReader: forgetReader
 ```
 
-*In order to make the figure clearer, the .didDisconnectUnexpectedly, .cancel and .error events are not represented.*
+*In order to make the figure clearer, the .didDisconnectUnexpectedly, and .cancel events are not represented.*

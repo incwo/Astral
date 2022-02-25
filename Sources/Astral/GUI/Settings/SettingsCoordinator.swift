@@ -133,7 +133,7 @@ class SettingsCoordinator: NSObject {
         case .charging(_):
             return false
             
-        case .installingUpdate (let reader):
+        case .userInitiatedUpdate(let reader), .automaticUpdate(let reader):
             updateViewController.viewModel?.content = .updating(reader)
             updateViewController.reload()
             screen = .update

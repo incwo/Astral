@@ -31,8 +31,10 @@ class TerminalStateMachine {
         case connecting (Reader)
         /// The reader is connected and ready to accept payments
         case connected (Reader)
-        /// An update is being installed on the Reader
-        case installingUpdate (Reader)
+        /// An update is being installed on the Reader (user-initiated)
+        case userInitiatedUpdate (Reader)
+        /// A mandatory update is being installed on the Reader (initiated by Stripe Terminal at the end of connection)
+        case automaticUpdate (Reader)
         /// Processing a payment
         case charging (Reader)
         
@@ -50,8 +52,10 @@ class TerminalStateMachine {
                 return "connecting(\(reader.serialNumber))"
             case .connected(let reader):
                 return "connected(\(reader.serialNumber))"
-            case .installingUpdate(let reader):
+            case .userInitiatedUpdate(let reader):
                 return "installingUpdate(\(reader.serialNumber))"
+            case .automaticUpdate(let reader):
+                return "installingMandatoryUpdate(\(reader.serialNumber))"
             case .charging(let reader):
                 return "charging(\(reader.serialNumber))"
             }
@@ -139,19 +143,15 @@ class TerminalStateMachine {
             case .didConnect:
                 return .connected(reader)
             case .didBeginInstallingUpdate:
-                return .installingUpdate(reader)
+                return .automaticUpdate(reader)
             default:
                 return nil
             }
             
         case .connected(let reader):
             switch event {
-            case .didConnect:
-                // It happens after a mandatory update, because .didEndInstallingUpdate put in the .connected state before connecting has ended.
-                return .connected(reader)
-                
             case .didBeginInstallingUpdate:
-                return .installingUpdate(reader)
+                return .userInitiatedUpdate(reader)
             case .charge:
                 return .charging(reader)
             case .didDisconnectUnexpectedly:
@@ -162,10 +162,18 @@ class TerminalStateMachine {
                 return nil
             }
             
-        case .installingUpdate(let reader):
+        case .userInitiatedUpdate(let reader):
             switch event {
             case .didEndInstallingUpdate:
                 return .connected(reader)
+            default:
+                return nil
+            }
+            
+        case .automaticUpdate(let reader):
+            switch event {
+            case .didEndInstallingUpdate:
+                return .connecting(reader)
             default:
                 return nil
             }
