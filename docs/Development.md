@@ -30,8 +30,11 @@
         disconnected --> searchingReader: reconnect
         searchingReader --> connecting: didFindReader
 
+        connected --> disconnecting: forgetReader
+        disconnecting --> noReader: didDisconnect
+
         connecting --> automaticUpdate: didBeginInstallingUpdate
-        automaticUpdate --> connecting: didEndInstallingUpdate
+        automaticUpdate --> connected: didEndInstallingUpdate
 
         connecting --> connected: didConnect
         connected --> userInitiatedUpdate: didBeginInstallingUpdate
@@ -39,7 +42,6 @@
 
         connected --> charging: charge
         charging --> connected: didEndCharging 
-        connected --> noReader: forgetReader
 ```
 
 *In order to make the figure clearer, the .didDisconnectUnexpectedly, and .cancel events are not represented.*

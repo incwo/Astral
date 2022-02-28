@@ -25,11 +25,6 @@ protocol SettingsCoordinatorDelegate: AnyObject {
     /// Asks to cancel Searching for the reader
     func settingsCoordinatorCancelSearchingReader(_ sender: SettingsCoordinator)
     
-    /// Asks the delegate for the Reader to update.
-    ///
-    /// The reader object is needed to show the current version and the one to install.
-    func settingsCoordinatorRequestsReaderToUpdate(_ sender: SettingsCoordinator) -> Reader?
-    
     /// Asks the delegate to disconnect the current Reader
     func settingsCoordinatorDisconnectReader(_ sender: SettingsCoordinator)
     
@@ -47,7 +42,7 @@ class SettingsCoordinator: NSObject {
     
     weak var delegate: SettingsCoordinatorDelegate?
     
-    func presentSettings(from presentingViewController: UIViewController, reader: Reader?, completion: (()->())?) {
+    func presentSettings(from presentingViewController: UIViewController, completion: (()->())?) {
         guard let _ = delegate else {
             NSLog("\(#function) No delegate is set")
             return
@@ -58,7 +53,7 @@ class SettingsCoordinator: NSObject {
                 self.screen = .discovery
             }, onShowUpdate: { [weak self] in
                 guard let self = self else { return }
-                if let reader = self.delegate?.settingsCoordinatorRequestsReaderToUpdate(self) {
+                if let reader = self.reader {
                     self.updateViewController.viewModel?.content = .updateAvailable(reader)
                 } else {
                     self.updateViewController.viewModel?.content = .empty
@@ -70,10 +65,6 @@ class SettingsCoordinator: NSObject {
                 self.delegate?.settingsCoordinatorDisconnectReader(self)
             }
         )
-        
-        if let reader = reader {
-            settingsViewModel.content = .connected(reader)
-        }
         
         settingsViewController.viewModel = settingsViewModel
         settingsViewController.onClose = { [weak self] in
@@ -102,30 +93,37 @@ class SettingsCoordinator: NSObject {
     
     // MARK: Model State
     
+    private var reader: Reader?
+    
     /// Returns false if the state can not be handled
     func update(for state: TerminalState) -> Bool {
         switch state {
         case is NoReaderState:
+            reader = nil
             discoveryViewController.viewModel?.location = nil
             settingsViewController.viewModel?.content = .needsSettingUpReader
             settingsViewController.reload()
             return true
             
         case is DisconnectedState, is SearchingReaderState:
+            reader = nil
             settingsViewController.viewModel?.content = .searchingReader
             settingsViewController.reload()
             return true
             
         case is DiscoveringReadersState:
+            reader = nil
             return true
             
         case is ConnectingState:
+            reader = nil
             settingsViewController.viewModel?.content = .connecting
             settingsViewController.reload()
             return true
             
         case is ConnectedState:
             let reader = (state as! ConnectedState).reader
+            self.reader = reader
             settingsViewController.viewModel?.content = .connected(reader)
             settingsViewController.reload()
             screen = .settings
@@ -136,6 +134,7 @@ class SettingsCoordinator: NSObject {
             
         case is UserInitiatedUpdateState:
             let reader = (state as! UserInitiatedUpdateState).reader
+            self.reader = reader
             updateViewController.viewModel?.content = .updating(reader)
             updateViewController.reload()
             screen = .update
@@ -143,6 +142,7 @@ class SettingsCoordinator: NSObject {
             
         case is AutomaticUpdateState:
             let reader = (state as! AutomaticUpdateState).reader
+            self.reader = reader
             updateViewController.viewModel?.content = .updating(reader)
             updateViewController.reload()
             screen = .update

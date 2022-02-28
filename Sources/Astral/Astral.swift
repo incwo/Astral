@@ -48,7 +48,7 @@ public class Astral {
         
         let settingsCoordinator = SettingsCoordinator(readersDiscovery: model.discovery)
         settingsCoordinator.delegate = self
-        settingsCoordinator.presentSettings(from: presentingViewController, reader: model.reader) {
+        settingsCoordinator.presentSettings(from: presentingViewController) {
             let _ = settingsCoordinator.update(for: self.model.state)
             completion?(settingsCoordinator)
         }
@@ -262,10 +262,6 @@ extension Astral: SettingsCoordinatorDelegate {
     
     func settingsCoordinatorCancelSearchingReader(_ sender: SettingsCoordinator) {
         model.cancel(completion: nil)
-    }
-    
-    func settingsCoordinatorRequestsReaderToUpdate(_ sender: SettingsCoordinator) -> Reader? {
-        model.reader
     }
     
     func settingsCoordinatorDisconnectReader(_ sender: SettingsCoordinator) {

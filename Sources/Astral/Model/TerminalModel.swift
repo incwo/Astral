@@ -24,52 +24,53 @@ protocol TerminalModelDelegate: AnyObject {
 
 class TerminalModel: NSObject {
     init(apiClient: AstralApiClient) {
+        self.discovery = ReadersDiscovery()
+        self.connection = ReaderConnection()
         self.paymentProcessor = PaymentProcessor(apiClient: apiClient)
-        self.stateMachine = TerminalStateMachine(readerSerialNumber: Self.serialNumber)
         
         super.init()
         
         Terminal.shared.delegate = self
+        connection.delegate = self
     }
+    private let paymentProcessor: PaymentProcessor
+    let discovery: ReadersDiscovery
+    private let connection: ReaderConnection
+    
     
     weak var delegate: TerminalModelDelegate?
-    
 
     // MARK: Events
     
     /// Handle a Location picked by the user
     func didSelectLocation(_ location: Location) {
-        handleEvent(.didSelectLocation(location))
-        self.location = location
+        stateMachine.handleSignal(.didSelectLocation(location))
     }
-    private var location: Location?
     
     /// Handle a Reader picked by the user
     func didSelectReader(_ reader: Reader) {
-        self.reader = reader
-        saveReaderSerialNumber()
-        handleEvent(.didSelectReader(reader))
+        stateMachine.handleSignal(.didSelectReader(reader))
     }
-    private(set) var reader: Reader?
     
     /// Forget the current reader, so it's disconnected and its serial number is forgotten
     func forgetReader() {
-        handleEvent(.forgetReader)
+        stateMachine.handleSignal(.forgetReader)
     }
     
     func reconnect() {
-        handleEvent(.reconnect)
+        stateMachine.handleSignal(.reconnect)
     }
     
     /// Charge an amount
     func charge(currencyAmount: CurrencyAmount, completion: @escaping (ChargeResult)->()) {
-        handleEvent(.charge)
-        self.paymentProcessor.charge(currencyAmount: currencyAmount) { result in
-            // Whatever the result (success, error, cancelation), charging has ended
-            self.handleEvent(.didEndCharging)
+        self.chargeCompletion = { [weak self] result in
             completion(result)
+            self?.chargeCompletion = nil
         }
+        stateMachine.handleSignal(.charge(currencyAmount))
     }
+    // The charge completion closure is kept until a .didEndCharging signal is received
+    var chargeCompletion: ((ChargeResult)->())?
     
     /// Begin the installation of the software update
     func installUpdate() {
@@ -81,11 +82,11 @@ class TerminalModel: NSObject {
         switch stateMachine.state {
         case is SearchingReaderState:
             discovery.cancel {
-                self.handleEvent(.cancel)
+                self.stateMachine.handleSignal(.cancel)
             }
         case is DiscoveringReadersState:
             discovery.cancel() {
-                self.handleEvent(.cancel)
+                self.stateMachine.handleSignal(.cancel)
             }
         case is ChargingState:
             paymentProcessor.cancel {
@@ -101,148 +102,51 @@ class TerminalModel: NSObject {
 
     // MARK: State Machine
     
-    private let paymentProcessor: PaymentProcessor
-    let discovery = ReadersDiscovery()
-    private lazy var connection: ReaderConnection = {
-        let connection = ReaderConnection()
-        connection.delegate = self
-        return connection
+    lazy var stateMachine: TerminalStateMachine = {
+        let stateMachine = TerminalStateMachine(dependencies: .init(discovery: discovery, connection: connection, paymentProcessor: paymentProcessor), readerSerialNumber: Self.serialNumber)
+        stateMachine.onSignalReceived = { [weak self] signal in
+            switch signal {
+            case .didSelectReader(let reader):
+                self?.saveReaderSerialNumber(reader.serialNumber)
+            case .didDisconnect:
+                self?.saveReaderSerialNumber(nil)
+            case .didEndCharging(let result):
+                DispatchQueue.main.async { [weak self] in
+                    self?.chargeCompletion?(result)
+                }
+                
+            case .failure(let error):
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.delegate?.stripeTerminalModel(_sender: self, didFailWithError: error)
+                }
+                
+            default:
+                break
+            }
+        }
+        stateMachine.onStateUpdated = { state in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                NSLog("[Astral] State = \(state)")
+                self.delegate?.stripeTerminalModel(self, didUpdateState: state)
+            }
+        }
+        
+        return stateMachine
     }()
-    
-    let stateMachine: TerminalStateMachine
     
     /// Relays the current state of the state machine
     var state: TerminalState {
         stateMachine.state
     }
 
-    private func handleEvent(_ event: TerminalStateMachine.Event) {
-        switch stateMachine.update(with: event) {
-        case .success(let state):
-            handleTransition(to: state) { error in
-                if let error = error {
-                    self.reportErrorOnMainQueue(error)
-                } else {
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        NSLog("[Astral] State = \(state)")
-                        self.delegate?.stripeTerminalModel(self, didUpdateState: state)
-                    }
-                }
-            }
-        case .failure(let error):
-            reportErrorOnMainQueue(error)
-        }
-    }
-    
-    private func reportErrorOnMainQueue(_ error: Error) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.delegate?.stripeTerminalModel(_sender: self, didFailWithError: error)
-        }
-    }
-    
-    private func handleTransition(to newState: TerminalState, completion: @escaping ((Error?)->())) {
-        switch newState {
-        case is NoReaderState:
-            disconnectReader(completion: completion)
-            
-        case is DisconnectedState:
-            completion(nil)
-            
-        case is SearchingReaderState:
-            let serialNumber = (state as! SearchingReaderState).serialNumber
-            discovery.findReader(serialNumber: serialNumber) { result in
-                switch result {
-                case .found(let reader):
-                    self.reader = reader
-                    completion(nil)
-                    self.handleEvent(.didFindReader(reader))
-                case .failure(let error):
-                    completion(error)
-                }
-            }
-            
-        case is DiscoveringReadersState:
-            // Discovering is done by the DiscoveryTableViewController
-            completion(nil)
-            
-        case is ConnectingState:
-            let reader = (state as! ConnectingState).reader
-            connect(to: reader) { error in
-                if let error = error {
-                    completion(error)
-                } else {
-                    completion(nil)
-                    self.handleEvent(.didConnect)
-                }
-            }
-            
-        case is ConnectedState:
-            completion(nil)
-            
-        case is UserInitiatedUpdateState:
-            completion(nil)
-            
-        case is AutomaticUpdateState:
-            completion(nil)
-            
-        case is ChargingState:
-            // Charging is done in charge()
-            completion(nil)
-            
-        default:
-            NSLog("[Astral] \(#function) State not handled: \(state)")
-        }
-    }
-    
-    private func disconnectReader(completion: @escaping (Error?)->()) {
-        connection.disconnect(onSuccess: { [weak self] in
-            guard let self = self else { return }
-            self.location = nil
-            self.reader = nil
-            self.saveReaderSerialNumber()
-            completion(nil)
-        }, onFailure: { [weak self] error in
-            guard let self = self else { return }
-            self.location = nil
-            self.reader = nil
-            self.saveReaderSerialNumber()
-            completion(error)
-        })
-    }
-    
-    private func connect(to reader: Reader, completion: @escaping (Error?)->()) {
-        guard Terminal.shared.connectionStatus == .notConnected else {
-            NSLog("A Reader is already connected or connecting")
-            return
-        }
-        
-        configureSimulator()
-        let locationId: String?
-        if let location = location {
-            locationId = location.stripeId
-        } else {
-            locationId = reader.locationId
-        }
-        guard let locationId = locationId else {
-            NSLog("\(#function) Could not get the locationId")
-            return
-        }
-        
-        connection.connect(reader, locationId: locationId, onSuccess: {
-            completion(nil)
-        }, onFailure: { error in
-            completion(error)
-        })
-    }
-    
     // MARK: Serial Number
     
     // The serial number of the last reader is saved to the User defaults, so it can be reconnected automatically
     
-    private func saveReaderSerialNumber() {
-        UserDefaults.standard.set(reader?.serialNumber, forKey: Self.serialNumberUserDefaultsKey)
+    private func saveReaderSerialNumber(_ serialNumber: String?) {
+        UserDefaults.standard.set(serialNumber, forKey: Self.serialNumberUserDefaultsKey)
     }
     
     private static var serialNumber: String? {
@@ -254,12 +158,7 @@ class TerminalModel: NSObject {
 
 extension TerminalModel: TerminalDelegate {
     func terminal(_ terminal: Terminal, didReportUnexpectedReaderDisconnect reader: Reader) {
-        handleEvent(.didDisconnectUnexpectedly)
-    }
-    
-    // Call this method just before connecting the reader; simulatorConfiguration might be nil earlier.
-    private func configureSimulator() {
-        Terminal.shared.simulatorConfiguration.availableReaderUpdate = .random
+        stateMachine.handleSignal(.didDisconnectUnexpectedly)
     }
 }
 
@@ -271,7 +170,7 @@ extension TerminalModel: ReaderConnectionDelegate {
     func readerConnectionDidStartInstallingUpdate(_ sender: ReaderConnection) {
         // In the case of mandatory updates, this method is called even before the connect() completion block is called!
         // The state machine handles it, as a transition from .connecting to .installingUpdate.
-        handleEvent(.didBeginInstallingUpdate)
+        stateMachine.handleSignal(.didBeginInstallingUpdate)
     }
     
     func readerConnection(_ sender: ReaderConnection, softwareUpdateDidProgress progress: Float) {
@@ -279,7 +178,7 @@ extension TerminalModel: ReaderConnectionDelegate {
     }
     
     func readerConnectionDidFinishInstallingUpdate(_ sender: ReaderConnection) {
-        handleEvent(.didEndInstallingUpdate)
+        stateMachine.handleSignal(.didEndInstallingUpdate)
     }
 }
 
