@@ -44,4 +44,4 @@
         charging --> connected: didEndCharging 
 ```
 
-*In order to make the figure clearer, the .didDisconnectUnexpectedly, and .cancel events are not represented.*
+*In order to make the figure clearer, the .didDisconnectUnexpectedly, and .canceled events are not represented.*

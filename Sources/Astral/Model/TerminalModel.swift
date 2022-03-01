@@ -79,24 +79,7 @@ class TerminalModel: NSObject {
     
     /// Cancel the current operation
     func cancel(completion: (()->())?) {
-        switch stateMachine.state {
-        case is SearchingReaderState:
-            discovery.cancel {
-                self.stateMachine.handleSignal(.cancel)
-            }
-        case is DiscoveringReadersState:
-            discovery.cancel() {
-                self.stateMachine.handleSignal(.cancel)
-            }
-        case is ChargingState:
-            paymentProcessor.cancel {
-                completion?()
-            }
-        case is UserInitiatedUpdateState:
-            NSLog("[Astral] \(#function) Canceling the installation of updates is not implemented yet.")
-        default:
-            NSLog("[Astral] \(#function) The current operation can not be canceled.")
-        }
+        stateMachine.cancel(completion: completion)
     }
     
 
@@ -128,7 +111,9 @@ class TerminalModel: NSObject {
         stateMachine.onStateUpdated = { state in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
+                #if DEBUG
                 NSLog("[Astral] State = \(state)")
+                #endif
                 self.delegate?.stripeTerminalModel(self, didUpdateState: state)
             }
         }

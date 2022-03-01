@@ -50,6 +50,12 @@ class TerminalStateMachine: SignalHandling {
         self.state = newState
         newState.enter(signalHandler: self)
     }
+    
+    func cancel(completion: (()->())?) {
+        state.cancel { [weak self] in
+            self?.handleSignal(.canceled)
+        }
+    }
 }
 
 // MARK: Signals
@@ -83,9 +89,8 @@ enum TerminalSignal {
     /// Charging has ended. This may be because of success, cancelation or failure.
     case didEndCharging (ChargeResult)
     
-    /// The user wants to cancel the current action
-    case cancel
-    
+    /// The user canceled the State's action
+    case canceled
     /// An error occurred
     case failure (Error)
 }
@@ -95,10 +100,27 @@ enum TerminalSignal {
 protocol TerminalState {
     var dependencies: TerminalStateMachine.Dependencies {get}
     
-    // nil is returned if the next state is not defined — which is unexpected
+    /// Create the next state after a signal is received
+    ///
+    /// nil is returned if the next state is not defined — which is unexpected.
     func nextState(after event: TerminalSignal) -> TerminalState?
     
+    /// Called when the State is entered. The state should begin its processing if any.
     func enter(signalHandler: SignalHandling)
+    
+    /// Cancel the processing performed by the State
+    func cancel(completion: @escaping ()->())
+}
+
+extension TerminalState {
+    func enter(signalHandler: SignalHandling) {
+        // Do nothing
+    }
+    
+    func cancel(completion: @escaping ()->()) {
+        NSLog("[Astral] \(#function) The current operation can not be canceled.")
+        completion()
+    }
 }
 
 /// No reader is connected and no serial number is saved either
@@ -112,10 +134,6 @@ struct NoReaderState: TerminalState {
         default:
             return nil
         }
-    }
-    
-    func enter(signalHandler: SignalHandling) {
-        
     }
 }
 
@@ -132,10 +150,6 @@ struct DisconnectedState: TerminalState {
             return nil
         }
     }
-    
-    func enter(signalHandler: SignalHandling) {
-        
-    }
 }
 
 /// Nearby readers are being listed
@@ -147,6 +161,9 @@ struct DiscoveringReadersState: TerminalState {
         switch event {
         case .didSelectReader(let reader):
             return ConnectingState(dependencies: dependencies, location: location, reader: reader)
+            
+        case .canceled:
+            return NoReaderState(dependencies: dependencies)
         default:
             return nil
         }
@@ -154,6 +171,10 @@ struct DiscoveringReadersState: TerminalState {
     
     func enter(signalHandler: SignalHandling) {
         // Discovering is done by the DiscoveryTableViewController
+    }
+    
+    func cancel(completion: @escaping () -> ()) {
+        dependencies.discovery.cancel(completion: completion)
     }
 }
 
@@ -181,6 +202,10 @@ struct SearchingReaderState: TerminalState {
             }
         }
     }
+    
+    func cancel(completion: @escaping () -> ()) {
+        dependencies.discovery.cancel(completion: completion)
+    }
 }
 
 /// Establishing the connection with a Reader
@@ -201,7 +226,6 @@ struct ConnectingState: TerminalState {
     }
     
     func enter(signalHandler: SignalHandling) {
-        
         guard Terminal.shared.connectedReader == nil else {
             signalHandler.handleSignal(.didConnect)
             return
@@ -272,14 +296,10 @@ struct ConnectedState: TerminalState {
         case .didDisconnectUnexpectedly:
             return DisconnectedState(dependencies: dependencies, serialNumber: reader.serialNumber)
         case .forgetReader:
-            return NoReaderState(dependencies: dependencies)
+            return DisconnectingState(dependencies: dependencies)
         default:
             return nil
         }
-    }
-    
-    func enter(signalHandler: SignalHandling) {
-        
     }
 }
 
@@ -297,10 +317,6 @@ struct AutomaticUpdateState: TerminalState {
             return nil
         }
     }
-    
-    func enter(signalHandler: SignalHandling) {
-        
-    }
 }
 
 /// An update is being installed on the Reader (user-initiated)
@@ -315,10 +331,6 @@ struct UserInitiatedUpdateState: TerminalState {
         default:
             return nil
         }
-    }
-    
-    func enter(signalHandler: SignalHandling) {
-        
     }
 }
 
@@ -343,5 +355,9 @@ struct ChargingState: TerminalState {
         dependencies.paymentProcessor.charge(currencyAmount: currencyAmount) { result in
             signalHandler.handleSignal(.didEndCharging(result))
         }
+    }
+    
+    func cancel(completion: @escaping () -> ()) {
+        dependencies.paymentProcessor.cancel(completion: completion)
     }
 }

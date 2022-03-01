@@ -35,8 +35,11 @@ It is currently used in our Point-of-Sale app, [incwo POS](https://go.incwo.com/
 
 ### Limitations
 
-- Only Bluetooth readers are supported
-- Refunds are not supported
+Are not supported yet:
+
+- Refunds
+- Wifi Readers (WisePOS E, Verifone P400)
+- Canceling updates
 
 ## Integration
 
@@ -113,6 +116,13 @@ Stripe should have sent you a number of Test Cards along with your Reader. Your 
 Please note that the **amount which is charged matters**. The last two digits [have a special meaning](https://stripe.com/docs/terminal/references/testing). For instance, paying an amount of 1.55, will cause an *incorrect PIN* error.
 
 ## Participate in the development of Astral
+
+If you find Astral useful, you can help its development by:
+
+- Implement missing features
+- Test on other models of Readers
+- Add translations
+- Generally, open GitHub issues.
 
 See [the Development documentation](/docs/Development.md) for a description of the architecture of Astral.
 
