@@ -107,6 +107,9 @@
 /* Class = "UILabel"; text = "Connecting to the Reader…"; ObjectID = "oAK-Bg-0gZ"; */
 "oAK-Bg-0gZ.text" = "Connexion au lecteur…";
 
+/* Class = "UILabel"; text = "Disconnecting the Reader…"; ObjectID = "EBM-7k-QwB"; */
+"EBM-7k-QwB.text" = "Déconnexion du lecteur…";
+
 /* Class = "UILabel"; text = "_line1"; ObjectID = "tAX-iA-7dL"; */
 "tAX-iA-7dL.text" = "_line1";
 

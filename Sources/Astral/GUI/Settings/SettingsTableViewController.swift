@@ -84,6 +84,9 @@ extension SettingsTableViewController {
         case .connecting:
             return tableView.dequeueReusableCell(withIdentifier: "connecting", for: indexPath)
             
+        case .disconnecting:
+            return tableView.dequeueReusableCell(withIdentifier: "disconnecting", for: indexPath)
+            
         case .readerDescription (let reader):
             let cell = tableView.dequeueReusableCell(withIdentifier: "reader", for: indexPath) as! ReaderCell
             cell.model = Terminal.stringFromDeviceType(reader.deviceType)

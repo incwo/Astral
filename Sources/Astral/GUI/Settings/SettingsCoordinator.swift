@@ -121,6 +121,12 @@ class SettingsCoordinator: NSObject {
             settingsViewController.reload()
             return true
             
+        case is DisconnectingState:
+            reader = nil
+            settingsViewController.viewModel?.content = .disconnecting
+            settingsViewController.reload()
+            return true
+            
         case is ConnectedState:
             let reader = (state as! ConnectedState).reader
             self.reader = reader

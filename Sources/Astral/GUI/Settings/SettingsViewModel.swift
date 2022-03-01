@@ -26,6 +26,7 @@ class SettingsViewModel {
         case needsSettingUpReader
         case searchingReader
         case connecting
+        case disconnecting
         case connected (Reader)
     }
     var content: Content = .none
@@ -44,6 +45,7 @@ class SettingsViewModel {
         case setupReader
         case searchingReader
         case connecting
+        case disconnecting
         case readerDescription (Reader)
         case softwareUpdate
         case disconnect
@@ -68,6 +70,11 @@ class SettingsViewModel {
         case .connecting:
             return [
                 Section(title: sectionTitle, rows: [.connecting])
+            ]
+            
+        case .disconnecting:
+            return [
+                Section(title: sectionTitle, rows: [.disconnecting])
             ]
             
         case .connected(let reader):
