@@ -47,9 +47,15 @@ class DiscoveryViewModel {
         }
     }
     
+    private var isDiscovering: Bool = false {
+        didSet {
+            onUpdateDiscovering(isDiscovering)
+        }
+    }
+    
     // MARK: Discovery
     private func startDiscovery() {
-        updateDiscovering()
+        isDiscovering = true
         readers = []
         
         readersDiscovery.discoverReaders(onUpdate: { readers in
@@ -60,7 +66,7 @@ class DiscoveryViewModel {
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 self.readers = []
-                self.updateDiscovering()
+                self.isDiscovering = false
                 self.onError(error)
             }
         })
@@ -68,14 +74,10 @@ class DiscoveryViewModel {
     
     private func cancelDiscovery(completion: @escaping ()->()) {
         readersDiscovery.cancel {
-            self.updateDiscovering()
+            self.isDiscovering = false
             self.readers = []
             completion()
         }
-    }
-    
-    private func updateDiscovering() {
-        onUpdateDiscovering(readersDiscovery.isDiscovering)
     }
     
     // MARK: Content
