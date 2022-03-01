@@ -49,12 +49,15 @@ class ReadersDiscovery: NSObject {
         let config = DiscoveryConfiguration(discoveryMethod: .bluetoothScan, simulated: isSimulated)
         cancelable = Terminal.shared.discoverReaders(config, delegate: self, completion: { [weak self] error in
             guard let self = self else { return }
+            
+            // In opposition with other operations, we don't get a Cancelation error when the Discovery is canceled…
+            if let onCanceled = self.onCanceled {
+                onCanceled()
+                return
+            }
+            
             if let error = error {
-                if error.isCancelation {
-                    self.onCanceled?()
-                } else {
-                    self.onError?(error)
-                }
+                self.onError?(error)
             }
         })
     }

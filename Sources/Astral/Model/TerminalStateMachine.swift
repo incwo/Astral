@@ -189,7 +189,8 @@ struct SearchingReaderState: TerminalState {
             return ConnectingState(dependencies: dependencies, location: nil, reader: reader)
             
         case .canceled, .failure(_):
-            return DisconnectedState(dependencies: dependencies, serialNumber: serialNumber)
+            // We might never see the reader again. At least allow selecting an other one
+            return NoReaderState(dependencies: dependencies)
         default:
             return nil
         }
