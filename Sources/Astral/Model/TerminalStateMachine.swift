@@ -162,7 +162,7 @@ struct DiscoveringReadersState: TerminalState {
         case .didSelectReader(let reader):
             return ConnectingState(dependencies: dependencies, location: location, reader: reader)
             
-        case .canceled:
+        case .canceled, .failure(_):
             return NoReaderState(dependencies: dependencies)
         default:
             return nil
@@ -187,6 +187,9 @@ struct SearchingReaderState: TerminalState {
         switch event {
         case .didFindReader(let reader):
             return ConnectingState(dependencies: dependencies, location: nil, reader: reader)
+            
+        case .canceled, .failure(_):
+            return DisconnectedState(dependencies: dependencies, serialNumber: serialNumber)
         default:
             return nil
         }
@@ -220,6 +223,10 @@ struct ConnectingState: TerminalState {
             return ConnectedState(dependencies: dependencies, reader: reader)
         case .didBeginInstallingUpdate:
             return AutomaticUpdateState(dependencies: dependencies, location: location, reader: reader)
+            
+        case .failure(_):
+            // Probably we can never connect the reader, just forget it
+            return NoReaderState(dependencies: dependencies)
         default:
             return nil
         }
@@ -262,6 +269,9 @@ struct DisconnectingState: TerminalState {
     func nextState(after event: TerminalSignal) -> TerminalState? {
         switch event {
         case .didDisconnect:
+            return NoReaderState(dependencies: dependencies)
+            
+        case .failure(_):
             return NoReaderState(dependencies: dependencies)
         default:
             return nil
@@ -346,6 +356,9 @@ struct ChargingState: TerminalState {
             return ConnectedState(dependencies: dependencies, reader: reader)
         case .didDisconnectUnexpectedly:
             return DisconnectedState(dependencies: dependencies, serialNumber: reader.serialNumber)
+            
+        case .canceled, .failure(_):
+            return ConnectedState(dependencies: dependencies, reader: reader)
         default:
             return nil
         }
