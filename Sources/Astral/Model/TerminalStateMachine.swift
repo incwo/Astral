@@ -95,6 +95,42 @@ enum TerminalSignal {
     case failure (Error)
 }
 
+extension TerminalSignal: CustomStringConvertible {
+    var description: String {
+        switch self {
+            
+        case .didSelectLocation(let location):
+            return "didSelectLocation(\(location.displayName ?? location.description)"
+        case .didSelectReader(let reader):
+            return "didSelectReader(\(reader.serialNumber)"
+        case .reconnect:
+            return "reconnect"
+        case .didFindReader(let reader):
+            return "didFindReader(\(reader.serialNumber)"
+        case .didConnect:
+            return "didConnect"
+        case .didDisconnect:
+            return "didDisconnect"
+        case .didDisconnectUnexpectedly:
+            return "didDisconnectUnexpectedly"
+        case .forgetReader:
+            return "forgetReader"
+        case .didBeginInstallingUpdate:
+            return "didBeginInstallingUpdate"
+        case .didEndInstallingUpdate:
+            return "didEndInstallingUpdate"
+        case .charge(let amount):
+            return "charge(\(amount))"
+        case .didEndCharging(let result):
+            return "didEndCharging(\(result)"
+        case .canceled:
+            return "canceled"
+        case .failure(let error):
+            return "failure(\(error)"
+        }
+    }
+}
+
 // MARK: States
 
 protocol TerminalState {
@@ -137,6 +173,12 @@ struct NoReaderState: TerminalState {
     }
 }
 
+extension NoReaderState: CustomStringConvertible {
+    var description: String {
+        "NoReader"
+    }
+}
+
 /// No reader is connected, but a serial number is saved, so reconnecting can be attempted
 struct DisconnectedState: TerminalState {
     let dependencies: TerminalStateMachine.Dependencies
@@ -149,6 +191,12 @@ struct DisconnectedState: TerminalState {
         default:
             return nil
         }
+    }
+}
+
+extension DisconnectedState: CustomStringConvertible {
+    var description: String {
+        "Disconnected (serialNumber=\(serialNumber)"
     }
 }
 
@@ -175,6 +223,12 @@ struct DiscoveringReadersState: TerminalState {
     
     func cancel(completion: @escaping () -> ()) {
         dependencies.discovery.cancel(completion: completion)
+    }
+}
+
+extension DiscoveringReadersState: CustomStringConvertible {
+    var description: String {
+        "DiscoveringReaders (location='\(location.displayName ?? location.description)')"
     }
 }
 
@@ -209,6 +263,12 @@ struct SearchingReaderState: TerminalState {
     
     func cancel(completion: @escaping () -> ()) {
         dependencies.discovery.cancel(completion: completion)
+    }
+}
+
+extension SearchingReaderState: CustomStringConvertible {
+    var description: String {
+        "SearchingReader (serialNumber = \(serialNumber))"
     }
 }
 
@@ -264,6 +324,12 @@ struct ConnectingState: TerminalState {
     }
 }
 
+extension ConnectingState: CustomStringConvertible {
+    var description: String {
+        "Connecting (location='\(location?.displayName ?? "nil")'; reader=\(reader.serialNumber))"
+    }
+}
+
 struct DisconnectingState: TerminalState {
     let dependencies: TerminalStateMachine.Dependencies
     
@@ -285,6 +351,12 @@ struct DisconnectingState: TerminalState {
         }, onFailure: { error in
             signalHandler.handleSignal(.failure(error))
         })
+    }
+}
+
+extension DisconnectingState: CustomStringConvertible {
+    var description: String {
+        "Disconnecting"
     }
 }
 
@@ -314,6 +386,12 @@ struct ConnectedState: TerminalState {
     }
 }
 
+extension ConnectedState: CustomStringConvertible {
+    var description: String {
+        "Connected (reader=\(reader.serialNumber))"
+    }
+}
+
 /// A mandatory update is being installed on the Reader (initiated by Stripe Terminal at the end of connection)
 struct AutomaticUpdateState: TerminalState {
     let dependencies: TerminalStateMachine.Dependencies
@@ -330,6 +408,12 @@ struct AutomaticUpdateState: TerminalState {
     }
 }
 
+extension AutomaticUpdateState: CustomStringConvertible {
+    var description: String {
+        "AutomaticUpdate (reader=\(reader.serialNumber)"
+    }
+}
+
 /// An update is being installed on the Reader (user-initiated)
 struct UserInitiatedUpdateState: TerminalState {
     let dependencies: TerminalStateMachine.Dependencies
@@ -342,6 +426,12 @@ struct UserInitiatedUpdateState: TerminalState {
         default:
             return nil
         }
+    }
+}
+
+extension UserInitiatedUpdateState: CustomStringConvertible {
+    var description: String {
+        "UserInitiatedUpdate (reader=\(reader.serialNumber))"
     }
 }
 
@@ -373,5 +463,11 @@ struct ChargingState: TerminalState {
     
     func cancel(completion: @escaping () -> ()) {
         dependencies.paymentProcessor.cancel(completion: completion)
+    }
+}
+
+extension ChargingState: CustomStringConvertible {
+    var description: String {
+        "Charging (reader= \(reader.serialNumber); amount=\(currencyAmount))"
     }
 }
