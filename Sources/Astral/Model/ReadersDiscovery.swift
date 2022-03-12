@@ -14,16 +14,24 @@ enum ReadersDiscoveryError: Error {
 
 /// Discover Stripe Readers
 class ReadersDiscovery: NSObject {
+    init(onIsDiscovering: @escaping (Bool)->()) {
+        self.onIsDiscovering = onIsDiscovering
+    }
     
     typealias OnUpdate = ([Reader])->()
     typealias OnError = (Error)->()
     typealias OnCanceled = ()->()
+    private var onIsDiscovering: (Bool)->()
     private var onUpdate: OnUpdate?
     private var onError: OnError?
     private var onCanceled: OnCanceled?
     private var cancelable: Cancelable?
     
-    private(set) var isDiscovering: Bool = false
+    private(set) var isDiscovering: Bool = false {
+        didSet {
+            onIsDiscovering(isDiscovering)
+        }
+    }
     
 #if targetEnvironment(simulator)
     private let isSimulated = true

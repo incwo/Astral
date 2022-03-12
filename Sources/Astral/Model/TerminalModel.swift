@@ -18,6 +18,9 @@ protocol TerminalModelDelegate: AnyObject {
     /// Informs about the progress of the installation of the update
     func stripeTerminalModel(_ sender: TerminalModel, installingUpdateDidProgress progress: Float)
     
+    /// Informs whether the Discovering of readers is being performed.
+    func stripeTerminalModel(_ sender: TerminalModel, isDiscovering: Bool)
+    
     /// Informs about the discovery of readers.
     ///
     /// This method is called repeatedly while discovering and the list of readers is updated.
@@ -29,8 +32,6 @@ protocol TerminalModelDelegate: AnyObject {
 
 class TerminalModel: NSObject {
     init(apiClient: AstralApiClient) {
-        self.discovery = ReadersDiscovery()
-        self.connection = ReaderConnection()
         self.paymentProcessor = PaymentProcessor(apiClient: apiClient)
         
         super.init()
@@ -39,9 +40,14 @@ class TerminalModel: NSObject {
         connection.delegate = self
     }
     private let paymentProcessor: PaymentProcessor
-    let discovery: ReadersDiscovery
-    private let connection: ReaderConnection
+    private let connection = ReaderConnection()
     
+    private lazy var discovery: ReadersDiscovery = {
+        return ReadersDiscovery(onIsDiscovering: { [weak self] isDiscovering in
+            guard let self = self else { return }
+            self.delegate?.stripeTerminalModel(self, isDiscovering: isDiscovering)
+        })
+    }()
     
     weak var delegate: TerminalModelDelegate?
 

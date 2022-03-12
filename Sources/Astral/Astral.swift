@@ -46,7 +46,7 @@ public class Astral {
             break
         }
         
-        let settingsCoordinator = SettingsCoordinator(readersDiscovery: model.discovery)
+        let settingsCoordinator = SettingsCoordinator()
         settingsCoordinator.delegate = self
         settingsCoordinator.presentSettings(from: presentingViewController) {
             let _ = settingsCoordinator.update(for: self.model.state)
@@ -202,6 +202,17 @@ extension Astral: TerminalModelDelegate {
             break
         case .settings(let coordinator):
             coordinator.updateProgress = progress
+        }
+    }
+    
+    func stripeTerminalModel(_ sender: TerminalModel, isDiscovering: Bool) {
+        switch presentedCoordinator {
+        case .none:
+            break
+        case .charge(_):
+            break
+        case .settings(let coordinator):
+            coordinator.updateIsDiscovering(isDiscovering)
         }
     }
     

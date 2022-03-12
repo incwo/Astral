@@ -34,12 +34,6 @@ protocol SettingsCoordinatorDelegate: AnyObject {
 
 /// A coordinator for the Settings panel
 class SettingsCoordinator: NSObject {
-    init(readersDiscovery: ReadersDiscovery) {
-        self.readersDiscovery = readersDiscovery
-    }
-    
-    let readersDiscovery: ReadersDiscovery
-    
     weak var delegate: SettingsCoordinatorDelegate?
     
     func presentSettings(from presentingViewController: UIViewController, completion: (()->())?) {
@@ -88,6 +82,13 @@ class SettingsCoordinator: NSObject {
         didSet {
             updateViewController.viewModel?.progress = updateProgress
             updateViewController.updateProgress(updateProgress)
+        }
+    }
+    
+    /// Called when Discovering begins or ends
+    func updateIsDiscovering(_ isDiscovering: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            self?.discoveryViewController.isDiscovering = isDiscovering
         }
     }
     
@@ -244,7 +245,6 @@ class SettingsCoordinator: NSObject {
         discoveryViewController.onReaderPicked = { [weak self] reader in
             guard let self = self else { return }
             self.delegate?.settingsCoordinator(self, didPick: reader)
-            self.readersDiscovery.cancel(completion: nil) // Discovery must be stopped AFTER connecting to the Reader, or we get an error message.
             self.screen = .settings
         }
         

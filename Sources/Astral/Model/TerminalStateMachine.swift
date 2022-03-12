@@ -395,6 +395,11 @@ struct ConnectedState: TerminalState {
             return nil
         }
     }
+    
+    func enter(signalHandler: SignalHandling) {
+        // Discovery may only be stopped AFTER the Reader is connected
+        dependencies.discovery.cancel(completion: nil)
+    }
 }
 
 extension ConnectedState: CustomStringConvertible {
