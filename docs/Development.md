@@ -25,6 +25,7 @@
         [*] --> noReader: No serial number saved
         noReader --> discoveringReaders: didSelectLocation
         discoveringReaders --> connecting: didSelectReader
+        discoveringReaders --> discoveringReaders: didSelectLocation
 
         [*] --> disconnected: A serial number was saved
         disconnected --> searchingReader: reconnect
@@ -41,7 +42,7 @@
         userInitiatedUpdate --> connected: didEndInstallingUpdate
 
         connected --> charging: charge
-        charging --> connected: didEndCharging 
+        charging --> connected: didEndCharging         
 ```
 
 *In order to make the figure clearer, the .didDisconnectUnexpectedly, and .canceled events are not represented.*

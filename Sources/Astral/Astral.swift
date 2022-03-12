@@ -205,6 +205,17 @@ extension Astral: TerminalModelDelegate {
         }
     }
     
+    func stripeTerminalModel(_ sender: TerminalModel, didDiscoverReaders readers: [Reader]) {
+        switch presentedCoordinator {
+        case .none:
+            break
+        case .charge(_):
+            break
+        case .settings(let coordinator):
+            coordinator.didDiscoverReaders(readers)
+        }
+    }
+    
     func stripeTerminalModel(_sender: TerminalModel, didFailWithError error: Error) {
         presentAlert(for: error)
     }

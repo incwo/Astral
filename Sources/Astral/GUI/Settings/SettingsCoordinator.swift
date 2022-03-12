@@ -91,6 +91,11 @@ class SettingsCoordinator: NSObject {
         }
     }
     
+    /// Called to provide a list of readers that have just been discovered.
+    func didDiscoverReaders(_ readers: [Reader]) {
+        discoveryViewController.viewModel?.readers = readers
+    }
+    
     // MARK: Model State
     
     private var reader: Reader?
@@ -226,16 +231,11 @@ class SettingsCoordinator: NSObject {
         let discoveryViewController = storyboard.instantiateViewController(withIdentifier: "discovery") as! DiscoveryTableViewController
         
         discoveryViewController.viewModel = DiscoveryViewModel(
-            readersDiscovery: readersDiscovery,
             onUpdateDiscovering: { isDiscovering in
                 discoveryViewController.isDiscovering = isDiscovering
             },
             onUpdateSections: { indexes in
                 discoveryViewController.reloadSections(indexes: indexes)
-            },
-            onError: { [weak self] error in
-                guard let self = self else { return }
-                self.delegate?.settingsCoordinator(self, didFail: error)
             })
         
         discoveryViewController.onPickLocation = {

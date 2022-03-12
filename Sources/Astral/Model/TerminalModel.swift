@@ -18,6 +18,11 @@ protocol TerminalModelDelegate: AnyObject {
     /// Informs about the progress of the installation of the update
     func stripeTerminalModel(_ sender: TerminalModel, installingUpdateDidProgress progress: Float)
     
+    /// Informs about the discovery of readers.
+    ///
+    /// This method is called repeatedly while discovering and the list of readers is updated.
+    func stripeTerminalModel(_ sender: TerminalModel, didDiscoverReaders readers: [Reader])
+    
     /// Informs about an error
     func stripeTerminalModel(_sender: TerminalModel, didFailWithError error: Error)
 }
@@ -86,7 +91,13 @@ class TerminalModel: NSObject {
     // MARK: State Machine
     
     lazy var stateMachine: TerminalStateMachine = {
-        let stateMachine = TerminalStateMachine(dependencies: .init(discovery: discovery, connection: connection, paymentProcessor: paymentProcessor), readerSerialNumber: Self.serialNumber)
+        let onReadersDiscovered = { [weak self] (readers: [Reader]) in
+            guard let self = self else { return }
+            self.delegate?.stripeTerminalModel(self, didDiscoverReaders: readers)
+        }
+        let stateMachine = TerminalStateMachine(
+            dependencies: .init(discovery: discovery, onReadersDiscovered: onReadersDiscovered, connection: connection, paymentProcessor: paymentProcessor),
+            readerSerialNumber: Self.serialNumber)
         stateMachine.onSignalReceived = { [weak self] signal in
             switch signal {
             case .didSelectReader(let reader):

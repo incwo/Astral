@@ -17,6 +17,7 @@ class TerminalStateMachine: SignalHandling {
     
     struct Dependencies {
         let discovery: ReadersDiscovery
+        let onReadersDiscovered: ([Reader])->()
         let connection: ReaderConnection
         let paymentProcessor: PaymentProcessor
     }
@@ -210,6 +211,10 @@ struct DiscoveringReadersState: TerminalState {
         case .didSelectReader(let reader):
             return ConnectingState(dependencies: dependencies, location: location, reader: reader)
             
+        case .didSelectLocation(let location):
+            // A new location is selected while searching for readers at a previous location
+            return DiscoveringReadersState(dependencies: dependencies, location: location)
+            
         case .canceled, .failure(_):
             return NoReaderState(dependencies: dependencies)
         default:
@@ -218,7 +223,13 @@ struct DiscoveringReadersState: TerminalState {
     }
     
     func enter(signalHandler: SignalHandling) {
-        // Discovering is done by the DiscoveryTableViewController
+        dependencies.discovery.cancel {
+            dependencies.discovery.discoverReaders(
+                onUpdate: dependencies.onReadersDiscovered,
+                onError: { error in
+                    signalHandler.handleSignal(.failure(error))
+            })
+        }
     }
     
     func cancel(completion: @escaping () -> ()) {
