@@ -232,9 +232,6 @@ class SettingsCoordinator: NSObject {
         let discoveryViewController = storyboard.instantiateViewController(withIdentifier: "discovery") as! DiscoveryTableViewController
         
         discoveryViewController.viewModel = DiscoveryViewModel(
-            onUpdateDiscovering: { isDiscovering in
-                discoveryViewController.isDiscovering = isDiscovering
-            },
             onUpdateSections: { indexes in
                 discoveryViewController.reloadSections(indexes: indexes)
             })

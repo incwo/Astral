@@ -10,12 +10,10 @@ import StripeTerminal
 
 class DiscoveryViewModel {
     
-    init(onUpdateDiscovering: @escaping (Bool)->(), onUpdateSections: @escaping (IndexSet)->()) {
-        self.onUpdateDiscovering = onUpdateDiscovering
+    init(onUpdateSections: @escaping (IndexSet)->()) {
         self.onUpdateSections = onUpdateSections
     }
     
-    let onUpdateDiscovering: (Bool)->()
     let onUpdateSections: (IndexSet)->()
     
     /// The location for which Readers are shown
@@ -29,12 +27,6 @@ class DiscoveryViewModel {
     var readers: [Reader] = [] {
         didSet {
             reloadSections([.readers])
-        }
-    }
-    
-    private var isDiscovering: Bool = false {
-        didSet {
-            onUpdateDiscovering(isDiscovering)
         }
     }
     
