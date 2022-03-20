@@ -224,6 +224,9 @@ struct DiscoveringReadersState: TerminalState {
     
     func enter(signalHandler: SignalHandling) {
         dependencies.discovery.cancel {
+            // Call a first time with an empty list. Otherwise previous results would be shown.
+            dependencies.onReadersDiscovered([])
+            
             dependencies.discovery.discoverReaders(
                 onUpdate: dependencies.onReadersDiscovered,
                 onError: { error in
