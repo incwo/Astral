@@ -286,6 +286,7 @@ extension SettingsCoordinator: UIAdaptivePresentationControllerDelegate {
     // Called for "Swipe to dismiss" on iOS 13+
     // This is for the navigationController
     func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
+        self.delegate?.settingsCoordinatorWillDismiss(self)
         self.screen = .none
     }
 }
