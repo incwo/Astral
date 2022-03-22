@@ -107,7 +107,7 @@ One of the difficulties is that you will need a backend to test the example or y
 
 The backend needs your Stripe account's secret API key. You can obtain it on [Stripe's API key page](https://dashboard.stripe.com/test/apikeys). There are two keys — this is the one starting with `sk_test` (you should begin in "Test mode").
 
-In our example, we chose to deploy the sample backed locally on our Mac using the Docker container. This should allow testing it quickly on the iOS simulator. However, if you want to test on a physical iOS device and a physical Reader, you'd either have to deploy on Heroku, or activate web sharing on your Mac.
+In our example, we chose to deploy the sample back-end locally on our Mac using the Docker container. This should allow testing it quickly on the iOS simulator. However, if you want to test on a physical iOS device and a physical Reader, you'd either have to deploy on Heroku, or activate web sharing on your Mac.
 
 ### Testing the (Physical) Reader
 
@@ -117,7 +117,7 @@ Please note that the **amount which is charged matters**. The last two digits [h
 
 ## Participate in the development of Astral
 
-If you find Astral useful, you can help its development by:
+If you find Astral useful, you can help its development:
 
 - Implement missing features
 - Test on other models of Readers
